@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Sistema Help Desk ::: Login</title>
+    <meta charset="UTF-8" />
+  <!-- Import Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Import Google Icon Font -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link type="text/css" rel="stylesheet" href="materialize/css/materialize.min.css" media="screen,projection" />
+</head>
+<body>
+    <div class="container">
+        <form class="form-signin was-validated mt-5" method="post" th:action="@{/login}">
+            <div class="text-center mb-4">
+                <img class="mb-4" th:src="@{materialize/image/Screenshot_10.png}" alt="" width="72" height="72">
+                <h1 class="h3 mb-3 font-weight-normal">Sistema Help Desk</h1>
+                <p class="font-weight-lighter">Seja bem-vindo.</p>
+                <p class="text-muted">Realize seu login para continuar</p>                    
+                <div th:if="${alerta != null}" th:class="${alerta == 'erro'} ? 'alert alert-danger' : 'alert alert-success'" role="alert">
+                    <h4 th:text="${titulo}" class="alert-heading">Credenciais...</h4>
+                    <p th:text="${texto}">Login ou senha incorretos...</p>
+                    <hr>
+                    <p class="mb-0"><small th:text="${subtexto}">Acesso permitido...</small></p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="inputEmail">Email</label>
+                <input type="text" id="inputEmail" class="form-control" placeholder="Email address" name="username" required autofocus>
+                <div class="invalid-feedback">Use seu email cadastrado como login.</div>
+            </div>
+
+            <div class="form-group">
+                <label for="inputPassword">Senha</label>
+                <input type="password" id="inputPassword" class="form-control" placeholder="Password" name="password" required> 
+                <div class="invalid-feedback">Digite sua senha.</div>    
+            </div>
+
+            <div class="form-check mb-3">
+                <input type="checkbox" class="form-check-input" id="rememberMe" value="remember-me">
+                <label class="form-check-label" for="rememberMe">Remember me</label>
+            </div>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Entrar</button>
+            <hr>
+            <nav class="nav nav-pills flex-column flex-sm-row">
+                <a class="flex-sm-fill text-sm-left nav-link" th:href="@{/u/novo/cadastro}"><i class="far fa-arrow-alt-circle-right"></i>&nbsp;Novo cadastro</a>
+                <a class="flex-sm-fill text-sm-left nav-link" th:href="@{/u/p/redefinir/senha}"><i class="fas fa-key"></i>&nbsp;Recuperar senha</a>
+                <a class="flex-sm-fill text-sm-left nav-link" th:href="@{/}"><i class="fas fa-home"></i>&nbsp;Home</a>
+            </nav>
+            <p class="mt-5 mb-3 text-muted text-center">Sistema Help Desk&copy; 2024</p>
+        </form>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+.bd-placeholder-img {
+    font-size: 1.125rem;
+    text-anchor: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+@media (min-width : 768px) {
+    .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+    }
+}
+.mb-4{
+    border-radius: 50px;
+}
+.rotate-180 {
+    transform: rotate(180deg);
+}
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: #f8f9fa;
+}
+.logout-button {
+    display: none;
+}
+.card {
+    margin-top: 2rem;
+}
+.footer {
+    padding: 1rem;
+    background-color: #f8f9fa;
+    text-align: center;
+}

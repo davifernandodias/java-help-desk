@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml" layout:decorate="~{layout}">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Sistema Help Desk ::: Home</title>
+    <!-- Import Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Import Google Icon Font -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="materialize/css/materialize.min.css" media="screen,projection" />
+
+</head>
+
+<body>
+
+    <section class="layout-content" layout:fragment="corpo">
+        <header class="header">
+            <form th:action="@{/logout}" method="post">
+                <div>
+                    <button type="submit">Sair</button>
+                </div>
+            </form>
+
+        </header>
+        <main role="main">
+            <section class="jumbotron text-center">
+                <img class="d-block mx-auto mb-4" th:src="@{materialize/image/Screenshot_10.png}" width="72"
+                    height="72">
+                <div class="container">
+                    <h1 class="jumbotron-heading">Sistema Help Desk</h1>
+                    <p class="lead text-muted">Bem-vindo ao Sistema Help Desk. Aqui você pode gerenciar seus chamados e
+                        solicitações de suporte.</p>
+                </div>
+            </section>
+
+            <div class="album py-5 bg-light">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card mb-4 box-shadow">
+                                <img class="card-img-top" th:src="@{/image/feature_1.jpg}" alt="Feature 1">
+                                <div class="card-body">
+                                    <h5 class="card-title">Funcionalidade 1</h5>
+                                    <p class="card-text">Descrição da funcionalidade 1 do Sistema Help Desk.</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <button class="btn btn-sm btn-outline-secondary"><a href="/dale">Ver
+                                                Detalhes</button></a>
+                                        <small class="text-muted">9 mins</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card mb-4 box-shadow">
+                                <img class="card-img-top" th:src="@{/image/feature_2.jpg}" alt="Feature 2">
+                                <div class="card-body">
+                                    <h5 class="card-title">Funcionalidade 2</h5>
+                                    <p class="card-text">Descrição da funcionalidade 2 do Sistema Help Desk.</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <button class="btn btn-sm btn-outline-secondary">Ver Detalhes</button>
+                                        <small class="text-muted">12 mins</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card mb-4 box-shadow">
+                                <img class="card-img-top" th:src="@{/image/feature_3.jpg}" alt="Feature 3">
+                                <div class="card-body">
+                                    <h5 class="card-title">Funcionalidade 3</h5>
+                                    <p class="card-text">Descrição da funcionalidade 3 do Sistema Help Desk.</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <button class="btn btn-sm btn-outline-secondary">Ver Detalhes</button>
+                                        <small class="text-muted">15 mins</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Sistema Help Desk, Inc. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.toggle-button').click(function () {
+                $('.logout-button').toggle();
+                $(this).find('i').toggleClass('rotate-180');
+            });
+        });
+
+        function login() {
+            window.location.href = '/login';
+        }
+
+        function logout() {
+            window.location.href = '/logout';
+        }
+    </script>
+
+</body>
+
+</html>
