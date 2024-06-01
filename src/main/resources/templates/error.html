@@ -1,70 +1,61 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml" layout:decorate="~{layout}">
+<html lang="pt-br">
+
 <head>
     <meta charset="UTF-8" />
-    <title>Sistema Help Desk ::: Home</title>
-    <!-- Import Bootstrap CSS -->
+    <title>Erro 404 - Página não encontrada</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Import Google Icon Font -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link type="text/css" rel="stylesheet" href="materialize/css/materialize.min.css" media="screen,projection" />
     <style>
-        body, html {
-            height: 100%;
-            margin: 0;
-            font-family: Arial, sans-serif;
-        }
-        .wrapper {
+        body {
+            background-color: #f0f8ff;
+            height: 100vh;
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
+            margin: 0;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-family: Arial, sans-serif;
         }
-        .content {
-            flex: 1;
-            padding: 2rem;
+
+        .container {
+            max-width: 600px;
+            padding: 20px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-        .footer {
-            background-color: #f8f9fa;
-            padding: 1rem 0;
-        }
-        .btn-primary {
-            font-size: 1.5rem;
-            padding: 1rem 2rem;
-        }
-        .jumbotron-heading {
+
+        h1 {
             font-size: 3rem;
-            margin-bottom: 1rem;
+            margin-bottom: 20px;
+            color: #dc3545;
         }
-        .lead {
-            font-size: 1.5rem;
-            margin-bottom: 2rem;
+
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
+
 <body>
-<div class="wrapper">
-    <header class="header">
-
-    </header>
-    <main role="main" class="content">
-        <section class="jumbotron text-center">
-            <img class="d-block mx-auto mb-4" th:src="@{materialize/image/Screenshot_10.png}" width="72" height="72">
-            <div class="container">
-                <h1 class="jumbotron-heading">ERRO</h1> 
-                <p class="lead text-muted">Error 404</p>
-                <a href="/"><button class="btn btn-primary">RETORNAR</button></a>
-            </div>
-        </section>
-    </main>
-    <footer class="footer">
-        <div class="container">
-            <p class="text-center">&copy; 2024 Sistema Help Desk, Inc. Todos os direitos reservados.</p>
-        </div>
-    </footer>
-</div>
-
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <div class="container">
+        <h1>Erro 404</h1>
+        <p>A página que você está procurando não foi encontrada.</p>
+        <p><a href="/">Voltar para a página inicial</a></p>
+    </div>
 </body>
+
 </html>

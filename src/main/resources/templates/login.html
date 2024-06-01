@@ -3,17 +3,53 @@
 <head>
     <title>Sistema Help Desk ::: Login</title>
     <meta charset="UTF-8" />
-  <!-- Import Bootstrap CSS -->
-  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Import Google Icon Font -->
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link type="text/css" rel="stylesheet" href="materialize/css/materialize.min.css" media="screen,projection" />
+    <!-- Import Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Import Google Icon Font -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="materialize/css/materialize.min.css" media="screen,projection" />
+    <style>
+        body {
+            background-color: #f0f8ff;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .form-signin {
+            max-width: 400px;
+            padding: 15px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-signin img {
+            margin-right: 15px;
+        }
+
+        .form-signin label {
+            font-weight: bold;
+        }
+
+        .form-signin .alert {
+            margin-bottom: 15px;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <form class="form-signin was-validated mt-5" method="post" th:action="@{/login}">
+        <form class="form-signin was-validated" method="post" th:action="@{/login}">
             <div class="text-center mb-4">
-                <img class="mb-4" th:src="@{materialize/image/Screenshot_10.png}" alt="" width="72" height="72">
                 <h1 class="h3 mb-3 font-weight-normal">Sistema Help Desk</h1>
                 <p class="font-weight-lighter">Seja bem-vindo.</p>
                 <p class="text-muted">Realize seu login para continuar</p>                    
@@ -27,7 +63,7 @@
 
             <div class="form-group">
                 <label for="inputEmail">Email</label>
-                <input type="text" id="inputEmail" class="form-control" placeholder="Email address" name="username" required autofocus>
+                <input type="email" id="inputEmail" class="form-control" placeholder="Email address" name="username" required autofocus>
                 <div class="invalid-feedback">Use seu email cadastrado como login.</div>
             </div>
 
@@ -46,7 +82,7 @@
             <nav class="nav nav-pills flex-column flex-sm-row">
                 <a class="flex-sm-fill text-sm-left nav-link" th:href="@{/u/novo/cadastro}"><i class="far fa-arrow-alt-circle-right"></i>&nbsp;Novo cadastro</a>
                 <a class="flex-sm-fill text-sm-left nav-link" th:href="@{/u/p/redefinir/senha}"><i class="fas fa-key"></i>&nbsp;Recuperar senha</a>
-                <a class="flex-sm-fill text-sm-left nav-link" th:href="@{/}"><i class="fas fa-home"></i>&nbsp;Home</a>
+
             </nav>
             <p class="mt-5 mb-3 text-muted text-center">Sistema Help Desk&copy; 2024</p>
         </form>
