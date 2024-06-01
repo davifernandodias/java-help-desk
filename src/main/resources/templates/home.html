@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 
 <head>
     <meta charset="UTF-8" />
@@ -118,11 +118,16 @@
             <p style="margin: 1rem; font-size: 1.3rem;">DEMO</p>
         </div>
         <div class="nav-buttons">
-            <a href="/login" class="btn btn-outline-secondary">Entrar</a>
-            <a href="/register" class="btn btn-outline-success">Cadastrar</a>
-            <form action="/logout" method="post" style="display:inline;">
+                <a th:href="@{/login}" class="btn btn-outline-secondary" sec:authorize="!isAuthenticated()">Entrar</a>
+
+                <a th:href="@{/u/novo/cadastro}" class="btn btn-outline-secondary" sec:authorize="!isAuthenticated()">Cadastrar-se</a>
+           
+                <form th:action="@{/logout}" method="post" style="display:inline;">
+                <i class="fas fa-user"></i> <span class=""
+								>Bob</span>
                 <button type="submit" class="btn btn-outline-danger">Sair</button>
             </form>
+            
         </div>
     </header>
 
