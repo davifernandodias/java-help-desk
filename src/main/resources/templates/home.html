@@ -9,43 +9,112 @@
     <!-- Import Google Icon Font -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link type="text/css" rel="stylesheet" href="materialize/css/materialize.min.css" media="screen,projection" />
+    <style>
+        body {
+            background-color: #f0f8ff;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+        }
 
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .header img {
+            height: 50px;
+        }
+
+        .header .nav-buttons a,
+        .header .nav-buttons button {
+            color: #fff;
+            background-color: #696969;
+            border-color: #696969;
+        }
+
+        .header .nav-buttons a:hover,
+        .header .nav-buttons button:hover {
+            color: #fff;
+            background-color: #494949;
+            border-color: #494949;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .jumbotron {
+            background-color: #ffffff;
+            padding: 8rem 1rem;
+            text-align: center;
+        }
+
+        .jumbotron .container {
+            max-width: 600px;
+        }
+
+        .album {
+            padding: 2rem 0;
+        }
+
+        .card {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .footer {
+            padding: 1rem 0;
+            text-align: center;
+            background-color: #f8f9fa;
+            border-top: 1px solid #dee2e6;
+        }
+    </style>
 </head>
 
 <body>
 
     <section class="layout-content" layout:fragment="corpo">
         <header class="header">
-            <form th:action="@{/logout}" method="post">
-                <div>
-                    <button type="submit">Sair</button>
-                </div>
-            </form>
-
+            <div class="logo">
+                <p style="margin: 1rem; font-size: 1.3rem;">DEMO</p>
+            </div>
+            <div class="nav-buttons">
+                <a href="/login" class="btn btn-outline-secondary">Entrar</a>
+                <a href="/register" class="btn btn-outline-success">Cadastrar</a>
+                <form th:action="@{/logout}" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-outline-danger">Sair</button>
+                </form>
+            </div>
         </header>
         <main role="main">
-            <section class="jumbotron text-center">
-                <img class="d-block mx-auto mb-4" th:src="@{materialize/image/Screenshot_10.png}" width="72"
-                    height="72">
+            <section class="jumbotron">
                 <div class="container">
-                    <h1 class="jumbotron-heading">Sistema Help Desk</h1>
+                    <h1 class="jumbotron-heading">SISTEMA HELP DESK</h1>
                     <p class="lead text-muted">Bem-vindo ao Sistema Help Desk. Aqui você pode gerenciar seus chamados e
                         solicitações de suporte.</p>
+                    <a href="#dale" class="btn btn-primary my-2">Saiba mais</a>
                 </div>
             </section>
 
-            <div class="album py-5 bg-light">
+            <div class="album bg-light">
                 <div class="container">
                     <div class="row">
                         <div class="col-md-4">
                             <div class="card mb-4 box-shadow">
-                                <img class="card-img-top" th:src="@{/image/feature_1.jpg}" alt="Feature 1">
+                                <img class="card-img-top" th:src="@{materialize/image/iconDataAnalisy.png}" alt="Feature 1">
                                 <div class="card-body">
-                                    <h5 class="card-title">Funcionalidade 1</h5>
-                                    <p class="card-text">Descrição da funcionalidade 1 do Sistema Help Desk.</p>
+                                    <h5 class="card-title">Gerenciamento de Chamados</h5>
+                                    <p class="card-text">Permite aos usuários criar, atualizar e acompanhar o status dos chamados de suporte. Os agentes de suporte podem atribuir, priorizar e resolver esses chamados, garantindo que todos os problemas sejam tratados de maneira eficiente.</p>
                                     <div class="d-flex justify-content-between align-items-center">
-                                        <button class="btn btn-sm btn-outline-secondary"><a href="/dale">Ver
-                                                Detalhes</button></a>
+                                        <a href="/dale" class="btn btn-sm btn-outline-secondary">Ver Detalhes</a>
                                         <small class="text-muted">9 mins</small>
                                     </div>
                                 </div>
@@ -53,10 +122,10 @@
                         </div>
                         <div class="col-md-4">
                             <div class="card mb-4 box-shadow">
-                                <img class="card-img-top" th:src="@{/image/feature_2.jpg}" alt="Feature 2">
+                                <img class="card-img-top" th:src="@{materialize/image/iconDataAnalisy.png}" alt="Feature 2">
                                 <div class="card-body">
-                                    <h5 class="card-title">Funcionalidade 2</h5>
-                                    <p class="card-text">Descrição da funcionalidade 2 do Sistema Help Desk.</p>
+                                    <h5 class="card-title">Dashboard</h5>
+                                    <p class="card-text">Gera relatórios detalhados sobre o desempenho do suporte, incluindo métricas como o tempo médio de resposta, tempo de resolução, satisfação do cliente e volume de chamados. Essas análises ajudam na identificação de áreas de melhoria e no planejamento estratégico do suporte.</p>
                                     <div class="d-flex justify-content-between align-items-center">
                                         <button class="btn btn-sm btn-outline-secondary">Ver Detalhes</button>
                                         <small class="text-muted">12 mins</small>
@@ -66,10 +135,10 @@
                         </div>
                         <div class="col-md-4">
                             <div class="card mb-4 box-shadow">
-                                <img class="card-img-top" th:src="@{/image/feature_3.jpg}" alt="Feature 3">
+                                <img class="card-img-top" th:src="@{materialize/image/iconDataAnalisy.png}" alt="Feature 3">
                                 <div class="card-body">
-                                    <h5 class="card-title">Funcionalidade 3</h5>
-                                    <p class="card-text">Descrição da funcionalidade 3 do Sistema Help Desk.</p>
+                                    <h5 class="card-title">Otimização</h5>
+                                    <p class="card-text">Permite a automação de tarefas repetitivas e definição de regras de negócio para direcionar chamados, priorizar problemas e notificar usuários. Isso reduz o tempo de resposta e melhora a eficiência do suporte, garantindo que os problemas sejam resolvidos de forma rápida e organizada.</p>
                                     <div class="d-flex justify-content-between align-items-center">
                                         <button class="btn btn-sm btn-outline-secondary">Ver Detalhes</button>
                                         <small class="text-muted">15 mins</small>
@@ -92,23 +161,6 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $('.toggle-button').click(function () {
-                $('.logout-button').toggle();
-                $(this).find('i').toggleClass('rotate-180');
-            });
-        });
-
-        function login() {
-            window.location.href = '/login';
-        }
-
-        function logout() {
-            window.location.href = '/logout';
-        }
-    </script>
-
 </body>
 
 </html>
