@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <title>Sistema Help Desk ::: Home</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    
+
     <style>
         body {
             background-color: #f0f8ff;
@@ -118,16 +118,19 @@
             <p style="margin: 1rem; font-size: 1.3rem;">DEMO</p>
         </div>
         <div class="nav-buttons">
-                <a th:href="@{/login}" class="btn btn-outline-secondary" sec:authorize="!isAuthenticated()">Entrar</a>
+            
+            <!-- Verifica se o usuário NÃO está autenticado -->
+            <a th:href="@{/login}" class="btn btn-outline-secondary" th:if="${!isAuthenticated}">Entrar</a>
 
-                <a th:href="@{/u/novo/cadastro}" class="btn btn-outline-secondary" sec:authorize="!isAuthenticated()">Cadastrar-se</a>
-           
-                <form th:action="@{/logout}" method="post" style="display:inline;">
-                <i class="fas fa-user"></i> <span class=""
-								>Bob</span>
+            <!-- Verifica se o usuário NÃO está autenticado -->
+            <a th:href="@{/u/novo/cadastro}" class="btn btn-outline-secondary"
+                th:if="${!isAuthenticated}">Cadastrar-se</a>
+
+
+            <form th:action="@{/logout}" method="post" style="display:inline;">
+                <i class="fas fa-user"></i> <span class="">Bob</span>
                 <button type="submit" class="btn btn-outline-danger">Sair</button>
             </form>
-            
         </div>
     </header>
 
@@ -149,11 +152,12 @@
                     <div class="col-md-4">
                         <div class="card mb-4 box-shadow">
                             <img class="card-img-top" src="materialize/image/iconDataAnalisy.png" alt="Feature 1">
-                            <div class="card-body" >
+                            <div class="card-body">
                                 <h5 class="card-title">Gerenciamento de Chamados</h5>
                                 <p class="card-text">Permite aos usuários criar, atualizar e acompanhar o status dos
                                     chamados de suporte. Os agentes de suporte podem atribuir, priorizar e resolver
-                                    esses chamados que foram criados, garantindo que todos os problemas sejam tratados de maneira
+                                    esses chamados que foram criados, garantindo que todos os problemas sejam tratados
+                                    de maneira
                                     eficiente.</p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <a href="/dale" class="btn btn-sm btn-outline-secondary">Ver Detalhes</a>
@@ -171,7 +175,7 @@
                                     volume de chamados. Essas análises ajudam na identificação de áreas de melhoria e no
                                     planejamento estratégico do suporte.</p>
                                 <div class="d-flex justify-content-between align-items-center">
-                                 
+
                                     <button class="btn btn-sm btn-outline-secondary">Ver Detalhes</button>
                                 </div>
                             </div>
@@ -182,9 +186,11 @@
                             <img class="card-img-top" src="materialize/image/iconDataAnalisy.png" alt="Feature 3">
                             <div class="card-body">
                                 <h5 class="card-title">Automação de Fluxo</h5>
-                                <p class="card-text">Permite a automação de tarefas repetitivas e definição de regras de negócio para direcionar chamados,
-                                     priorizar problemas e notificar usuários. Isso reduz o tempo de resposta e melhora a eficiência do suporte,
-                                     garantindo que os problemas sejam resolvidos de forma rápida e organizada.</p>
+                                <p class="card-text">Permite a automação de tarefas repetitivas e definição de regras de
+                                    negócio para direcionar chamados,
+                                    priorizar problemas e notificar usuários. Isso reduz o tempo de resposta e melhora a
+                                    eficiência do suporte,
+                                    garantindo que os problemas sejam resolvidos de forma rápida e organizada.</p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <button class="btn btn-sm btn-outline-secondary">Ver Detalhes</button>
                                 </div>

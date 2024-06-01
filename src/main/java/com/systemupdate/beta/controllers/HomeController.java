@@ -1,5 +1,8 @@
 package com.systemupdate.beta.controllers;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,7 +12,11 @@ public class HomeController {
 
     // Open home page
     @GetMapping({"/", "/home"})
-    public String view() {
+    public String view(ModelMap model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        boolean isAuthenticated = auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken);
+        model.addAttribute("isAuthenticated", isAuthenticated);
+
         return "home";
     }
 
