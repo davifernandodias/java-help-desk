@@ -29,6 +29,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/materialize/**", "/css/**", "/image/**", "/js/**").permitAll()
                 .requestMatchers("/", "/home").permitAll()
+                .requestMatchers("/u/**").hasAuthority("ADMIN")
                 .anyRequest().authenticated()
             )
             .formLogin(formLogin -> formLogin

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Sistema Help Desk ::: Home</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #f0f8ff;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .header img {
+            height: 50px;
+        }
+
+        .header .nav-buttons a,
+        .header .nav-buttons button {
+            color: #fff;
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .header .nav-buttons a:hover,
+        .header .nav-buttons button:hover {
+            color: #fff;
+            background-color: #0356af;
+            border-color: #0356af;
+        }
+
+        .sidebar {
+            flex: 0 0 200px;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .sidebar li {
+            margin-bottom: 10px;
+        }
+
+        .sidebar li a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .sidebar li a:hover {
+            text-decoration: underline;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .jumbotron {
+            background-color: #ffffff;
+            padding: 9rem 1rem;
+            text-align: center;
+        }
+
+        .jumbotron .container {
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .footer {
+            padding: 1rem 0;
+            text-align: center;
+            background-color: #f8f9fa;
+            border-top: 1px solid #dee2e6;
+        }
+
+        .highlight-text {
+            color: #007bff;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="header">
+        <div class="logo">
+            <p style="margin: 1rem; font-size: 1.3rem;">DEMO</p>
+        </div>
+        <div class="nav-buttons">
+
+            <!-- Verifica se o usuário NÃO está autenticado -->
+            <a th:href="@{/login}" class="btn btn-outline-secondary" th:if="${!isAuthenticated}">Entrar</a>
+
+            <!-- Verifica se o usuário NÃO está autenticado -->
+            <a th:href="@{/u/novo/cadastro}" class="btn btn-outline-secondary"
+                th:if="${!isAuthenticated}">Cadastrar-se</a>
+
+
+            <form th:action="@{/logout}" method="post" style="display:inline;" th:if="${isAuthenticated}">
+                <i class="fas fa-user"></i> <span th:text="${userEmail}"></span>
+                <button type="submit" class="btn btn-outline-danger">Sair</button>
+            </form>
+        </div>
+    </header>
+
+    <div class="d-flex">
+        <div class="sidebar">
+            <ul>
+                <li><a href="#">Sistema Help Desk</a></li>
+                <li><a href="#">Gerenciamento de Chamados</a></li>
+                <li><a href="#">Dashboard</a></li>
+                <li><a href="#">Cadastro de Chamados</a></li>
+                <li><a href="#">Manutenção</a></li>
+                <li><a href="#">Tipos de Chamados por Área</a></li>
+            </ul>
+        </div>
+
+        <main role="main">
+            <section class="jumbotron">
+                <div class="container">
+                    <h1 class="jumbotron-heading">Plataforma de Suporte de gerenciamento de tickets e
+                        melhora a comunicação com os clientes.</h1>
+                    <p class="lead text-muted">Bem-vindo ao Sistema Help Desk. Aqui você pode gerenciar seus chamados e
+                        solicitações de suporte.</p>
+                    <a href="#info" class="btn btn-primary my-2" id="saiba-mais-btn">Saiba mais</a>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Sistema Help Desk, Inc. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#saiba-mais-btn').click(function (event) {
+                event.preventDefault();
+                $('html, body').animate({
+                    scrollTop: $("#info").offset().top
+                }, 1000);
+            });
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

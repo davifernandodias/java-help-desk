@@ -1,18 +1,20 @@
 package com.systemupdate.beta.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.systemupdate.beta.models.Perfil;
+
 import com.systemupdate.beta.models.Usuario;
 import com.systemupdate.beta.repository.UsuarioRepository;
+import com.systemupdate.beta.security.CustomUserDetails;
 
 import jakarta.transaction.Transactional;
 
@@ -34,18 +36,16 @@ public class UsuarioService implements UserDetailsService {
         if (usuario == null) {
             throw new UsernameNotFoundException("Usuário não encontrado");
         }
-        return new User(
+
+        List<GrantedAuthority> authorities = usuario.getPerfis().stream()
+                .map(perfil -> new SimpleGrantedAuthority(perfil.getDesc()))
+                .collect(Collectors.toList());
+
+        return new CustomUserDetails(
             usuario.getEmail(),
             usuario.getSenha(),
-            AuthorityUtils.createAuthorityList(getAuthorities(usuario.getPerfis()))
+            authorities,
+            authorities.isEmpty() ? null : authorities.get(0).getAuthority()
         );
-    }
-
-    private String[] getAuthorities(List<Perfil> perfis) {
-        String[] authorities = new String[perfis.size()];
-        for (int i = 0; i < perfis.size(); i++) {
-            authorities[i] = perfis.get(i).getDesc();
-        }
-        return authorities;
     }
 }

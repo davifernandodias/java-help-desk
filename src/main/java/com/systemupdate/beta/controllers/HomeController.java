@@ -7,26 +7,43 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.systemupdate.beta.security.CustomUserDetails;
+
 @Controller
 public class HomeController {
 
-    // Open home page
+    
     @GetMapping({"/", "/home"})
     public String view(ModelMap model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = auth.getName(); 
         boolean isAuthenticated = auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken);
+        /*
+         * MODAL DE AUTENTICAÇÃO E FILTRAGEM DE PERFIL DE ADMIN OU COLABORADOR.
+         * 
+         */
+        
         model.addAttribute("isAuthenticated", isAuthenticated);
+        model.addAttribute("userEmail", userEmail); 
+
+        // Captura o cargo do usuário
+        if (isAuthenticated && auth.getPrincipal() instanceof CustomUserDetails) {
+            CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
+            String role = userDetails.getRole();
+            model.addAttribute("isAdmin", "ADMIN".equals(role)); 
+        } else {
+            model.addAttribute("isAdmin", false); 
+        }
 
         return "home";
     }
 
-    // Open login page
+
     @GetMapping("/login")
     public String login() {
         return "login";
     }
 
-    // Login invalid
     @GetMapping("/login-error")
     public String loginError(ModelMap model) {
         model.addAttribute("alerta", "erro");

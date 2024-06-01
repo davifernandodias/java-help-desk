@@ -92,5 +92,4 @@ public class Usuario extends AbstractEntity {
 	public void setCodigoVerificador(String codigoVerificador) {
 		this.codigoVerificador = codigoVerificador;
 	}
-
 }
