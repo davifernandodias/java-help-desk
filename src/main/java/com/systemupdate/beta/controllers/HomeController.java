@@ -23,7 +23,7 @@ public class HomeController {
         model.addAttribute("isAuthenticated", isAuthenticated);
         
 
-        return "home";
+        return "infopage/home";
     }
 
     @GetMapping({ "/principal" })
@@ -46,7 +46,7 @@ public class HomeController {
             model.addAttribute("isAdmin", false);
         }
 
-        return "principal";
+        return "index/principal";
     }
 
 }

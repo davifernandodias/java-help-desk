@@ -204,6 +204,7 @@
         <div class="logo">
             <p style="margin: 1rem; font-size: 1.3rem;">DEMO</p>
         </div>
+        <a th:href="@{/Painel/Adminstrador}" class="btn btn-outline-secondary" th:if="${isAdmin}">Painel Admin</a>
         <div class="nav-buttons">
             <!-- Verifica se o usuário NÃO está autenticado -->
             <a th:href="@{/login}" class="btn btn-outline-secondary" th:if="${!isAuthenticated}">Entrar</a>
@@ -231,7 +232,7 @@
                         <h2 class="subtitulo">Gerenciamento
                             <p class="lead">
                                 <a href="/dashboard">Consultar Tickets</a>
-                                <a href="/dashboard">Abrir Ticket</a>
+                                <a href="/abrirticket">Abrir Ticket</a>
                             </p>
                         </h2>
                     </div>
