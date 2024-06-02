@@ -12,32 +12,42 @@ import com.systemupdate.beta.security.CustomUserDetails;
 @Controller
 public class HomeController {
 
-    
-    @GetMapping({"/", "/home"})
+    @GetMapping({ "/", "/home" })
     public String view(ModelMap model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String userEmail = auth.getName(); 
         boolean isAuthenticated = auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken);
         /*
          * MODAL DE AUTENTICAÇÃO E FILTRAGEM DE PERFIL DE ADMIN OU COLABORADOR.
          * 
          */
-        
         model.addAttribute("isAuthenticated", isAuthenticated);
-        model.addAttribute("userEmail", userEmail); 
-
-        // Captura o cargo do usuário
-        if (isAuthenticated && auth.getPrincipal() instanceof CustomUserDetails) {
-            CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
-            String role = userDetails.getRole();
-            model.addAttribute("isAdmin", "ADMIN".equals(role)); 
-        } else {
-            model.addAttribute("isAdmin", false); 
-        }
+        
 
         return "home";
     }
 
+    @GetMapping({ "/principal" })
+    public String principal(ModelMap model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = auth.getName();
+        boolean isAuthenticated = auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken);
+        /*
+         * MODAL DE AUTENTICAÇÃO E FILTRAGEM DE PERFIL DE ADMIN OU COLABORADOR.
+         * 
+         */
+
+        model.addAttribute("isAuthenticated", isAuthenticated);
+        model.addAttribute("userEmail", userEmail);
+        if (isAuthenticated && auth.getPrincipal() instanceof CustomUserDetails) {
+            CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
+            String role = userDetails.getRole();
+            model.addAttribute("isAdmin", "ADMIN".equals(role));
+        } else {
+            model.addAttribute("isAdmin", false);
+        }
+
+        return "principal";
+    }
 
     @GetMapping("/login")
     public String login() {

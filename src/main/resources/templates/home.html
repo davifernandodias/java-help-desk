@@ -120,21 +120,11 @@
         <div class="nav-buttons">
 
             <!-- Verifica se o usuário NÃO está autenticado -->
-            <a th:href="@{/login}" class="btn btn-outline-secondary" th:if="${!isAuthenticated}">Entrar</a>
+            <a th:href="@{/login}" class="btn btn-outline-secondary" >Entrar</a>
 
             <!-- Verifica se o usuário NÃO está autenticado -->
             <a th:href="@{/u/novo/cadastro}" class="btn btn-outline-secondary"
-                th:if="${!isAuthenticated}">Cadastrar-se</a>
-
-            
-
-
-            <form th:action="@{/logout}" method="post" style="display:inline;" th:if="${isAuthenticated}">
-                <i class="fas fa-user"></i> <span th:text="${userEmail}"></span>
-                <button type="submit" class="btn btn-outline-danger">Sair</button>
-            </form>
-
-            
+               >Cadastrar-se</a>
         </div>
     </header>
 
@@ -145,7 +135,7 @@
                     melhora a comunicação com os clientes.</h1>
                 <p class="lead text-muted">Bem-vindo ao Sistema Help Desk. Aqui você pode gerenciar seus chamados e
                     solicitações de suporte.</p>
-                    <a th:href="@{/admin/painel}" class="btn btn-outline-secondary" th:if="${isAdmin}">Painel Admin</a>
+                    <a th:href="@{/welcome}" class="btn btn-outline-secondary" th:if="${isAdmin}">Painel Admin</a>
 
                 <a href="#info" class="btn btn-primary my-2" id="saiba-mais-btn">Saiba mais</a>
                 
