@@ -3,214 +3,30 @@
 
 <head>
     <meta charset="UTF-8" />
-    <title>Sistema Help Desk - Cadastro de Chamado</title>
+    <title>Cadastro de Chamado</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f0f8ff;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            margin: 0;
-            font-family: Arial, sans-serif;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 20px;
-            background-color: #f8f9fa;
-            border-bottom: 1px solid #dee2e6;
-            position: relative;
-            z-index: 1000;
-        }
-
-        .nav-buttons {
-            display: flex;
-            align-items: center;
-        }
-
-        .nav-buttons a,
-        .nav-buttons button {
-            color: #fff;
-            background-color: #007bff;
-            border-color: #007bff;
-            margin-right: 10px;
-            border-radius: 5px;
-            padding: 10px;
-            text-align: center;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .nav-buttons a:hover,
-        .nav-buttons button:hover {
-            background-color: #0056b3;
-            border-color: #0056b3;
-        }
-
-        main {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            padding: 20px;
-            position: relative;
-        }
-
-        .form-container {
-            background-color: #ffffff;
-            padding: 2rem 1rem;
-            text-align: center;
-            margin-right: 20px;
-            border-radius: 5px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 600px;
-        }
-
-        .form-container h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .form-group {
-            margin-bottom: 1rem;
-            text-align: left;
-        }
-
-        .form-group label {
-            font-size: 1rem;
-            font-weight: bold;
-        }
-
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-
-        .form-group input[type="submit"] {
-            font-size: 1.2rem;
-            padding: 10px 20px;
-            margin-top: 1rem;
-            border-radius: 5px;
-            background-color: #007bff;
-            color: #fff;
-            border: 1px solid #007bff;
-            cursor: pointer;
-        }
-
-        .form-group input[type="submit"]:hover {
-            background-color: #0056b3;
-            border-color: #0056b3;
-        }
-
-        .footer {
-            padding: 1rem 0;
-            text-align: center;
-            background-color: #f8f9fa;
-            border-top: 1px solid #dee2e6;
-            border-radius: 5px;
-            margin-top: auto;
-            width: 100%;
-        }
-
-        .sidebar {
-            position: fixed;
-            top: 70px;
-            right: 0;
-            width: 250px;
-            background-color: #ffffff;
-            border-left: 1px solid #dee2e6;
-            height: 100%;
-            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
-            z-index: 999;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-
-        .sidebar ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .sidebar ul li {
-            margin-bottom: 10px;
-        }
-
-        .sidebar ul li a {
-            display: block;
-            color: #007bff;
-            text-decoration: none;
-            padding: 10px;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-        }
-
-        .sidebar ul li a:hover {
-            background-color: #f0f8ff;
-        }
-    </style>
 </head>
 
 <body>
-    <header class="header">
-        <div class="logo">
-            <p style="margin: 1rem; font-size: 1.3rem;">DEMO</p>
-        </div>
-        <a th:href="@{/Painel/Adminstrador}" class="btn btn-outline-secondary" th:if="${isAdmin}">Painel Admin</a>
-        <div class="nav-buttons">
-            <a th:href="@{/login}" class="btn btn-outline-secondary" th:if="${!isAuthenticated}">Entrar</a>
-            <a th:href="@{/u/novo/cadastro}" class="btn btn-outline-secondary"
-                th:if="${!isAuthenticated}">Cadastrar-se</a>
-            <form th:action="@{/logout}" method="post" style="display: flex;" th:if="${isAuthenticated}">
-                <i class="fas fa-user"></i> <span th:text="${userEmail}"></span>
-                <button type="submit" class="btn btn-outline-danger">Sair</button>
-            </form>
-        </div>
-    </header>
-    <main>
-        <div class="form-container">
-            <div th:if="${sucesso!=null}">
-                <strong th:text="${sucesso}">SALVOU</strong>
+    <div class="container">
+        <h1>Cadastro de Chamado</h1>
+        <form th:action="@{/chamado/salvar}" method="post" class="was-validated">
+            <div class="form-group">
+                <label for="titulo">Título:</label>
+                <input type="text" class="form-control" id="titulo" name="titulo" required>
             </div>
-            <h1>Cadastrar Chamado</h1>
-                <form id="ticketForm" action="/cadastrar-chamado" method="post">
-                    <div class="form-group">
-                        <label for="colaborador">Colaborador</label>
-                        <input type="text" id="colaborador" name="colaborador" placeholder="Nome do Colaborador" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="dataChamado">Data do Chamado</label>
-                        <input type="date" id="dataChamado" name="dataChamado" required>
-                    </div>
-                    <!-- outros campos do formulário -->
-                    <div class="form-group">
-                        <input type="submit" value="Cadastrar">
-                    </div>
-                </form>
-        </div>
-    </main>
-
-    <div class="sidebar">
-        <ul>
-            <li><a href="#">Chat</a></li>
-            <li><a href="#">Ver Chamados Abertos</a></li>
-            <li><a href="#">Informações de Consulta</a></li>
-        </ul>
+            <div class="form-group">
+                <label for="descricao">Descrição:</label>
+                <textarea class="form-control" id="descricao" name="descricao" rows="3" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Salvar</button>
+            
+        </form>
+        
     </div>
-
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2024 Sistema Help Desk, Inc. Todos os direitos reservados.</p>
-        </div>
-    </footer>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 
 </html>

@@ -10,13 +10,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 
 import com.systemupdate.beta.models.Usuario;
 import com.systemupdate.beta.repository.UsuarioRepository;
 import com.systemupdate.beta.security.CustomUserDetails;
-
-import jakarta.transaction.Transactional;
 
 @Service
 public class UsuarioService implements UserDetailsService {
@@ -38,7 +36,7 @@ public class UsuarioService implements UserDetailsService {
         }
 
         List<GrantedAuthority> authorities = usuario.getPerfis().stream()
-                .map(perfil -> new SimpleGrantedAuthority(perfil.getDesc()))
+                .map(perfil -> new SimpleGrantedAuthority(perfil.getDescricao()))
                 .collect(Collectors.toList());
 
         return new CustomUserDetails(
@@ -48,4 +46,20 @@ public class UsuarioService implements UserDetailsService {
             authorities.isEmpty() ? null : authorities.get(0).getAuthority()
         );
     }
+    
+    @Transactional
+    public Usuario salvar(Usuario usuario) {
+        return usuarioRepository.save(usuario);
+    }
+    
+    @Transactional
+    public List<Usuario> buscarTodos() {
+        return usuarioRepository.findAll();
+    }
+
+    public Usuario findByEmail(String userEmail) {
+        return usuarioRepository.findByEmail(userEmail);
+    }
+
+
 }

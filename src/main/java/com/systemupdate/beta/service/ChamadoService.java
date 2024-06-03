@@ -17,4 +17,4 @@ public class ChamadoService {
     public void salvar(Chamado chamado){
         chamadoRepository.save(chamado);
     }
-} 
+}

@@ -13,51 +13,97 @@ import java.util.List;
 @Table(name = "colaboradores")
 public class Colaborador extends AbstractEntity {
 
-	@Column(name = "nome", unique = true, nullable = false)
-	private String nome;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@Column(name = "data_nascimento", nullable = false)
-	@DateTimeFormat(iso = ISO.DATE)
-	private LocalDate dtNascimento;
+    @Column(name = "nome", unique = true, nullable = false)
+    private String nome;
 
-	@JsonIgnore
-	@OneToMany(mappedBy = "colaborador")
-	private List<Chamado> chamados;
-	
-	@OneToOne(cascade = CascadeType.REMOVE)
-	@JoinColumn(name = "id_usuario")
-	private Usuario usuario;
+    @Column(name = "data_nascimento", nullable = false)
+    @DateTimeFormat(iso = ISO.DATE)
+    private LocalDate dataNascimento;
 
-	public String getNome() {
-		return nome;
-	}
+    @OneToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "id_usuario", nullable = false)
+    private Usuario usuario;
 
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
+    @Column(name = "cargo", nullable = false)
+    private String cargo;
 
-	public LocalDate getDtNascimento() {
-		return dtNascimento;
-	}
+    @Column(name = "salario", nullable = false)
+    private Double salario;
 
-	public void setDtNascimento(LocalDate dtNascimento) {
-		this.dtNascimento = dtNascimento;
-	}
+    @Column(name = "regiao", nullable = false)
+    private String regiao;
 
-	public List<Chamado> getChamados() {
-		return chamados;
-	}
+    @JsonIgnore
+    @OneToMany(mappedBy = "colaborador")
+    private List<Chamado> chamados;
 
-	public void setChamados(List<Chamado> chamados) {
-		this.chamados = chamados;
-	}
+    // Getters and Setters
 
-	public Usuario getUsuario() {
-		return usuario;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public LocalDate getDataNascimento() {
+        return dataNascimento;
+    }
+
+    public void setDataNascimento(LocalDate dataNascimento) {
+        this.dataNascimento = dataNascimento;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public String getCargo() {
+        return cargo;
+    }
+
+    public void setCargo(String cargo) {
+        this.cargo = cargo;
+    }
+
+    public Double getSalario() {
+        return salario;
+    }
+
+    public void setSalario(Double salario) {
+        this.salario = salario;
+    }
+
+    public String getRegiao() {
+        return regiao;
+    }
+
+    public void setRegiao(String regiao) {
+        this.regiao = regiao;
+    }
+
+    public List<Chamado> getChamados() {
+        return chamados;
+    }
+
+    public void setChamados(List<Chamado> chamados) {
+        this.chamados = chamados;
+    }
 }

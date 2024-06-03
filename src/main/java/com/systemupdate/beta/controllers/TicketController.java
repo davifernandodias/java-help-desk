@@ -1,5 +1,7 @@
 package com.systemupdate.beta.controllers;
 
+import java.time.LocalDateTime;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -7,36 +9,54 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import com.systemupdate.beta.models.Chamado;
-import com.systemupdate.beta.service.ChamadoService;
+import com.systemupdate.beta.models.Colaborador;
+import com.systemupdate.beta.models.Usuario;
+import com.systemupdate.beta.repository.ChamadoRepository;
+import com.systemupdate.beta.service.UsuarioService;
 
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 @Controller
 public class TicketController {
 
-    @Autowired
-    private ChamadoService chamadoService;
+    private final UsuarioService usuarioService;
 
-    @GetMapping("abrirticket")
-    public String viewTicket(ModelMap model){
+    public TicketController(UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
+    }
+
+    @GetMapping({ "/chamado" })
+    public String principal(ModelMap model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = auth.getName();
         boolean isAuthenticated = auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken);
-        /*
-         * MODAL DE AUTENTICAÇÃO E FILTRAGEM DE PERFIL DE ADMIN OU COLABORADOR.
-         * 
-         */
 
         model.addAttribute("isAuthenticated", isAuthenticated);
         model.addAttribute("userEmail", userEmail);
+        model.addAttribute("chamado", new Chamado());
         return "ticket/openchamado";
     }
-    public String salvar(Chamado chamado, RedirectAttributes attr){
-        chamadoService.salvar(chamado);
-        attr.addFlashAttribute("sucesso","Operação realizada com sucesso");
-        return "ticket/openchamdo";
+
+    @Autowired
+    private ChamadoRepository chamadoRepository;
+
+    @PostMapping("/chamado/salvar")
+    public String salvarChamado(@ModelAttribute("chamado") Chamado chamado, ModelMap model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = auth.getName();
+        Usuario usuario = usuarioService.findByEmail(userEmail);
+
+        Colaborador colaborador = usuario.getColaborador();
+        chamado.setColaborador(colaborador);
+        chamado.setDataCriacao(LocalDateTime.now());
+        chamadoRepository.save(chamado);
+
+        model.addAttribute("sucesso", "Chamado salvo com sucesso!");
+
+        return "ticket/openchamado"; 
     }
-    
+
 }

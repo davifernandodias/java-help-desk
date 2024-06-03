@@ -7,8 +7,12 @@ import jakarta.persistence.*;
 @Table(name = "perfis")
 public class Perfil extends AbstractEntity {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @Column(name = "descricao", nullable = false, unique = true)
-    private String desc;
+    private String descricao;
 
     public Perfil() {
         super();
@@ -18,11 +22,11 @@ public class Perfil extends AbstractEntity {
         super.setId(id);
     }
 
-    public String getDesc() {
-        return desc;
+    public String getDescricao() {
+        return descricao;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 }

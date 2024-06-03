@@ -1,21 +1,22 @@
 package com.systemupdate.beta.models;
 
 public enum PerfilTipo {
-	ADMIN(1, "ADMIN"), COLABORADOR(3, "COLABORADOR");
-	
-	private long cod;
-	private String desc;
+    ADMIN(1, "ADMIN"), 
+    COLABORADOR(3, "COLABORADOR");
 
-	private PerfilTipo(long cod, String desc) {
-		this.cod = cod;
-		this.desc = desc;
-	}
+    private long cod;
+    private String descricao;
 
-	public long getCod() {
-		return cod;
-	}
+    private PerfilTipo(long cod, String descricao) {
+        this.cod = cod;
+        this.descricao = descricao;
+    }
 
-	public String getDesc() {
-		return desc;
-	}
+    public long getCod() {
+        return cod;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
 }
