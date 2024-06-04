@@ -2,6 +2,7 @@ package com.systemupdate.beta.controllers;
 
 import java.time.LocalDateTime;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -10,6 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.systemupdate.beta.models.Chamado;
 import com.systemupdate.beta.models.Colaborador;
@@ -58,5 +61,24 @@ public class TicketController {
 
         return "ticket/openchamado"; 
     }
+
+    @RequestMapping("/consultar")
+    public ModelAndView searchChamadosView(ModelMap model){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = auth.getName();
+        boolean isAuthenticated = auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken);
+    
+        model.addAttribute("isAuthenticated", isAuthenticated);
+        model.addAttribute("userEmail", userEmail);
+
+        ModelAndView mv = new ModelAndView("searchchamado");
+        Iterable<Chamado> chamados = chamadoRepository.findAll();
+        mv.addObject("chamados",chamados);
+        return mv;
+    }
+
+
+
+    
 
 }
