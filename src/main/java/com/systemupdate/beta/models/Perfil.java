@@ -2,10 +2,9 @@ package com.systemupdate.beta.models;
 
 import jakarta.persistence.*;
 
-@SuppressWarnings("serial")
 @Entity
 @Table(name = "perfis")
-public class Perfil extends AbstractEntity {
+public class Perfil {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,11 +14,26 @@ public class Perfil extends AbstractEntity {
     private String descricao;
 
     public Perfil() {
-        super();
     }
 
     public Perfil(Long id) {
-        super.setId(id);
+        this.id = id;
+    }
+
+    public Perfil(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public Perfil(int cod) {
+        this.descricao = PerfilTipo.toEnum(cod).getDescricao();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getDescricao() {

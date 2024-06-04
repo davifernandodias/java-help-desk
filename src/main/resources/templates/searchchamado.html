@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8" />
-    <title>EventosApp</title>
+    <title>Sistema Help Desk</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
@@ -55,17 +55,17 @@
 
 <body>
     <div class="container">
-        <h1>lista de chamados</h1>
+        <h1>Lista de Chamados</h1>
         <table>
             <thead>
                 <tr>
                     <th>ID</th>
                     <th>Nome</th>
-                    <th>Titulo</th>
+                    <th>Título</th>
                     <th>Descrição</th>
                     <th>Status</th>
                     <th>Data da Criação</th>
-                    <th>AÇÃO</th>
+                    <th>Ação</th>
                 </tr>
             </thead>
             <tbody>
@@ -76,7 +76,7 @@
                     <td><span th:text="${chamado.descricao}"></span></td>
                     <td><span th:text="${chamado.status}"></span></td>
                     <td><span th:text="${chamado.dataCriacao}"></span></td>
-                    <td><span  style="margin: 20px;" href="/sell">icon ver </span></td>
+                    <td><a th:href="@{/sell(id=${chamado.id})}" class="btn btn-primary">Ver</a></td>
                 </tr>
             </tbody>
         </table>

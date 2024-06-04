@@ -2,7 +2,6 @@ package com.systemupdate.beta.controllers;
 
 import java.time.LocalDateTime;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,17 +18,18 @@ import com.systemupdate.beta.models.Colaborador;
 import com.systemupdate.beta.models.Usuario;
 import com.systemupdate.beta.repository.ChamadoRepository;
 import com.systemupdate.beta.service.UsuarioService;
+import com.systemupdate.beta.models.PerfilTipo;
 
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 @Controller
 public class TicketController {
 
-    private final UsuarioService usuarioService;
+    @Autowired
+    private UsuarioService usuarioService;
 
-    public TicketController(UsuarioService usuarioService) {
-        this.usuarioService = usuarioService;
-    }
+    @Autowired
+    private ChamadoRepository chamadoRepository;
 
     @GetMapping({ "/chamado" })
     public String principal(ModelMap model) {
@@ -42,9 +42,6 @@ public class TicketController {
         model.addAttribute("chamado", new Chamado());
         return "ticket/openchamado";
     }
-
-    @Autowired
-    private ChamadoRepository chamadoRepository;
 
     @PostMapping("/chamado/salvar")
     public String salvarChamado(@ModelAttribute("chamado") Chamado chamado, ModelMap model) {
@@ -59,29 +56,34 @@ public class TicketController {
 
         model.addAttribute("sucesso", "Chamado salvo com sucesso!");
 
-        return "ticket/openchamado"; 
+        return "ticket/openchamado";
     }
 
     @RequestMapping("/consultar")
-    public ModelAndView searchChamadosView(ModelMap model){
+    public ModelAndView searchChamadosView(ModelMap model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = auth.getName();
         boolean isAuthenticated = auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken);
-    
+
         model.addAttribute("isAuthenticated", isAuthenticated);
         model.addAttribute("userEmail", userEmail);
-    
+
         Usuario usuario = usuarioService.findByEmail(userEmail);
         Colaborador colaborador = usuario.getColaborador();
-    
+
+        boolean isAdmin = usuario.getPerfis().stream()
+                                 .anyMatch(perfil -> perfil.getDescricao().equals(PerfilTipo.ADMIN.getDescricao()));
+
         ModelAndView mv = new ModelAndView("searchchamado");
-        Iterable<Chamado> chamados = chamadoRepository.findByColaborador(colaborador);
-        mv.addObject("chamados",chamados);
+
+        if (isAdmin) {
+            Iterable<Chamado> chamados = chamadoRepository.findAll();
+            mv.addObject("chamados", chamados);
+        } else {
+            Iterable<Chamado> chamados = chamadoRepository.findByColaborador(colaborador);
+            mv.addObject("chamados", chamados);
+        }
+
         return mv;
     }
-
-
-
-    
-
 }

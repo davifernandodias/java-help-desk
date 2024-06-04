@@ -115,4 +115,13 @@ public class Usuario extends AbstractEntity {
     public void setColaborador(Colaborador colaborador) {
         this.colaborador = colaborador;
     }
+
+    public boolean hasPerfil(String perfilDescricao) {
+        for (Perfil perfil : perfis) {
+            if (perfil.getDescricao().equalsIgnoreCase(perfilDescricao)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
