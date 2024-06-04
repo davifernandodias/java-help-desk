@@ -70,9 +70,12 @@ public class TicketController {
     
         model.addAttribute("isAuthenticated", isAuthenticated);
         model.addAttribute("userEmail", userEmail);
-
+    
+        Usuario usuario = usuarioService.findByEmail(userEmail);
+        Colaborador colaborador = usuario.getColaborador();
+    
         ModelAndView mv = new ModelAndView("searchchamado");
-        Iterable<Chamado> chamados = chamadoRepository.findAll();
+        Iterable<Chamado> chamados = chamadoRepository.findByColaborador(colaborador);
         mv.addObject("chamados",chamados);
         return mv;
     }
