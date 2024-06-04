@@ -28,7 +28,7 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/materialize/**", "/css/**", "/image/**", "/js/**").permitAll()
-                .requestMatchers("/", "/home").permitAll()
+                .requestMatchers("/", "/home").permitAll() 
                 
                 .anyRequest().authenticated()
             )
@@ -44,7 +44,7 @@ public class SecurityConfig {
     }
 
     @Autowired
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception { //CRIP SENHA
         auth.userDetailsService(usuarioService).passwordEncoder(new BCryptPasswordEncoder());
     }
 }

@@ -4,6 +4,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 
+/*
+ * 
+ * CONTROLLER QUE FAZ AUTENCICAÇÃO
+ * COM A EMAIL E SENHA CRIPTOGRAFADA 
+ * RESGATADA DO BANCO DE DADOS.
+ * 
+ */
 @Controller
 public class LoginController {
 

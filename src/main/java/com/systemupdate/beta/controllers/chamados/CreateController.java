@@ -29,6 +29,7 @@ public class CreateController {
     @Autowired
     private ChamadoRepository chamadoRepository;
 
+    
     @GetMapping({ "/chamado" })
     public String principal(ModelMap model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
