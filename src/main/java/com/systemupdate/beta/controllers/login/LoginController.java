@@ -1,4 +1,4 @@
-package com.systemupdate.beta.controllers;
+package com.systemupdate.beta.controllers.login;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;

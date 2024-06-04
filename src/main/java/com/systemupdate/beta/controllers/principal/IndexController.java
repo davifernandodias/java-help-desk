@@ -1,4 +1,4 @@
-package com.systemupdate.beta.controllers;
+package com.systemupdate.beta.controllers.principal;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -10,21 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import com.systemupdate.beta.security.CustomUserDetails;
 
 @Controller
-public class HomeController {
-
-    @GetMapping({ "/", "/home" })
-    public String view(ModelMap model) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        boolean isAuthenticated = auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken);
-        /*
-         * MODAL DE AUTENTICAÇÃO E FILTRAGEM DE PERFIL DE ADMIN OU COLABORADOR.
-         * 
-         */
-        model.addAttribute("isAuthenticated", isAuthenticated);
-        
-
-        return "infopage/home";
-    }
+public class IndexController {
 
     @GetMapping({ "/principal" })
     public String principal(ModelMap model) {
