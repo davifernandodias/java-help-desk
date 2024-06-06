@@ -1,293 +1,61 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-
+<html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <title>Sistema Help Desk - Home</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-                body {
-            background-color: #f0f8ff;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            margin: 0;
-            font-family: Arial, sans-serif;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 20px;
-            background-color: #f8f9fa;
-            border-bottom: 1px solid #dee2e6;
-        }
-
-        .nav-buttons {
-            display: flex;
-            align-items: center;
-        }
-
-        .nav-buttons a,
-        .nav-buttons button {
-            color: #fff;
-            background-color: #007bff;
-            border-color: #007bff;
-            margin-right: 10px;
-            border-radius: 5px;
-            padding: 10px;
-            text-align: center;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .nav-buttons a:hover,
-        .nav-buttons button:hover {
-            background-color: #0056b3;
-            border-color: #0056b3;
-        }
-
-        main {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .jumbotron {
-            background-color: #ffffff;
-            padding: 2rem 1rem;
-            text-align: center;
-            margin-bottom: 20px;
-            border-radius: 5px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .jumbotron h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .jumbotron .btn {
-            font-size: 1.2rem;
-            padding: 10px 20px;
-            margin-top: 1rem;
-            border-radius: 5px;
-        }
-
-        .album {
-            padding: 2rem 0;
-            background-color: #f8f9fa;
-            border-radius: 5px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 100%;
-        }
-
-        .card {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 5px;
-            margin-bottom: 20px;
-            width: 100%;
-        }
-
-        .card-body {
-            text-align: justify;
-            padding: 1rem;
-        }
-
-        .card-title {
-            font-size: 1.25rem;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-        }
-
-        .card-text {
-            font-size: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .footer {
-            padding: 1rem 0;
-            text-align: center;
-            background-color: #f8f9fa;
-            border-top: 1px solid #dee2e6;
-            border-radius: 5px;
-            margin-top: auto;
-            width: 100%;
-        }
-
-        .highlight-text {
-            color: #007bff;
-            font-weight: bold;
-        }
-
-        .search-bar {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-            width: -10px;
-        }
-
-        #search-input {
-            padding: 10px;
-            margin-right: 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            flex-grow: 1;
-        }
-
-        #search-button {
-            padding: 10px 20px;
-            border-radius: 5px;
-            background-color: #007bff;
-            color: #fff;
-            border: 1px solid #007bff;
-            cursor: pointer;
-        }
-
-        #search-button:hover {
-            background-color: #0056b3;
-            border-color: #0056b3;
-        }
-
-      
-
-        /* Adiciona estilos para os quadrados */
-        .col-md-4 {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            height: 100%;
-            padding: 1rem;
-        }
-
-        /* Estiliza os textos dentro dos quadrados */
-        .subtitulo {
-            background-color: #007bff;
-            color: #fff;
-            font-size: 1.4rem;
-            padding: 20px;
-            margin-top: 0;
-            border-radius: 5px;
-            cursor: pointer;
-            text-align: center;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        /* Estiliza os textos dentro dos quadrados */
-        .subtitulo p {
-            font-size: 1rem;
-            margin-top: 20px;
-            text-align: center;
-            display: block; /* Faz com que os textos fiquem um embaixo do outro */
-        }
-
-        .subtitulo a {
-            color: #fff;
-            text-decoration: none;
-            margin-bottom: 10px;
-        }
-
-        .subtitulo a:hover {
-            text-decoration: underline;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link type="text/css" rel="stylesheet" href="materialize/css/materialize.principal.css" media="screen,projection" />
 </head>
 <body>
-<header class="header">
-        <div class="logo">
+
+<header>
+    <div class="header">
+        <div class="titulo">
             <p style="margin: 1rem; font-size: 1.3rem;">DEMO</p>
         </div>
-        <a th:href="@{/Painel/Adminstrador}" class="btn btn-outline-secondary" th:if="${isAdmin}">Painel Admin</a>
-        <div class="nav-buttons">
-            <!-- Verifica se o usuário NÃO está autenticado -->
-            <a th:href="@{/login}" class="btn btn-outline-secondary" th:if="${!isAuthenticated}">Entrar</a>
-
-            <!-- Verifica se o usuário NÃO está autenticado -->
-            <a th:href="@{/u/novo/cadastro}" class="btn btn-outline-secondary"
-                th:if="${!isAuthenticated}">Cadastrar-se</a>
-
-            <form th:action="@{/logout}" method="post" style="display:inline;" th:if="${isAuthenticated}">
+        <div class="logout-form">
+            <form th:action="@{/logout}" method="post" th:if="${isAuthenticated}">
                 <i class="fas fa-user"></i> <span th:text="${userEmail}"></span>
                 <button type="submit" class="btn btn-outline-danger">Sair</button>
             </form>
         </div>
-    </header>
-    <main>
-        <div class="search-bar">
-            <input type="text" id="search-input" placeholder="Pesquisar funcionalidades...">
-            <button id="search-button">Pesquisar chamado</button>
-        </div>
-        <section class="jumbotron">
-            <div class="container">
-                <h1 class="jumbotron-heading">Bem-vindo ao Sistema Help Desk</h1>
-                <div class="row">
-                    <div class="col-md-4">
-                        <h2 class="subtitulo">Gerenciamento
-                            <p class="lead">
-                                <a th:href="@{/consultar}">Consultar Tickets</a>
-                                <a th:href="@{/chamado}" class="btn btn-outline-primary">Abrir Ticket</a>
-                            </p>
-                        </h2>
-                    </div>
-                    <div class="col-md-4">
-                        <h2 class="subtitulo">Relatório Mensal
-                            <p class="lead">
-                                <a href="/dashboard">Dashboard</a>
-                            </p>
-                        </h2>
-                    </div>
-                    <div class="col-md-4">
-                        <h2 class="subtitulo">Colaboradores
-                            <p class="lead">
-                                <a href="/colaborador">Consultar Colaboradores</a>
-                                <a href="/colaborador">Atualizar Informações</a>
-                                <a href="/colaborador">Analisar Rendimentos</a>
-                            </p>
-                        </h2>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- Informações adicionais -->
-        <div id="info" class="album">
-            <div id="grafico" class="container">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempor, tortor ut blandit efficitur,
-                    justo massa finibus mauris, eu consectetur arcu libero et mi. Suspendisse potenti. Pellentesque
-                    habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nullam ullamcorper
-                    urna sed ligula dictum, sit amet consequat turpis dapibus.</p>
-            </div>
-        </div>
-    </main>
-<footer class="footer">
-        <div class="container">
-            <p>&copy; 2024 Sistema Help Desk, Inc. Todos os direitos reservados.</p>
-        </div>
-    </footer>
+    </div>
+</header>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $('#search-button').click(function () {
-                // Adicione o código para pesquisar chamados aqui
-            });
+<div class="sidebar">
+    <div class="separetor">
+        <p>CORE</p>
+    </div>
+    <a href="#" class="menu-item">Dashboard</a>
+    <div class="separetor">
+        <p>INTERFACE</p>
+    </div>
+    <label for="submenu-checkbox" class="menu-item" style="display: contents;">Gerenciamento <i class="fas fa-chevron-right"></i></label>
+    <input type="checkbox" id="submenu-checkbox" class="submenu-checkbox">
+    <div class="submenu" id="submenu">
+        <a href="#" class="submenu-item">Cadastro de Chamados</a>
+        <a href="#" class="submenu-item">Consultar Chamados</a>
+    </div>
+    <a href="#" class="menu-item">Menu Item 3</a>
+</div>
 
-            $('#saiba-mais-btn').click(function (event) {
-                event.preventDefault();
-                $('html, body').animate({
-                    scrollTop: $("#info").offset().top
-                }, 1000);
-            });
-        });
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<div class="content">
+    <h2>Conteúdo da Página</h2>
+    <p>Este é um exemplo de conteúdo para a página.</p>
+</div>
+
+<script>
+    document.getElementById('submenu-checkbox').addEventListener('change', function() {
+        var submenu = document.getElementById('submenu');
+        if (this.checked) {
+            submenu.style.display = 'block';
+        } else {
+            submenu.style.display = 'none';
+        }
+    });
+</script>
+
 </body>
-
 </html>
