@@ -1,29 +1,30 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-*{
-    font-family: 'Poppins','sans-serif';
+* {
+    font-family: 'Poppins', 'sans-serif';
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-:root{
-    --body-color:#E4E9F7;
-    --sidebar-color:#fff;
-    --primary-color:#695CFE;
-    --primary-color-light:#F6F5FF;
-    --toggle-color:#DDD;
-    --text-light:#707070;
-    --tran-03: all 0.2s ease;
+:root {
+    --body-color: #E4E9F7;
+    --sidebar-color: #fff;
+    --primary-color: #695CFE;
+    --primary-color-light: #F6F5FF;
+    --toggle-color: #DDD;
+    --text-light: #707070;
     --tran-03: all 0.3s ease;
     --tran-04: all 0.4s ease;
     --tran-05: all 0.5s ease;
 }
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
 }
-header{
+
+header {
     z-index: 100000;
 }
 
@@ -32,21 +33,23 @@ header{
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
-    background-color: #f8f9fa;
-    border-bottom: 1px solid #dee2e6;
+    background-color: #007bff;
 }
 
-a.menu-item {
+a.menu-item,
+a.menu-item-sub {
     text-decoration: none;
-    color: inherit; 
-    outline: none; 
+    color: inherit;
+    outline: none;
 }
 
-.titulo{
+.titulo {
+    color: white;
     display: inline-block;
 }
 
-.logout-form{
+.logout-form {
+    color: white;
     text-align: right;
     display: inline-flex;
     justify-content: flex-end;
@@ -54,105 +57,83 @@ a.menu-item {
 }
 
 .sidebar {
+    color: white;
     height: 100%;
     width: 200px;
     position: fixed;
     top: 83px; /* Ajusta a posição inicial do sidebar abaixo do header */
     left: 0;
-    background-color: #f1f1f1;
+    background-color: #0153aa;
     padding-top: 30px;
 }
+
 .content {
     margin-left: 200px;
     padding: 100px;
 }
-.menu-item {
+
+.menu-item,
+.menu-item-sub {
     padding: 20px;
     text-decoration: none;
     color: #333;
     display: block;
     transition: background-color 0.3s;
 }
-.menu-item:hover {
-    background-color: #ddd;
+
+.menu-item-sub {
+    padding: 15px;
 }
-.separetor{
-    color:#b8b7b7; 
+
+.menu-item-sub:hover {
+    opacity: 75%;
+}
+
+.menu-item:hover {
+    background-color: #013063;
+}
+
+.separetor {
+    color: #c9c9c9;
     margin: 20px 10px 5px 7px;
 }
-.submenu {
-    display: none;
-    position: absolute;
-    background-color: #fff;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    z-index: 1;
-    transition: all 0.3s;
+
+.button-container {
+    display: inline-block;
+    position: relative;
 }
 
-/* Checkbox para controlar o estado do submenu */
-.submenu-checkbox {
-    display: none;
+.btn {
+    cursor: pointer;
+    font-weight: 500;
+    border: 2px solid transparent;
+    padding: 10px 20px;
+    font-size: 16px;
+    margin-left: 20px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
 }
 
-/* Mostrar o submenu quando o checkbox estiver marcado */
-.submenu-checkbox:checked + .submenu {
-    display: block;
+.btn-outline-danger {
+    color: #dc3545;
+    border-color: #dc3545;
+    background-color: transparent;
 }
 
-.menu-item {
-    display: block;
-    margin-bottom: 10px;
+.btn-outline-danger:hover {
+    color: white;
+    background-color: #dc3545;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.submenu-item {
-    display: block;
-    padding: 5px 10px;
-    text-decoration: none;
-    color: #333;
+.collapse {
+    height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: height 0.5s ease-out, opacity 0.5s ease-out;
 }
 
-.submenu-item:hover {
-    background-color: #ddd;
-}
-
-.fas {
-    margin-right: 5px;
-}
-.submenu {
-    display: none;
-    position: absolute;
-    background-color: #fff;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    z-index: 1;
-    transition: all 0.3s;
-}
-
-/* Checkbox para controlar o estado do submenu */
-.submenu-checkbox {
-    display: none;
-}
-
-/* Mostrar o submenu quando o checkbox estiver marcado */
-.submenu-checkbox:checked + .submenu {
-    display: block;
-}
-
-.menu-item {
-    display: block;
-    margin-bottom: 10px;
-}
-
-.submenu-item {
-    display: block;
-    padding: 5px 10px;
-    text-decoration: none;
-    color: #333;
-}
-
-.submenu-item:hover {
-    background-color: #ddd;
-}
-
-.fas {
-    margin-right: 5px;
+.collapse.show {
+    height: auto;
+    opacity: 1;
 }
