@@ -39,7 +39,7 @@ public class CreateController {
         model.addAttribute("isAuthenticated", isAuthenticated);
         model.addAttribute("userEmail", userEmail);
         model.addAttribute("chamado", new Chamado());
-        return "ticket/openchamado";
+        return "ticket/cadastrarChamado";
     }
 
     @PostMapping("/chamado/salvar")
@@ -55,7 +55,7 @@ public class CreateController {
 
         model.addAttribute("sucesso", "Chamado salvo com sucesso!");
 
-        return "ticket/openchamado";
+        return "redirect:/chamado";
     }
 
 
