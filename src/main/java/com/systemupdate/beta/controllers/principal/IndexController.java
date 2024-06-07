@@ -32,7 +32,7 @@ public class IndexController {
             model.addAttribute("isAdmin", false);
         }
 
-        return "index/principal";
+        return "index/index";
     }
 
 }
