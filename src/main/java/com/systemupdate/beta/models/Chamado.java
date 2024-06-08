@@ -23,8 +23,7 @@ public class Chamado extends AbstractEntity {
 
     @Column(name = "status", nullable = false)
     private String status = "aberto";
-    @Column(name = "tipo", nullable = false)
-    private String tipo;
+
 
     @Column(name = "data_criacao", nullable = false)
     @DateTimeFormat(iso = ISO.DATE_TIME)
@@ -39,9 +38,7 @@ public class Chamado extends AbstractEntity {
     private Colaborador colaborador;
 
     // Getters and Setters
-    public String getTipo() {
-        return tipo;
-    }
+
 
     public Long getId() {
         return id;
@@ -54,9 +51,7 @@ public class Chamado extends AbstractEntity {
     public String getTitulo() {
         return titulo;
     }
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
+
 
     public void setTitulo(String titulo) {
         this.titulo = titulo;
