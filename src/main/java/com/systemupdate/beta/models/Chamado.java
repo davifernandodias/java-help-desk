@@ -20,6 +20,9 @@ public class Chamado extends AbstractEntity {
 
     @Column(name = "descricao", nullable = false)
     private String descricao;
+    
+    @Column(name = "supervisor", nullable = false)
+    private String supervisor;
 
     @Column(name = "status", nullable = false)
     private String status = "aberto";
@@ -36,10 +39,16 @@ public class Chamado extends AbstractEntity {
     @ManyToOne
     @JoinColumn(name = "id_colaborador", nullable = false)
     private Colaborador colaborador;
-
+    
     // Getters and Setters
 
 
+    public String getSupervisor() {
+        return supervisor;
+    }
+    public void setSupervisor(String supervisor) {
+        this.supervisor = supervisor;
+    }
     public Long getId() {
         return id;
     }

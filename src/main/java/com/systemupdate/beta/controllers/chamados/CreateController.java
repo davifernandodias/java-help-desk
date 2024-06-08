@@ -11,7 +11,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
-
 import com.systemupdate.beta.models.Chamado;
 import com.systemupdate.beta.models.Colaborador;
 import com.systemupdate.beta.models.Usuario;
@@ -29,7 +28,6 @@ public class CreateController {
     @Autowired
     private ChamadoRepository chamadoRepository;
 
-    
     @GetMapping({ "/chamado" })
     public String principal(ModelMap model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -47,16 +45,17 @@ public class CreateController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = auth.getName();
         Usuario usuario = usuarioService.findByEmail(userEmail);
-
+    
         Colaborador colaborador = usuario.getColaborador();
         chamado.setColaborador(colaborador);
         chamado.setDataCriacao(LocalDateTime.now());
+    
         chamadoRepository.save(chamado);
-
+    
         model.addAttribute("sucesso", "Chamado salvo com sucesso!");
-
+    
         return "redirect:/chamado";
     }
-
+    
 
 }
