@@ -15,6 +15,7 @@ public class Chamado extends AbstractEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
     @Column(name = "titulo", nullable = false)
     private String titulo;
 
@@ -39,9 +40,22 @@ public class Chamado extends AbstractEntity {
     @ManyToOne
     @JoinColumn(name = "id_colaborador", nullable = false)
     private Colaborador colaborador;
+
+    @ManyToOne
+    @JoinColumn(name = "tipo_de_chamado", nullable = false)
+    private TipoChamado tipoChamado;
+
+    
+    
     
     // Getters and Setters
 
+    public TipoChamado getTipoChamado() {
+        return tipoChamado;
+    }
+    public void setTipoChamado(TipoChamado tipoChamado) {
+        this.tipoChamado = tipoChamado;
+    }
 
     public String getSupervisor() {
         return supervisor;

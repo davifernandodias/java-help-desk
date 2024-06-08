@@ -10,11 +10,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.systemupdate.beta.models.Chamado;
 import com.systemupdate.beta.models.Colaborador;
+import com.systemupdate.beta.models.TipoChamado;
 import com.systemupdate.beta.models.Usuario;
 import com.systemupdate.beta.repository.ChamadoRepository;
+import com.systemupdate.beta.repository.TipoChamadoRepository;
 import com.systemupdate.beta.service.UsuarioService;
 
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -40,22 +43,30 @@ public class CreateController {
         return "ticket/cadastrarChamado";
     }
 
+    @Autowired
+    private TipoChamadoRepository tipoChamadoRepository;
+
     @PostMapping("/chamado/salvar")
-    public String salvarChamado(@ModelAttribute("chamado") Chamado chamado, ModelMap model) {
+    public String salvarChamado(@ModelAttribute("chamado") Chamado chamado,
+            @RequestParam("tipoChamado") Long tipoChamadoId, ModelMap model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = auth.getName();
         Usuario usuario = usuarioService.findByEmail(userEmail);
-    
+
         Colaborador colaborador = usuario.getColaborador();
         chamado.setColaborador(colaborador);
         chamado.setDataCriacao(LocalDateTime.now());
-    
+
+        // Buscar TipoChamado e associar ao chamado
+        TipoChamado tipoChamado = tipoChamadoRepository.findById(tipoChamadoId)
+                .orElseThrow(() -> new IllegalArgumentException("Tipo de chamado inválido"));
+        chamado.setTipoChamado(tipoChamado);
+
         chamadoRepository.save(chamado);
-    
+
         model.addAttribute("sucesso", "Chamado salvo com sucesso!");
-    
+
         return "redirect:/chamado";
     }
-    
 
 }
