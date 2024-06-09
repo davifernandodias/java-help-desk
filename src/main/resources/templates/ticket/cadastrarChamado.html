@@ -113,17 +113,22 @@
                                 <textarea class="form-control" id="descricao" name="descricao" rows="3" required></textarea>
                             </div>
                             <div class="form-group">
-                                <label for="supervisor">supervisor:</label>
-                                <textarea class="form-control" id="supervisor" name="supervisor"  required></textarea>
+                                <label for="supervisor">Supervisor:</label>
+                                <textarea class="form-control" id="supervisor" name="supervisor" required></textarea>
                             </div>
                             <div class="form-group">
-                                <label for="tipoChamado">Tipo de Chamado:</label>
-                                <select class="form-control" id="tipoChamado" name="tipoChamado" required>
-                                    <option value="1">INFORMATICA</option>
-                                    <option value="2">JURIDICO</option>
-                                    <option value="3">FINANCEIRO</option>
+                                <label for="tipoDeChamado">Tipo de Chamado:</label>
+                                <select class="form-control" id="tipoDeChamado" name="tipoDeChamado" required onchange="showAdditionalFields()">
+                                    <option value="INFORMATICA">INFORMATICA</option>
+                                    <option value="JURIDICO">JURIDICO</option>
+                                    <option value="FINANCEIRO">FINANCEIRO</option>
                                 </select>
                             </div>
+        
+                            <!-- Additional fields -->
+                            <div id="additionalFields"></div>
+                            
+                            
                             
                             <button type="submit" class="btn btn-primary">Salvar</button>
                             
@@ -152,5 +157,47 @@
         <script src="materialize/assets/demo/chart-area-demo.js"></script>
         <script src="materialize/assets/demo/chart-bar-demo.js"></script>
         <script src="materialize/assets/demo/chart-pie-demo.js"></script>
+        <script>
+            function showAdditionalFields() {
+                const tipoDeChamado = document.getElementById('tipoDeChamado').value;
+                const additionalFields = document.getElementById('additionalFields');
+                additionalFields.innerHTML = '';
+    
+                if (tipoDeChamado === 'INFORMATICA') {
+                    additionalFields.innerHTML = `
+                        <div class="form-group">
+                            <label for="problema">Problema:</label>
+                            <input type="text" class="form-control" id="problema" name="problema" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="equipamento">Equipamento:</label>
+                            <input type="text" class="form-control" id="equipamento" name="equipamento" required>
+                        </div>
+                    `;
+                } else if (tipoDeChamado === 'JURIDICO') {
+                    additionalFields.innerHTML = `
+                        <div class="form-group">
+                            <label for="advogado">Advogado:</label>
+                            <input type="text" class="form-control" id="advogado" name="advogado" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="processo">Processo:</label>
+                            <input type="text" class="form-control" id="processo" name="processo" required>
+                        </div>
+                    `;
+                } else if (tipoDeChamado === 'FINANCEIRO') {
+                    additionalFields.innerHTML = `
+                        <div class="form-group">
+                            <label for="valor">Valor:</label>
+                            <input type="number" class="form-control" id="valor" name="valor" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="conta">Conta:</label>
+                            <input type="text" class="form-control" id="conta" name="conta" required>
+                        </div>
+                    `;
+                }
+            }
+        </script>
     </body>
 </html>

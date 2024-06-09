@@ -9,18 +9,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.systemupdate.beta.models.Chamado;
-import com.systemupdate.beta.models.Colaborador;
-import com.systemupdate.beta.models.TipoChamado;
-import com.systemupdate.beta.models.Usuario;
-import com.systemupdate.beta.repository.ChamadoRepository;
-import com.systemupdate.beta.repository.TipoChamadoRepository;
+import com.systemupdate.beta.models.*;
+import com.systemupdate.beta.repository.*;
 import com.systemupdate.beta.service.UsuarioService;
-
-import org.springframework.web.bind.annotation.ModelAttribute;
 
 @Controller
 public class CreateController {
@@ -30,6 +25,15 @@ public class CreateController {
 
     @Autowired
     private ChamadoRepository chamadoRepository;
+
+    @Autowired
+    private ChamadoJuridicoRepository chamadoJuridicoRepository;
+
+    @Autowired
+    private ChamadoInformaticaRepository chamadoInformaticaRepository;
+
+    @Autowired
+    private ChamadoFinanceiroRepository chamadoFinanceiroRepository;
 
     @GetMapping({ "/chamado" })
     public String principal(ModelMap model) {
@@ -43,30 +47,61 @@ public class CreateController {
         return "ticket/cadastrarChamado";
     }
 
-    @Autowired
-    private TipoChamadoRepository tipoChamadoRepository;
-
     @PostMapping("/chamado/salvar")
-    public String salvarChamado(@ModelAttribute("chamado") Chamado chamado,
-            @RequestParam("tipoChamado") Long tipoChamadoId, ModelMap model) {
+    public String salvarChamado(
+            @ModelAttribute("chamado") Chamado chamado,
+            @RequestParam(value = "problema", required = false) String problema,
+            @RequestParam(value = "equipamento", required = false) String equipamento,
+            @RequestParam(value = "advogado", required = false) String advogado,
+            @RequestParam(value = "processo", required = false) String processo,
+            @RequestParam(value = "valor", required = false) Integer valor,
+            @RequestParam(value = "conta", required = false) String conta,
+            ModelMap model) {
+    
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = auth.getName();
         Usuario usuario = usuarioService.findByEmail(userEmail);
-
+    
         Colaborador colaborador = usuario.getColaborador();
         chamado.setColaborador(colaborador);
         chamado.setDataCriacao(LocalDateTime.now());
-
-        // Buscar TipoChamado e associar ao chamado
-        TipoChamado tipoChamado = tipoChamadoRepository.findById(tipoChamadoId)
-                .orElseThrow(() -> new IllegalArgumentException("Tipo de chamado inválido"));
-        chamado.setTipoChamado(tipoChamado);
-
+    
         chamadoRepository.save(chamado);
-
+    
+        // Salvar detalhes específicos do tipo de chamado
+        switch (chamado.getTipoDeChamado()) {
+            case "INFORMATICA":
+                ChamadoInformatica chamadoInformatica = new ChamadoInformatica();
+                chamadoInformatica.setId(chamado.getId());
+                chamadoInformatica.setProblema(problema);
+                chamadoInformatica.setEquipamento(equipamento);
+                chamadoInformatica.setIdTipoChamado(1); // Definindo o tipo de chamado como INFORMATICA
+                chamadoInformaticaRepository.save(chamadoInformatica);
+                break;
+    
+                case "FINANCEIRO":
+                ChamadoFinanceiro chamadoFinanceiro = new ChamadoFinanceiro();
+                chamadoFinanceiro.setId(chamado.getId());
+                chamadoFinanceiro.setValor(valor);
+                chamadoFinanceiro.setConta(conta);
+                chamadoFinanceiro.setIdTipoChamado(2); // Definindo o tipo de chamado como FINANCEIRO
+                chamadoFinanceiroRepository.save(chamadoFinanceiro);
+                break;
+    
+                case "JURIDICO":
+                ChamadoJuridico chamadoJuridico = new ChamadoJuridico();
+                chamadoJuridico.setId(chamado.getId());
+                chamadoJuridico.setAdvogado(advogado);
+                chamadoJuridico.setProcesso(processo);
+                chamadoJuridico.setIdTipoChamado(3); // Definindo o tipo de chamado como JURIDICO
+                chamadoJuridicoRepository.save(chamadoJuridico);
+                break;
+        }
+        
+    
         model.addAttribute("sucesso", "Chamado salvo com sucesso!");
-
+    
         return "redirect:/chamado";
     }
-
+    
 }

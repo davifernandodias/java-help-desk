@@ -19,6 +19,9 @@ public class Chamado extends AbstractEntity {
     @Column(name = "titulo", nullable = false)
     private String titulo;
 
+    @Column(name = "tipo_de_chamado", nullable = false)
+    private String tipoDeChamado;
+
     @Column(name = "descricao", nullable = false)
     private String descricao;
     
@@ -41,22 +44,20 @@ public class Chamado extends AbstractEntity {
     @JoinColumn(name = "id_colaborador", nullable = false)
     private Colaborador colaborador;
 
-    @ManyToOne
-    @JoinColumn(name = "tipo_de_chamado", nullable = false)
-    private TipoChamado tipoChamado;
+
 
     
     
     
     // Getters and Setters
 
-    public TipoChamado getTipoChamado() {
-        return tipoChamado;
+    
+    public String getTipoDeChamado() {
+        return tipoDeChamado;
     }
-    public void setTipoChamado(TipoChamado tipoChamado) {
-        this.tipoChamado = tipoChamado;
+    public void setTipoDeChamado(String tipoDeChamado) {
+        this.tipoDeChamado = tipoDeChamado;
     }
-
     public String getSupervisor() {
         return supervisor;
     }

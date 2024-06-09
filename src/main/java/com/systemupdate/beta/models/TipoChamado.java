@@ -1,26 +1,18 @@
 package com.systemupdate.beta.models;
 
-
-
 import jakarta.persistence.*;
-/*
- * 1 - INFORMATICA
- * 2 - JURIDICO
- * 3 - FINANCEIRO
- */
 
-@SuppressWarnings("serial")
 @Entity
-@Table(name = "tipo_chamado")
-public class TipoChamado extends AbstractEntity {
-    
-
+@Table(name = "tipos_chamado")
+public class TipoChamado {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Getters and Setters
+    @Column(name = "nome", nullable = false)
+    private String tipo;
 
+    // Getters e Setters
     public Long getId() {
         return id;
     }
@@ -29,4 +21,11 @@ public class TipoChamado extends AbstractEntity {
         this.id = id;
     }
 
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
 }
