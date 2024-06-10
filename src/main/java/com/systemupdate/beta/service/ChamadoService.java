@@ -12,9 +12,14 @@ import jakarta.transaction.Transactional;
 public class ChamadoService {
     @Autowired
     private ChamadoRepository chamadoRepository;
+
+    public int contarChamadosPorStatus(String status) {
+        return chamadoRepository.countByStatus(status);
+    }
     
     @Transactional
     public void salvar(Chamado chamado){
         chamadoRepository.save(chamado);
     }
+    
 }

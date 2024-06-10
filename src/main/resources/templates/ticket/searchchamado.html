@@ -1,86 +1,347 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <title>Sistema Help Desk</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f0f8ff;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            margin: 0;
-            font-family: Arial, sans-serif;
-        }
-
-        .container {
-            max-width: 800px; /* Define a largura máxima da tabela */
-            margin: 0 auto; /* Centraliza a tabela na página */
-            padding: 20px;
-        }
-
-        h1 {
-            text-align: center; /* Centraliza o título */
-            margin-bottom: 20px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            border-spacing: 0;
-        }
-
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        tr:hover {
-            background-color: #ddd;
-        }
-
-    </style>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Cadastrar Chamado</title>
+    <link type="text/css" rel="stylesheet" href="materialize/css/materialize.index.css" media="screen,projection" />
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 </head>
+<style>
+    body {
+        background-color: #f0f8ff;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        margin: 0;
+        font-family: Arial, sans-serif;
+    }
 
-<body>
-    <div class="container">
-        <h1>Lista de Chamados</h1>
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nome</th>
-                    <th>Título</th>
-                    <th>Descrição</th>
-                    <th>Status</th>
-                    <th>Data da Criação</th>
-                    <th>Ação</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="chamado : ${chamados}">
-                    <td><span th:text="${chamado.id}"></span></td>
-                    <td><span th:text="${chamado.colaborador.nome}"></span></td>
-                    <td><span th:text="${chamado.titulo}"></span></td>
-                    <td><span th:text="${chamado.descricao}"></span></td>
-                    <td><span th:text="${chamado.status}"></span></td>
-                    <td><span th:text="${chamado.dataCriacao}"></span></td>
-                    <td><a th:href="@{/sell(id=${chamado.id})}" class="btn btn-primary">Ver</a></td>
-                </tr>
-            </tbody>
-        </table>
+    .container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .search-bar {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .search-bar input {
+        width: 300px;
+        padding: 10px;
+        border-radius: 4px;
+        border: 1px solid #ddd;
+    }
+
+    .cards-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+    }
+
+    .card {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 30px;
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        width: 350px;
+        transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    .card.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .card-title {
+        font-size: 1.25em;
+        margin-bottom: 10px;
+    }
+
+    .card-content {
+        margin-bottom: 10px;
+    }
+
+    .card-status {
+        padding: 4px 8px;
+        border-radius: 4px;
+        color: #fff;
+    }
+
+    .status-aberto {
+        display: flex;
+        align-items: center;
+        width: 100px;
+        /* Ajuste conforme necessário */
+        background-color: #28a745;
+        border-radius: 4px;
+        padding: 4px;
+    }
+
+    .status-aberto::before {
+        content: '';
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        background-color: #fff;
+        border-radius: 50%;
+        /* Garante que seja um círculo */
+        margin-right: 8px;
+        /* Espaçamento entre o círculo e o texto */
+        margin-left: 4px;
+    }
+
+    .status-fechado {
+        background-color: #dc3545;
+    }
+
+    .time-open {
+        font-size: 0.875em;
+        color: #555;
+    }
+</style>
+
+<body class="sb-nav-fixed">
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+        <!-- Navbar Brand-->
+        <a class="navbar-brand ps-3" href="index.html">DEMO</a>
+        <!-- Sidebar Toggle-->
+        <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i
+                class="fas fa-bars"></i></button>
+        <!-- Navbar Search-->
+        <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0" th:if="${isAuthenticated}">
+            <i class="fas fa-user"></i> <span th:text="${userEmail}" style="color: white;"></span>
+        </form>
+        <!-- Navbar-->
+        <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
+                    aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="profile">Settings</a></li>
+                    <form th:action="@{/logout}" method="post">
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+                        <li><button class="dropdown-item" type="submit">Sair</button></li>
+                    </form>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+    <div id="layoutSidenav">
+        <div id="layoutSidenav_nav">
+            <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                <div class="sb-sidenav-menu">
+                    <div class="nav">
+                        <div class="sb-sidenav-menu-heading">Core</div>
+                        <a class="nav-link" href="/principal">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-chart-simple"
+                                    style="margin-right: 10px;"></i></div>
+                            Dashboard
+                        </a>
+                        <div class="sb-sidenav-menu-heading">Interface</div>
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                            data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-bars" style="margin-right: 10px;"></i>
+                            </div>
+                            Chamados
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne"
+                            data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="/chamado"><i class="fa-solid fa-plus"
+                                        style="margin-right: 10px;"></i>Novo chamado</a>
+                                <a class="nav-link" href="/consultar"><i class="fa-solid fa-magnifying-glass"
+                                        style="margin-right: 10px;"></i>Consultar chamado</a>
+                            </nav>
+                        </div>
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages"
+                            aria-expanded="false" aria-controls="collapsePages">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-clipboard-user"
+                                    style="margin-right: 10px;"></i></div>
+                            Gerenciamento
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="collapsePages" aria-labelledby="headingTwo"
+                            data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="layout-static.html"><i class="fa-solid fa-address-card"
+                                        style="margin-right: 10px;"></i>Novo Colaborador</a>
+                                <a class="nav-link" href="layout-static.html"><i class="fa-solid fa-magnifying-glass"
+                                        style="margin-right: 10px;"></i>Consultar Colaborador</a>
+                            </nav>
+                        </div>
+                        <div class="sb-sidenav-menu-heading">Addons</div>
+                        <a class="nav-link" href="charts.html">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-chart-pie"
+                                    style="margin-right: 5px;"></i></div>
+                            Charts
+                        </a>
+                        <a class="nav-link" href="tables.html">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-clipboard-list"
+                                    style="margin-right: 5px;"></i></div>
+                            Tables
+                        </a>
+                        <div class="sb-sidenav-menu-heading">Admistrador</div>
+                        <a class="nav-link" href="tables.html">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-users" style="margin-right: 5px;"></i>
+                            </div>
+                            Gerenciamento user
+                        </a>
+                    </div>
+                </div>
+                <div class="sb-sidenav-footer">
+                    <div class="small">Logado no:</div>
+                    Sistema Demo
+                </div>
+            </nav>
+        </div>
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid px-4">
+                    <h1>Lista de Chamados</h1>
+                    <div class="search-bar">
+                        <input type="text" id="searchInput" placeholder="Pesquisar chamados...">
+                    </div>
+                    <div id="chamados-container" class="cards-container">
+                        <div class="card" th:each="chamado : ${chamados}" th:data-id="${chamado.id}">
+                            <div class="card-title"><span th:text="${chamado.titulo}">Título do Chamado</span></div>
+                            <div class="card-content">
+                                <strong>Nome:</strong> <span th:text="${chamado.colaborador.nome}">Nome do
+                                    Colaborador</span>
+                            </div>
+                            <div class="card-status status-aberto"
+                                th:classappend="${chamado.status == 'Fechado'} ? 'status-fechado' : 'status-aberto'">
+                                <span th:text="${chamado.status}">Status</span>
+                            </div>
+                            <div class="card-content">
+                                <strong>Aberto há:</strong> <span class="time-open"
+                                    th:data-criacao="${chamado.dataCriacao}">Tempo desde a criação</span>
+                            </div>
+                            <div class="card-content">
+                                <a th:href="@{/sell(id=${chamado.id})}" class="btn btn-primary">Ver</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <footer class="py-4 bg-light mt-auto">
+                <div class="container-fluid px-4">
+                    <div class="d-flex align-items-center justify-content-between small">
+                        <div class="text-muted">Copyright &copy; Davi Website 2024</div>
+                        <div>
+                            <a href="#">Privacy Policy</a>
+                            &middot;
+                            <a href="#">Terms &amp; Conditions</a>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+    <script src="materialize/js/materialize.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+    <script>
+        // Função para calcular o tempo desde a criação do chamado
+        function timeSince(dateString) {
+            const now = new Date();
+            const createdDate = new Date(dateString);
+            const seconds = Math.floor((now - createdDate) / 1000);
+
+            if (seconds < 60) {
+                return `${seconds} segundo${seconds !== 1 ? 's' : ''}`;
+            }
+
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+
+            if (minutes < 60) {
+                return `${minutes} minuto${minutes !== 1 ? 's' : ''} e ${remainingSeconds} segundo${remainingSeconds !== 1 ? 's' : ''}`;
+            }
+
+            const hours = Math.floor(minutes / 60);
+            const remainingMinutes = minutes % 60;
+
+            if (hours < 24) {
+                return `${hours} hora${hours !== 1 ? 's' : ''} e ${remainingMinutes} minuto${remainingMinutes !== 1 ? 's' : ''}`;
+            }
+
+            const days = Math.floor(hours / 24);
+            const remainingHours = hours % 24;
+
+            if (days < 30) {
+                return `${days} dia${days !== 1 ? 's' : ''} e ${remainingHours} hora${remainingHours !== 1 ? 's' : ''}`;
+            }
+
+            const months = Math.floor(days / 30);
+            const remainingDays = days % 30;
+
+            if (months < 12) {
+                return `${months} mês${months !== 1 ? 'es' : ''} e ${remainingDays} dia${remainingDays !== 1 ? 's' : ''}`;
+            }
+
+            const years = Math.floor(months / 12);
+            const remainingMonths = months % 12;
+
+            return `${years} ano${years !== 1 ? 's' : ''} e ${remainingMonths} mês${remainingMonths !== 1 ? 'es' : ''}`;
+        }
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.card');
+            let delay = 0;
+
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.classList.add('show');
+                }, delay);
+                delay += 200;
+            });
+
+            const timeElements = document.querySelectorAll('.time-open');
+
+            timeElements.forEach(el => {
+                const dataCriacao = el.getAttribute('data-criacao');
+                el.textContent = timeSince(dataCriacao);
+            });
+
+            const searchInput = document.getElementById('searchInput');
+
+            searchInput.addEventListener('input', function () {
+                const searchTerm = searchInput.value.toLowerCase();
+                cards.forEach(card => {
+                    const title = card.querySelector('.card-title').textContent.toLowerCase();
+                    const name = card.querySelector('.card-content span').textContent.toLowerCase();
+                    if (title.includes(searchTerm) || name.includes(searchTerm)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+
+
 </body>
 
 </html>

@@ -124,7 +124,8 @@
                             <div class="card bg-primary text-white mb-4">
                                 <div class="card-body" style="font-size: 35px; text-align: center;">10</div>
                                 <p class="card-text" style="text-align: center; margin-left: 10px; font-size: 15px;">
-                                    <strong>TICKET ABERTO</strong></p>
+                                    <strong>TICKET ABERTO</strong>
+                                </p>
                                 <div class="card-footer d-flex align-items-center justify-content-between">
                                     <a class="small text-white stretched-link" href="#">Ver Detalhes</a>
                                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
@@ -135,7 +136,8 @@
                             <div class="card bg-warning text-white mb-4">
                                 <div class="card-body" style="font-size: 35px; text-align: center;">10</div>
                                 <p class="card-text" style="text-align: center; margin-left: 10px; font-size: 15px;">
-                                    <strong>TICKET EM ANDAMENTO</strong></p>
+                                    <strong>TICKET EM ANDAMENTO</strong>
+                                </p>
                                 <div class="card-footer d-flex align-items-center justify-content-between">
                                     <a class="small text-white stretched-link" href="#">Ver Detalhes</a>
                                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
@@ -146,7 +148,8 @@
                             <div class="card bg-success text-white mb-4">
                                 <div class="card-body" style="font-size: 35px; text-align: center;">10</div>
                                 <p class="card-text" style="text-align: center; margin-left: 10px; font-size: 15px;">
-                                    <strong>TICKET CONCLUÍDOS</strong></p>
+                                    <strong>TICKET CONCLUÍDOS</strong>
+                                </p>
                                 <div class="card-footer d-flex align-items-center justify-content-between">
                                     <a class="small text-white stretched-link" href="#">Ver Detalhes</a>
                                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
@@ -157,7 +160,8 @@
                             <div class="card bg-danger text-white mb-4">
                                 <div class="card-body" style="font-size: 35px; text-align: center;">10</div>
                                 <p class="card-text" style="text-align: center; margin-left: 10px; font-size: 15px;">
-                                    <strong>TICKET AGUARDANDO INFO ADD</strong></p>
+                                    <strong>TICKET AGUARDANDO INFO ADD</strong>
+                                </p>
                                 <div class="card-footer d-flex align-items-center justify-content-between">
                                     <a class="small text-white stretched-link" href="#">Ver Detalhes</a>
                                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
@@ -195,31 +199,23 @@
                                 <thead>
                                     <tr>
                                         <th>Name</th>
-                                        <th>Position</th>
-                                        <th>Office</th>
-                                        <th>Age</th>
-                                        <th>Start date</th>
-                                        <th>Salary</th>
+                                        <th>Cargo</th>
+                                        <th>idade</th>
+                                        <th>Regiao</th>
+                                        <th>Salario</th>
                                     </tr>
                                 </thead>
-                                <tfoot>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Position</th>
-                                        <th>Office</th>
-                                        <th>Age</th>
-                                        <th>Start date</th>
-                                        <th>Salary</th>
-                                    </tr>
-                                </tfoot>
                                 <tbody>
-                                    <tr>
-                                        <td>Tiger Nixon</td>
-                                        <td>System Architect</td>
-                                        <td>Edinburgh</td>
-                                        <td>61</td>
-                                        <td>2011/04/25</td>
-                                        <td>$320,800</td>
+                                    <tr th:each="colaborador : ${colaboradores}">
+                                        <td th:text="${colaborador.nome}">Nome do Colaborador</td>
+                                        <td th:text="${colaborador.cargo}">Cargo do Colaborador</td>
+                                        <td class="idade" th:text="${colaborador.dataNascimento}">idade</td>
+                                        <td th:text="${colaborador.regiao}">Região do Colaborador</td>
+                                        <td th:text="${colaborador.salario}">Salário do Colaborador</td>
+
+
+
+                                        <!-- Adicione outras colunas conforme necessário -->
                                     </tr>
                                 </tbody>
                             </table>
@@ -250,6 +246,36 @@
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
         crossorigin="anonymous"></script>
     <script src="materialize/js/materialize.table.js"></script>
+    <script>
+        function calcularIdade(dataNascimento) {
+            var hoje = new Date();
+            var partes = dataNascimento.split('-');
+            var nascimento = new Date(partes[0], partes[1] - 1, partes[2]); // -1 porque os meses em JavaScript são indexados a partir de 0
+            var idade = hoje.getFullYear() - nascimento.getFullYear();
+            var mes = hoje.getMonth() - nascimento.getMonth();
+            var dia = hoje.getDate() - nascimento.getDate();
+
+            if (mes < 0 || (mes === 0 && dia < 0)) {
+                idade--;
+            }
+
+            return idade;
+        }
+
+        // Chamada da função para cada linha da tabela
+        document.addEventListener("DOMContentLoaded", function () {
+            var linhas = document.querySelectorAll("#datatablesSimple tbody tr");
+
+            linhas.forEach(function (linha) {
+                var dataNascimento = linha.querySelector(".data-nascimento").textContent;
+                var idade = calcularIdade(dataNascimento);
+                linha.querySelector(".idade").textContent = idade; 
+            });
+        });
+
+    </script>
+
+
 </body>
 
 </html>

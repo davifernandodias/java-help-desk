@@ -41,6 +41,7 @@ public class Colaborador extends AbstractEntity {
     @OneToMany(mappedBy = "colaborador")
     private List<Chamado> chamados;
 
+
     // Getters and Setters
 
     public Long getId() {
