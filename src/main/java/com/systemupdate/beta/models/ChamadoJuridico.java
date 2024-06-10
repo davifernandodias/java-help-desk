@@ -16,7 +16,7 @@ public class ChamadoJuridico {
     private String advogado;
     @Column(name = "processo", nullable = false)
     private String processo;
-    @Column(name = "id_tipo_chamado", nullable = false)
+    @Column(name = "id_tipo_chamado_referencia", nullable = false)
     private int idTipoChamado;
     
     public int getIdTipoChamado() {

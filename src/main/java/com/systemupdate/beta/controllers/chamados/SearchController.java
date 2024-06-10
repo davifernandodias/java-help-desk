@@ -1,12 +1,12 @@
 package com.systemupdate.beta.controllers.chamados;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -16,8 +16,6 @@ import com.systemupdate.beta.models.Usuario;
 import com.systemupdate.beta.repository.ChamadoRepository;
 import com.systemupdate.beta.service.UsuarioService;
 import com.systemupdate.beta.models.PerfilTipo;
-
-
 
 @Controller
 public class SearchController {
@@ -41,7 +39,7 @@ public class SearchController {
         Colaborador colaborador = usuario.getColaborador();
 
         boolean isAdmin = usuario.getPerfis().stream()
-                                 .anyMatch(perfil -> perfil.getDescricao().equals(PerfilTipo.ADMIN.getDescricao()));
+                .anyMatch(perfil -> perfil.getDescricao().equals(PerfilTipo.ADMIN.getDescricao()));
 
         ModelAndView mv = new ModelAndView("ticket/searchchamado");
 
@@ -55,4 +53,27 @@ public class SearchController {
 
         return mv;
     }
+
+
+    
+    @RequestMapping("/chamado/{id}")
+    public ModelAndView viewChamado(@PathVariable("id") Long id, ModelMap model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = auth.getName();
+        boolean isAuthenticated = auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken);
+    
+        model.addAttribute("isAuthenticated", isAuthenticated);
+        model.addAttribute("userEmail", userEmail);
+        
+        Chamado chamado = chamadoRepository.findById(id).orElse(null);
+        ModelAndView mv = new ModelAndView("ticket/detalhesChamados");
+        if (chamado != null) {
+            mv.addObject("chamado", chamado);
+        } else {
+            System.out.print("erro !!!!");
+        }
+    
+        return mv;
+    }
+    
 }

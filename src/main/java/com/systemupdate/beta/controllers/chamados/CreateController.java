@@ -70,7 +70,7 @@ public class CreateController {
     
         // Salvar detalhes específicos do tipo de chamado
         switch (chamado.getTipoDeChamado()) {
-            case "INFORMATICA":
+            case 1:
                 ChamadoInformatica chamadoInformatica = new ChamadoInformatica();
                 chamadoInformatica.setId(chamado.getId());
                 chamadoInformatica.setProblema(problema);
@@ -79,7 +79,7 @@ public class CreateController {
                 chamadoInformaticaRepository.save(chamadoInformatica);
                 break;
     
-                case "FINANCEIRO":
+                case 2:
                 ChamadoFinanceiro chamadoFinanceiro = new ChamadoFinanceiro();
                 chamadoFinanceiro.setId(chamado.getId());
                 chamadoFinanceiro.setValor(valor);
@@ -88,7 +88,7 @@ public class CreateController {
                 chamadoFinanceiroRepository.save(chamadoFinanceiro);
                 break;
     
-                case "JURIDICO":
+                case 3:
                 ChamadoJuridico chamadoJuridico = new ChamadoJuridico();
                 chamadoJuridico.setId(chamado.getId());
                 chamadoJuridico.setAdvogado(advogado);

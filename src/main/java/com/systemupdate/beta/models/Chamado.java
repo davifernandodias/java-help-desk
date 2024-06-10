@@ -19,8 +19,8 @@ public class Chamado extends AbstractEntity {
     @Column(name = "titulo", nullable = false)
     private String titulo;
 
-    @Column(name = "tipo_de_chamado", nullable = false)
-    private String tipoDeChamado;
+    @Column(name = "tipo_chamado", nullable = false)
+    private int tipoDeChamado;
 
     @Column(name = "descricao", nullable = false)
     private String descricao;
@@ -52,10 +52,10 @@ public class Chamado extends AbstractEntity {
     // Getters and Setters
 
     
-    public String getTipoDeChamado() {
+    public int getTipoDeChamado() {
         return tipoDeChamado;
     }
-    public void setTipoDeChamado(String tipoDeChamado) {
+    public void setTipoDeChamado(int tipoDeChamado) {
         this.tipoDeChamado = tipoDeChamado;
     }
     public String getSupervisor() {

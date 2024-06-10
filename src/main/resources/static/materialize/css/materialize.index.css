@@ -485,6 +485,9 @@ progress {
 [hidden] {
   display: none !important;
 }
+.dedao{
+  background-color: red;
+}
 
 .lead {
   font-size: 1.25rem;
@@ -501,6 +504,7 @@ progress {
     font-size: 5rem;
   }
 }
+
 
 .display-2 {
   font-size: calc(1.575rem + 3.9vw);

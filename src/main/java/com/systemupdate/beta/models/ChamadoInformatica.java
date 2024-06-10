@@ -16,7 +16,7 @@ public class ChamadoInformatica {
     private String problema;
     @Column(name = "equipamento", nullable = false)
     private String equipamento;
-    @Column(name = "id_tipo_chamado", nullable = false)
+    @Column(name = "id_tipo_chamado_referencia", nullable = false)
     private int idTipoChamado;
     
     

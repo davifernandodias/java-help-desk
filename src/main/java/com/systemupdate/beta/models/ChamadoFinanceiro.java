@@ -16,7 +16,7 @@ public class ChamadoFinanceiro {
     private int valor;
     @Column(name = "conta", nullable = false)
     private String conta;
-    @Column(name = "id_tipo_chamado", nullable = false)
+    @Column(name = "id_tipo_chamado_referencia", nullable = false)
     private int idTipoChamado;
 
     public int getIdTipoChamado() {

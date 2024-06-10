@@ -216,7 +216,7 @@
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid px-4">
-                    <h1>Lista de Chamados</h1>
+                    <h1 class="listada">Lista de Chamados</h1>
                     <div class="search-bar">
                         <input type="text" id="searchInput" placeholder="Pesquisar chamados...">
                     </div>
@@ -224,19 +224,17 @@
                         <div class="card" th:each="chamado : ${chamados}" th:data-id="${chamado.id}">
                             <div class="card-title"><span th:text="${chamado.titulo}">Título do Chamado</span></div>
                             <div class="card-content">
-                                <strong>Nome:</strong> <span th:text="${chamado.colaborador.nome}">Nome do
-                                    Colaborador</span>
+                                <strong>Nome:</strong> <span th:text="${chamado.colaborador.nome}">Nome do Colaborador</span>
                             </div>
                             <div class="card-status status-aberto"
                                 th:classappend="${chamado.status == 'Fechado'} ? 'status-fechado' : 'status-aberto'">
                                 <span th:text="${chamado.status}">Status</span>
                             </div>
                             <div class="card-content">
-                                <strong>Aberto há:</strong> <span class="time-open"
-                                    th:data-criacao="${chamado.dataCriacao}">Tempo desde a criação</span>
+                                <strong>Aberto há:</strong> <span class="time-open" th:data-criacao="${chamado.dataCriacao}">Tempo desde a criação</span>
                             </div>
                             <div class="card-content">
-                                <a th:href="@{/sell(id=${chamado.id})}" class="btn btn-primary">Ver</a>
+                                <a th:href="@{/chamado/{id}(id=${chamado.id})}" class="btn btn-primary">Ver</a>
                             </div>
                         </div>
                     </div>
