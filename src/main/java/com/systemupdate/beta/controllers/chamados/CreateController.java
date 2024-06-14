@@ -57,51 +57,50 @@ public class CreateController {
             @RequestParam(value = "valor", required = false) Integer valor,
             @RequestParam(value = "conta", required = false) String conta,
             ModelMap model) {
-    
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = auth.getName();
         Usuario usuario = usuarioService.findByEmail(userEmail);
-    
+
         Colaborador colaborador = usuario.getColaborador();
         chamado.setColaborador(colaborador);
         chamado.setDataCriacao(LocalDateTime.now());
-    
+
+        // Salvar o chamado genérico
         chamadoRepository.save(chamado);
-    
+
         // Salvar detalhes específicos do tipo de chamado
         switch (chamado.getTipoDeChamado()) {
             case 1:
                 ChamadoInformatica chamadoInformatica = new ChamadoInformatica();
-                chamadoInformatica.setId(chamado.getId());
                 chamadoInformatica.setProblema(problema);
                 chamadoInformatica.setEquipamento(equipamento);
-                chamadoInformatica.setIdTipoChamado(1); // Definindo o tipo de chamado como INFORMATICA
+                chamadoInformatica.setTipoChamado(chamado.getTipoDeChamado());
+                chamadoInformatica.setChamado(chamado);
                 chamadoInformaticaRepository.save(chamadoInformatica);
                 break;
-    
-                case 2:
+
+            case 2:
                 ChamadoFinanceiro chamadoFinanceiro = new ChamadoFinanceiro();
-                chamadoFinanceiro.setId(chamado.getId());
                 chamadoFinanceiro.setValor(valor);
                 chamadoFinanceiro.setConta(conta);
-                chamadoFinanceiro.setIdTipoChamado(2); // Definindo o tipo de chamado como FINANCEIRO
+                chamadoFinanceiro.setTipoChamado(chamado.getTipoDeChamado());
+                chamadoFinanceiro.setChamado(chamado);
                 chamadoFinanceiroRepository.save(chamadoFinanceiro);
                 break;
-    
-                case 3:
+
+            case 3:
                 ChamadoJuridico chamadoJuridico = new ChamadoJuridico();
-                chamadoJuridico.setId(chamado.getId());
                 chamadoJuridico.setAdvogado(advogado);
                 chamadoJuridico.setProcesso(processo);
-                chamadoJuridico.setIdTipoChamado(3); // Definindo o tipo de chamado como JURIDICO
+                chamadoJuridico.setTipoChamado(chamado.getTipoDeChamado());
+                chamadoJuridico.setChamado(chamado);
                 chamadoJuridicoRepository.save(chamadoJuridico);
                 break;
         }
-        
-    
+
         model.addAttribute("sucesso", "Chamado salvo com sucesso!");
-    
+
         return "redirect:/chamado";
     }
-    
 }
