@@ -41,6 +41,8 @@ public class SearchController {
                 .anyMatch(perfil -> perfil.getDescricao().equals(PerfilTipo.ADMIN.getDescricao()));
 
         ModelAndView mv = new ModelAndView("ticket/searchchamado");
+        
+        mv.addObject("isAdmin", isAdmin);
 
         if (isAdmin) {
             Iterable<Chamado> chamados = chamadoRepository.findAll();
