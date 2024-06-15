@@ -87,7 +87,6 @@
         display: flex;
         align-items: center;
         width: 100px;
-        /* Ajuste conforme necessário */
         background-color: #28a745;
         border-radius: 4px;
         padding: 4px;
@@ -100,9 +99,7 @@
         height: 8px;
         background-color: #fff;
         border-radius: 50%;
-        /* Garante que seja um círculo */
         margin-right: 8px;
-        /* Espaçamento entre o círculo e o texto */
         margin-left: 4px;
     }
 
@@ -217,27 +214,27 @@
             <main>
                 <div class="container-fluid px-4">
                     <h1 class="listada">Lista de Chamados</h1>
-                    <div class="search-bar">
-                        <input type="text" id="searchInput" placeholder="Pesquisar chamados...">
-                    </div>
-                    <div id="chamados-container" class="cards-container">
-                        <div class="card" th:each="chamado : ${chamados}" th:data-id="${chamado.id}">
-                            <div class="card-title"><span th:text="${chamado.titulo}">Título do Chamado</span></div>
-                            <div class="card-content">
-                                <strong>Nome:</strong> <span th:text="${chamado.colaborador.nome}">Nome do Colaborador</span>
-                            </div>
-                            <div class="card-status status-aberto"
-                                th:classappend="${chamado.status == 'Fechado'} ? 'status-fechado' : 'status-aberto'">
-                                <span th:text="${chamado.status}">Status</span>
-                            </div>
-                            <div class="card-content">
-                                <strong>Aberto há:</strong> <span class="time-open" th:data-criacao="${chamado.dataCriacao}">Tempo desde a criação</span>
-                            </div>
-                            <div class="card-content">
-                                <a th:href="@{/chamado/{id}(id=${chamado.id})}" class="btn btn-primary">Ver</a>
-                            </div>
-                        </div>
-                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Título</th>
+                                <th>Descrição</th>
+                                <th>Nome</th>
+                                <!-- Adicione mais colunas conforme necessário -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Iteração sobre a lista de chamados -->
+                            <div class="card" th:each="chamado : ${chamados}" th:data-id="${chamado.id}">
+                                <td th:text="${chamado.id}">ID</td>
+                                <td th:text="${chamado.colaborador.nome}">Descrição</td>
+                                <td th:text="${chamado.titulo}">Título</td>
+                                <td th:text="${chamado.descricao}">Descrição</td>
+                                <!-- Adicione mais colunas conforme necessário -->
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </main>
             <footer class="py-4 bg-light mt-auto">
@@ -258,86 +255,7 @@
         crossorigin="anonymous"></script>
     <script src="materialize/js/materialize.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-    <script>
-        // Função para calcular o tempo desde a criação do chamado
-        function timeSince(dateString) {
-            const now = new Date();
-            const createdDate = new Date(dateString);
-            const seconds = Math.floor((now - createdDate) / 1000);
 
-            if (seconds < 60) {
-                return `${seconds} segundo${seconds !== 1 ? 's' : ''}`;
-            }
-
-            const minutes = Math.floor(seconds / 60);
-            const remainingSeconds = seconds % 60;
-
-            if (minutes < 60) {
-                return `${minutes} minuto${minutes !== 1 ? 's' : ''} e ${remainingSeconds} segundo${remainingSeconds !== 1 ? 's' : ''}`;
-            }
-
-            const hours = Math.floor(minutes / 60);
-            const remainingMinutes = minutes % 60;
-
-            if (hours < 24) {
-                return `${hours} hora${hours !== 1 ? 's' : ''} e ${remainingMinutes} minuto${remainingMinutes !== 1 ? 's' : ''}`;
-            }
-
-            const days = Math.floor(hours / 24);
-            const remainingHours = hours % 24;
-
-            if (days < 30) {
-                return `${days} dia${days !== 1 ? 's' : ''} e ${remainingHours} hora${remainingHours !== 1 ? 's' : ''}`;
-            }
-
-            const months = Math.floor(days / 30);
-            const remainingDays = days % 30;
-
-            if (months < 12) {
-                return `${months} mês${months !== 1 ? 'es' : ''} e ${remainingDays} dia${remainingDays !== 1 ? 's' : ''}`;
-            }
-
-            const years = Math.floor(months / 12);
-            const remainingMonths = months % 12;
-
-            return `${years} ano${years !== 1 ? 's' : ''} e ${remainingMonths} mês${remainingMonths !== 1 ? 'es' : ''}`;
-        }
-
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const cards = document.querySelectorAll('.card');
-            let delay = 0;
-
-            cards.forEach((card, index) => {
-                setTimeout(() => {
-                    card.classList.add('show');
-                }, delay);
-                delay += 200;
-            });
-
-            const timeElements = document.querySelectorAll('.time-open');
-
-            timeElements.forEach(el => {
-                const dataCriacao = el.getAttribute('data-criacao');
-                el.textContent = timeSince(dataCriacao);
-            });
-
-            const searchInput = document.getElementById('searchInput');
-
-            searchInput.addEventListener('input', function () {
-                const searchTerm = searchInput.value.toLowerCase();
-                cards.forEach(card => {
-                    const title = card.querySelector('.card-title').textContent.toLowerCase();
-                    const name = card.querySelector('.card-content span').textContent.toLowerCase();
-                    if (title.includes(searchTerm) || name.includes(searchTerm)) {
-                        card.style.display = 'block';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
-            });
-        });
-    </script>
 
 
 </body>

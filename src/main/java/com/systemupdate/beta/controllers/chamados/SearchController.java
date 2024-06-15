@@ -6,7 +6,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -56,24 +55,5 @@ public class SearchController {
 
 
     
-    @RequestMapping("/chamado/{id}")
-    public ModelAndView viewChamado(@PathVariable("id") Long id, ModelMap model) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String userEmail = auth.getName();
-        boolean isAuthenticated = auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken);
-    
-        model.addAttribute("isAuthenticated", isAuthenticated);
-        model.addAttribute("userEmail", userEmail);
-        
-        Chamado chamado = chamadoRepository.findById(id).orElse(null);
-        ModelAndView mv = new ModelAndView("ticket/detalhesChamados");
-        if (chamado != null) {
-            mv.addObject("chamado", chamado);
-        } else {
-            System.out.print("erro !!!!");
-        }
-    
-        return mv;
-    }
     
 }

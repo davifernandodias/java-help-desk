@@ -26,11 +26,37 @@
 
         label {
             font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #80bdff;
+            box-shadow: 0 0 5px rgba(128, 189, 255, 0.5);
         }
 
         .btn-primary {
             background-color: #007bff;
             border-color: #007bff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background-color 0.2s, border-color 0.2s;
         }
 
         .btn-primary:hover {
@@ -38,8 +64,30 @@
             border-color: #0056b3;
         }
 
-        .additional-fields {
-            display: none;
+        .breadcrumb {
+            background-color: #e9ecef;
+            border-radius: 5px;
+            padding: 10px 15px;
+            margin-bottom: 20px;
+        }
+
+        .breadcrumb-item a {
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        .breadcrumb-item.active {
+            color: #6c757d;
+        }
+
+        .breadcrumb-item+.breadcrumb-item::before {
+            content: ">";
+            color: #6c757d;
+            margin: 0 5px;
+        }
+
+        #additionalFields .form-group {
+            margin-top: 20px;
         }
     </style>
 </head>
@@ -112,7 +160,7 @@
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="layout-static.html"><i class="fa-solid fa-address-card"
                                         style="margin-right: 10px;"></i>Novo Colaborador</a>
-                                <a class="nav-link" href="/consultar"><i class="fa-solid fa-magnifying-glass"
+                                <a class="nav-link" href="layout-static.html"><i class="fa-solid fa-magnifying-glass"
                                         style="margin-right: 10px;"></i>Consultar Colaborador</a>
                             </nav>
                         </div>
@@ -127,7 +175,7 @@
                                     style="margin-right: 5px;"></i></div>
                             Tables
                         </a>
-                        <div class="sb-sidenav-menu-heading">Administrador</div>
+                        <div class="sb-sidenav-menu-heading">Admistrador</div>
                         <a class="nav-link" href="tables.html">
                             <div class="sb-nav-link-icon"><i class="fa-solid fa-users" style="margin-right: 5px;"></i>
                             </div>
@@ -149,7 +197,7 @@
                         <li class="breadcrumb-item"><a href="index.html">FAQ</a></li>
                         <li class="breadcrumb-item active">Tipos de chamados</li>
                     </ol>
-                    <form th:action="@{/chamado/salvar}" method="post" class="was-validated">
+                    <form th:action="@{/chamado/salvar}" method="post" class="was-validated" id="chamadoForm">
                         <!-- Campos básicos -->
                         <div class="form-group">
                             <label for="titulo">Título:</label>
@@ -163,8 +211,18 @@
                             <label for="supervisor">Nome do supervisor(a):</label>
                             <input type="text" class="form-control" id="supervisor" name="supervisor" required>
                         </div>
+                        <div class="form-group">
+                            <label for="tipoChamado">Tipo de Chamado:</label>
+                            <select class="form-control" name="tipoChamado" id="tipoChamado" onchange="showAdditionalFields()">
+                                <option value="0">Selecione</option>
+                                <option value="1">Informática</option>
+                                <option value="2">Financeiro</option>
+                                <option value="3">Jurídico</option>
+                            </select>
+                        </div>
 
-
+                        <!-- Local onde os campos adicionais serão inseridos -->
+                        <div id="additionalFields"></div>
 
                         <button type="submit" class="btn btn-primary">Salvar</button>
                     </form>
@@ -188,10 +246,51 @@
         crossorigin="anonymous"></script>
     <script src="materialize/js/materialize.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-<!-- Campos adicionais de acordo com o tipo de chamado -->
+    <script>
+        function showAdditionalFields() {
+            var tipoChamado = document.getElementById("tipoChamado").value;
+            var additionalFields = document.getElementById("additionalFields");
 
+            // Limpar campos adicionais existentes
+            additionalFields.innerHTML = "";
 
-
+            // Criar campos adicionais de acordo com o tipo de chamado selecionado
+            if (tipoChamado == "1") {
+                additionalFields.innerHTML += `
+                    <div class="form-group">
+                        <label for="problema">Problema:</label>
+                        <input type="text" class="form-control" id="problema" name="problema" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="equipamento">Equipamento:</label>
+                        <input type="text" class="form-control" id="equipamento" name="equipamento" required>
+                    </div>
+                `;
+            } else if (tipoChamado == "2") {
+                additionalFields.innerHTML += `
+                    <div class="form-group">
+                        <label for="valor">Valor:</label>
+                        <input type="number" class="form-control" id="valor" name="valor" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="conta">Conta:</label>
+                        <input type="text" class="form-control" id="conta" name="conta" required>
+                    </div>
+                `;
+            } else if (tipoChamado == "3") {
+                additionalFields.innerHTML += `
+                    <div class="form-group">
+                        <label for="advogado">Advogado:</label>
+                        <input type="text" class="form-control" id="advogado" name="advogado" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="processo">Processo:</label>
+                        <input type="text" class="form-control" id="processo" name="processo" required>
+                    </div>
+                `;
+            }
+        }
+    </script>
 </body>
 
 </html>

@@ -40,7 +40,7 @@ public class Chamado extends AbstractEntity {
     // Atributos específicos de cada tipo de chamado
 
     // INFORMATICA
-   /* @Column(name = "problema")
+    @Column(name = "problema")
     private String problema;
 
     @Column(name = "equipamento")
@@ -59,13 +59,61 @@ public class Chamado extends AbstractEntity {
 
     @Column(name = "advogado")
     private String advogado;
- */
+ 
     // Getters e Setters omitidos para brevidade
 
     
 
     public LocalDateTime getDataAtualizacao() {
         return dataAtualizacao;
+    }
+
+    public String getProblema() {
+        return problema;
+    }
+
+    public void setProblema(String problema) {
+        this.problema = problema;
+    }
+
+    public String getEquipamento() {
+        return equipamento;
+    }
+
+    public void setEquipamento(String equipamento) {
+        this.equipamento = equipamento;
+    }
+
+    public Integer getValor() {
+        return valor;
+    }
+
+    public void setValor(Integer valor) {
+        this.valor = valor;
+    }
+
+    public String getConta() {
+        return conta;
+    }
+
+    public void setConta(String conta) {
+        this.conta = conta;
+    }
+
+    public String getProcesso() {
+        return processo;
+    }
+
+    public void setProcesso(String processo) {
+        this.processo = processo;
+    }
+
+    public String getAdvogado() {
+        return advogado;
+    }
+
+    public void setAdvogado(String advogado) {
+        this.advogado = advogado;
     }
 
     public String getTitulo() {

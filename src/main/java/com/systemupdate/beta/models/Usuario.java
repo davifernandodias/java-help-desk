@@ -48,16 +48,16 @@ public class Usuario extends AbstractEntity {
         super.setId(id);
     }
 
+    public Usuario(String email) {
+        this.email = email;
+    }
+
     // Adiciona perfis à lista
     public void addPerfil(PerfilTipo tipo) {
         if (this.perfis == null) {
             this.perfis = new ArrayList<>();
         }
         this.perfis.add(new Perfil(tipo.getCod()));
-    }
-
-    public Usuario(String email) {
-        this.email = email;
     }
 
     public Long getId() {
