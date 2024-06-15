@@ -212,14 +212,15 @@
                             <input type="text" class="form-control" id="supervisor" name="supervisor" required>
                         </div>
                         <div class="form-group">
-                            <label for="tipoChamado">Tipo de Chamado:</label>
-                            <select class="form-control" name="tipoChamado" id="tipoChamado" onchange="showAdditionalFields()">
-                                <option value="0">Selecione</option>
+                            <label for="tipoDeChamado">Tipo de Chamado:</label>
+                            <select class="form-control" name="tipoDeChamado" id="tipoDeChamado" onchange="showAdditionalFields()">
+                                <option value="">Selecione</option>
                                 <option value="1">Informática</option>
                                 <option value="2">Financeiro</option>
                                 <option value="3">Jurídico</option>
                             </select>
                         </div>
+                        
 
                         <!-- Local onde os campos adicionais serão inseridos -->
                         <div id="additionalFields"></div>
@@ -248,7 +249,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
     <script>
         function showAdditionalFields() {
-            var tipoChamado = document.getElementById("tipoChamado").value;
+            var tipoChamado = document.getElementById("tipoDeChamado").value;
             var additionalFields = document.getElementById("additionalFields");
 
             // Limpar campos adicionais existentes

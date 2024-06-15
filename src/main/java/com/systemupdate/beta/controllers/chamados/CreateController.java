@@ -40,26 +40,29 @@ public class CreateController {
 
     @PostMapping("/chamado/salvar")
     public String salvarChamado(@ModelAttribute Chamado chamado) {
-        // Obter o colaborador atualmente logado
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String userEmail = auth.getName();
-        Colaborador colaborador = usuarioService.findByEmail(userEmail).getColaborador();
-
-        // Configurar o colaborador no objeto Chamado
-        chamado.setColaborador(colaborador);
-
-        chamado.setDataAtualizacao(LocalDateTime.now());
-        
-        // Definir a data de abertura (atual)
-        chamado.setDataAbertura(LocalDateTime.now());
-
-        // Definir o status (aberto)
-        chamado.setStatus("aberto");
-
-        // Salvar o chamado no banco de dados através do repositório
-        chamadoRepository.save(chamado);
-
-        // Redirecionar para a página de listagem de chamados ou outra ação desejada
-        return "redirect:/chamado";
+        try {
+            // Obter o colaborador atualmente logado
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            String userEmail = auth.getName();
+            Colaborador colaborador = usuarioService.findByEmail(userEmail).getColaborador();
+    
+            // Configurar o colaborador no objeto Chamado
+            chamado.setColaborador(colaborador);
+            chamado.setDataAtualizacao(LocalDateTime.now());
+            chamado.setDataAbertura(LocalDateTime.now());
+            chamado.setStatus("aberto");
+    
+            // Salvar o chamado no banco de dados através do repositório
+            chamadoRepository.save(chamado);
+    
+            // Redirecionar para a página de listagem de chamados ou outra ação desejada
+            return "redirect:/chamado";
+        } catch (Exception e) {
+            // Tratar exceção (logar, relançar, etc.)
+            // Redirecionar para uma página de erro ou mostrar uma mensagem relevante
+            return "redirect:/error";
+        }
     }
+    
+    
 }
