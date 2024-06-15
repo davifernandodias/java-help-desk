@@ -1,58 +1,79 @@
 package com.systemupdate.beta.models;
 
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.format.annotation.DateTimeFormat.ISO;
-import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
-@SuppressWarnings("serial")
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+
 @Entity
-@Table(name = "chamados",
-       indexes = {@Index(name = "idx_tipo_chamado", columnList = "tipo_chamado")})
+@Table(name = "chamados")
 public class Chamado extends AbstractEntity {
 
     @Column(name = "titulo", nullable = false)
     private String titulo;
 
-    @Column(name = "tipo_chamado", nullable = false, columnDefinition = "INT CHECK (tipo_chamado IN (1, 2, 3))")
-    private int tipoDeChamado;
-
     @Column(name = "descricao", nullable = false)
     private String descricao;
+
+    @Column(name = "data_abertura", nullable = false)
+    private LocalDateTime dataAbertura;
+
+    @Column(name = "data_atualizacao")
+    private LocalDateTime dataAtualizacao;
 
     @Column(name = "supervisor", nullable = false)
     private String supervisor;
 
+    @Column(name = "tipo_de_chamado", nullable = false)
+    private int tipoDeChamado;
+
     @Column(name = "status", nullable = false)
-    private String status = "aberto";
-
-    @Column(name = "data_criacao", nullable = false)
-    @DateTimeFormat(iso = ISO.DATE_TIME)
-    private LocalDateTime dataCriacao;
-
-    @Column(name = "data_atualizacao")
-    @DateTimeFormat(iso = ISO.DATE_TIME)
-    private LocalDateTime dataAtualizacao;
+    private String status;
 
     @ManyToOne
     @JoinColumn(name = "id_colaborador", nullable = false)
     private Colaborador colaborador;
 
-    // Getters and Setters
+    // Atributos específicos de cada tipo de chamado
+
+    // INFORMATICA
+   /* @Column(name = "problema")
+    private String problema;
+
+    @Column(name = "equipamento")
+    private String equipamento;
+
+    // FINANCEIRO
+    @Column(name = "valor")
+    private Integer valor;
+
+    @Column(name = "conta")
+    private String conta;
+
+    // JURIDICO
+    @Column(name = "processo")
+    private String processo;
+
+    @Column(name = "advogado")
+    private String advogado;
+ */
+    // Getters e Setters omitidos para brevidade
+
+    
+
+    public LocalDateTime getDataAtualizacao() {
+        return dataAtualizacao;
+    }
+
     public String getTitulo() {
         return titulo;
     }
 
     public void setTitulo(String titulo) {
         this.titulo = titulo;
-    }
-
-    public int getTipoDeChamado() {
-        return tipoDeChamado;
-    }
-
-    public void setTipoDeChamado(int tipoDeChamado) {
-        this.tipoDeChamado = tipoDeChamado;
     }
 
     public String getDescricao() {
@@ -63,12 +84,28 @@ public class Chamado extends AbstractEntity {
         this.descricao = descricao;
     }
 
+    public LocalDateTime getDataAbertura() {
+        return dataAbertura;
+    }
+
+    public void setDataAbertura(LocalDateTime dataAbertura) {
+        this.dataAbertura = dataAbertura;
+    }
+
     public String getSupervisor() {
         return supervisor;
     }
 
     public void setSupervisor(String supervisor) {
         this.supervisor = supervisor;
+    }
+
+    public int getTipoDeChamado() {
+        return tipoDeChamado;
+    }
+
+    public void setTipoDeChamado(int tipoDeChamado) {
+        this.tipoDeChamado = tipoDeChamado;
     }
 
     public String getStatus() {
@@ -79,27 +116,17 @@ public class Chamado extends AbstractEntity {
         this.status = status;
     }
 
-    public LocalDateTime getDataCriacao() {
-        return dataCriacao;
-    }
-
-    public void setDataCriacao(LocalDateTime dataCriacao) {
-        this.dataCriacao = dataCriacao;
-    }
-
-    public LocalDateTime getDataAtualizacao() {
-        return dataAtualizacao;
-    }
-
-    public void setDataAtualizacao(LocalDateTime dataAtualizacao) {
-        this.dataAtualizacao = dataAtualizacao;
-    }
-
     public Colaborador getColaborador() {
         return colaborador;
     }
 
     public void setColaborador(Colaborador colaborador) {
         this.colaborador = colaborador;
+    }
+
+
+
+    public void setDataAtualizacao(LocalDateTime dataAtualizacao) {
+        this.dataAtualizacao = dataAtualizacao;
     }
 }
