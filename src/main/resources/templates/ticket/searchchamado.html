@@ -174,7 +174,6 @@
                                             <th>Nome</th>
                                             <th>Título</th>
                                             <th>Descrição</th>
-                                            <th>Data Abertura</th>
                                             <th>Status</th>
                                             <th>Tipo do Chamado</th>
                                 </tr>
@@ -185,7 +184,6 @@
                                     <td th:text="${chamado.colaborador.nome}">Nome</td>
                                     <td th:text="${chamado.titulo}">Título</td>
                                     <td th:text="${chamado.descricao}">Descrição</td>
-                                    <td th:text="${chamado.dataAbertura}">Data Abertura</td>
                                     <td>
                                         <span
                                             th:classappend="${chamado.status == 'aberto'} ? 'badge bg-success' : 'badge bg-danger'">
