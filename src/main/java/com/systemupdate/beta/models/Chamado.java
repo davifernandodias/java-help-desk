@@ -1,11 +1,13 @@
 package com.systemupdate.beta.models;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
 @Entity
@@ -21,11 +23,25 @@ public class Chamado extends AbstractEntity {
     @Column(name = "data_abertura", nullable = false)
     private LocalDateTime dataAbertura;
 
+    @Column(name = "codigo_busca", nullable = false)
+    private UUID codigoBusca;
+
+    public Chamado() {
+        this.codigoBusca = UUID.randomUUID(); // Inicializa o UUID no construtor se necessário
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        this.codigoBusca = UUID.randomUUID(); // Gera um novo UUID antes de persistir
+    }
+
     @Column(name = "data_atualizacao")
     private LocalDateTime dataAtualizacao;
 
     @Column(name = "supervisor", nullable = false)
     private String supervisor;
+
+    
 
     @Column(name = "tipo_de_chamado", nullable = false)
     private int tipoDeChamado;
@@ -62,7 +78,12 @@ public class Chamado extends AbstractEntity {
  
     // Getters e Setters omitidos para brevidade
 
-    
+    public UUID getCodigoBusca() {
+        return codigoBusca;
+    }
+    public void setCodigoBusca(UUID codigoBusca) {
+        this.codigoBusca = codigoBusca;
+    }
 
     public LocalDateTime getDataAtualizacao() {
         return dataAtualizacao;

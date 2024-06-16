@@ -213,14 +213,15 @@
                         </div>
                         <div class="form-group">
                             <label for="tipoDeChamado">Tipo de Chamado:</label>
-                            <select class="form-control" name="tipoDeChamado" id="tipoDeChamado" onchange="showAdditionalFields()">
+                            <select class="form-control" name="tipoDeChamado" id="tipoDeChamado"
+                                onchange="showAdditionalFields()">
                                 <option value="">Selecione</option>
                                 <option value="1">Informática</option>
                                 <option value="2">Financeiro</option>
                                 <option value="3">Jurídico</option>
                             </select>
                         </div>
-                        
+
 
                         <!-- Local onde os campos adicionais serão inseridos -->
                         <div id="additionalFields"></div>
@@ -269,10 +270,10 @@
                 `;
             } else if (tipoChamado == "2") {
                 additionalFields.innerHTML += `
-                    <div class="form-group">
-                        <label for="valor">Valor:</label>
-                        <input type="number" class="form-control" id="valor" name="valor" required>
-                    </div>
+<div class="form-group">
+    <label for="valor">Valor:</label>
+    <input type="number" class="form-control" id="valor" name="valor" required min="0" max="50000">
+</div>
                     <div class="form-group">
                         <label for="conta">Conta:</label>
                         <input type="text" class="form-control" id="conta" name="conta" required>
@@ -292,6 +293,7 @@
             }
         }
     </script>
+
 </body>
 
 </html>

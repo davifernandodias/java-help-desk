@@ -165,12 +165,17 @@
                 <div id="layoutSidenav_content">
                     <main>
                         <div class="container">
+                            <div class="search-bar">
+                                <input type="text" id="searchInput" class="search-input" placeholder="Buscar por código..." oninput="filterTable()">
+                                <button class="search-btn" onclick="filterTable()">Buscar</button>
+                            </div>
+                            
                             <h1 class="listada">Lista de Chamados</h1>
                             <div class="table-responsive">
                                 <table class="table table-striped">
                                     <thead>
                                         <tr>
-                                            <th>ID</th>
+                                            <th>Codigo</th>
                                             <th th:if="${isAdmin}">Nome</th>
                                             <th>Título</th>
                                             <th>Descrição</th>
@@ -181,7 +186,7 @@
                                     </thead>
                                     <tbody>
                                         <tr th:each="chamado, rowStat : ${chamados}" class="fade-in">
-                                            <td th:text="${chamado.id}">ID</td>
+                                            <td class="codigoChamado" th:text="${chamado.codigoBusca}">CODIGO</td>
                                             <td th:if="${isAdmin}" th:text="${chamado.colaborador.nome}">Nome</td>
                                             <td th:text="${chamado.titulo}">Título</td>
                                             <td th:text="${chamado.descricao}">Descrição</td>
@@ -198,11 +203,10 @@
                                                 </span>
                                             </td>
                                             <th>
-                                                <span style="background-color: #00b32d; color: white; cursor: pointer; padding: 5px; border-radius: 20px;">
-                                                    <i class="fas fa-circle" style="color: #00b32d;"></i>analisar
-                                                </span>
+                                                <a href="#" class="btn-analisar">
+                                                    <i class="fas fa-circle" style="color: #00b32d; margin-right: 5px;"></i>Analisar
+                                                </a>
                                             </th>
-                                            
                                         </tr>
                                     </tbody>
                                 </table>
@@ -229,6 +233,50 @@
             crossorigin="anonymous"></script>
         <script src="materialize/js/materialize.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var codigoCells = document.querySelectorAll('.codigoChamado');
+        
+                codigoCells.forEach(function(codigoCell) {
+                    var codigoText = codigoCell.textContent.trim();
+                    
+                    // Exibir apenas os primeiros 6 caracteres
+                    var shortenedCodigo = codigoText.substring(0, 6);
+                    
+                    // Adicionar os três pontos se o código for maior que 6 caracteres
+                    if (codigoText.length > 6) {
+                        shortenedCodigo += '';
+                    }
+                    
+                    // Substituir o conteúdo da célula pelo código encurtado
+                    codigoCell.textContent = shortenedCodigo;
+                });
+            });
+        </script>
+        <script>
+            function filterTable() {
+                var input, filter, table, tr, td, i, txtValue;
+                input = document.getElementById("searchInput");
+                filter = input.value.toUpperCase();
+                table = document.querySelector(".table");
+                tr = table.getElementsByTagName("tr");
+        
+                for (i = 0; i < tr.length; i++) {
+                    td = tr[i].getElementsByTagName("td")[0]; // Coluna do Código
+        
+                    if (td) {
+                        txtValue = td.textContent || td.innerText;
+                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        } else {
+                            tr[i].style.display = "none";
+                        }
+                    }
+                }
+            }
+        </script>
+        
+        
     </body>
 
     </html>

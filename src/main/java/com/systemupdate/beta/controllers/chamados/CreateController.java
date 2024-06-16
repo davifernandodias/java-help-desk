@@ -2,6 +2,7 @@ package com.systemupdate.beta.controllers.chamados;
 
 import java.time.LocalDateTime;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -45,7 +46,7 @@ public class CreateController {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             String userEmail = auth.getName();
             Colaborador colaborador = usuarioService.findByEmail(userEmail).getColaborador();
-    
+            
             // Configurar o colaborador no objeto Chamado
             chamado.setColaborador(colaborador);
             chamado.setDataAtualizacao(LocalDateTime.now());
