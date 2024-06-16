@@ -54,6 +54,37 @@ public class SearchController {
 
         return mv;
     }
+    @RequestMapping("/detalhes")
+    public ModelAndView ConsultaPorID(ModelMap model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = auth.getName();
+        boolean isAuthenticated = auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken);
+
+        model.addAttribute("isAuthenticated", isAuthenticated);
+        model.addAttribute("userEmail", userEmail);
+
+        Usuario usuario = usuarioService.findByEmail(userEmail);
+        Colaborador colaborador = usuario.getColaborador();
+
+        boolean isAdmin = usuario.getPerfis().stream()
+                .anyMatch(perfil -> perfil.getDescricao().equals(PerfilTipo.ADMIN.getDescricao()));
+
+        ModelAndView mv = new ModelAndView("ticket/searchchamado");
+        
+        mv.addObject("isAdmin", isAdmin);
+
+        if (isAdmin) {
+            Iterable<Chamado> chamados = chamadoRepository.findAll();
+            mv.addObject("chamados", chamados);
+        } else {
+            Iterable<Chamado> chamados = chamadoRepository.findByColaborador(colaborador);
+            mv.addObject("chamados", chamados);
+        }
+
+        return mv;
+    }
+
+
 
 
     
