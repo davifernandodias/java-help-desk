@@ -6,6 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -54,8 +55,8 @@ public class SearchController {
 
         return mv;
     }
-    @RequestMapping("/detalhes")
-    public ModelAndView ConsultaPorID(ModelMap model) {
+    @RequestMapping("/detalhes{id}")
+    public ModelAndView ConsultaPorID(@PathVariable("id") Long id,ModelMap model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = auth.getName();
         boolean isAuthenticated = auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken);
@@ -69,7 +70,7 @@ public class SearchController {
         boolean isAdmin = usuario.getPerfis().stream()
                 .anyMatch(perfil -> perfil.getDescricao().equals(PerfilTipo.ADMIN.getDescricao()));
 
-        ModelAndView mv = new ModelAndView("ticket/searchchamado");
+        ModelAndView mv = new ModelAndView("ticket/detalhesChamados");
         
         mv.addObject("isAdmin", isAdmin);
 
@@ -80,6 +81,8 @@ public class SearchController {
             Iterable<Chamado> chamados = chamadoRepository.findByColaborador(colaborador);
             mv.addObject("chamados", chamados);
         }
+        Iterable<Chamado> chamadinhos = chamadoRepository.findByColaborador(colaborador);
+        mv.addObject("chamadinhos",chamadinhos);
 
         return mv;
     }
