@@ -68,13 +68,22 @@ public class SearchController {
 
         Usuario usuario = usuarioService.findByEmail(userEmail);
         Chamado chamado = chamadoRepository.findById(id).orElse(null);
+        Colaborador colaborador = usuario.getColaborador();
 
         boolean isAdmin = usuario.getPerfis().stream()
                 .anyMatch(perfil -> perfil.getDescricao().equals(PerfilTipo.ADMIN.getDescricao()));
 
         ModelAndView mv = new ModelAndView("ticket/detalhesChamados");
         if (isAdmin || (chamado != null && chamado.getColaborador().equals(usuario.getColaborador()))) {
+            mv.addObject("isAdmin", isAdmin);
             mv.addObject("chamado", chamado);
+            if(isAdmin){
+                Iterable<Chamado> chamados = chamadoRepository.findAll();
+                mv.addObject("chamados", chamados);
+            } else{
+                Iterable<Chamado> chamados = chamadoRepository.findByColaborador(colaborador);
+                mv.addObject("chamados", chamados);
+            }
         } else {
             mv.addObject("error", "Você não tem permissão para acessar este chamado.");
         }
