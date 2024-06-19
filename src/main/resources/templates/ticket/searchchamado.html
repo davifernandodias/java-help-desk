@@ -171,7 +171,8 @@
                                 <button class="search-btn" onclick="filterTable()">Buscar</button>
                             </div>
                             
-                            <h1 class="listada">Lista de Chamados</h1>
+                            <h1 class="listada"th:if="${isAdmin}">Todos Chamados</h1>
+                            <h1 class="listada"th:if="${!isAdmin}">Seus Chamdos</h1>
                             <div class="table-responsive">
                                 <table class="table table-striped">
                                     <thead>
