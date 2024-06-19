@@ -42,7 +42,7 @@ public class SearchController {
                 .anyMatch(perfil -> perfil.getDescricao().equals(PerfilTipo.ADMIN.getDescricao()));
 
         ModelAndView mv = new ModelAndView("ticket/searchchamado");
-        
+
         mv.addObject("isAdmin", isAdmin);
 
         if (isAdmin) {
@@ -55,8 +55,10 @@ public class SearchController {
 
         return mv;
     }
-    @RequestMapping("/detalhes{id}")
-    public ModelAndView ConsultaPorID(@PathVariable("id") Long id,ModelMap model) {
+
+
+    @RequestMapping("/detalhes/{id}")
+    public ModelAndView consultaPorID(@PathVariable Long id, ModelMap model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = auth.getName();
         boolean isAuthenticated = auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken);
@@ -65,31 +67,18 @@ public class SearchController {
         model.addAttribute("userEmail", userEmail);
 
         Usuario usuario = usuarioService.findByEmail(userEmail);
-        Colaborador colaborador = usuario.getColaborador();
+        Chamado chamado = chamadoRepository.findById(id).orElse(null);
 
         boolean isAdmin = usuario.getPerfis().stream()
                 .anyMatch(perfil -> perfil.getDescricao().equals(PerfilTipo.ADMIN.getDescricao()));
 
         ModelAndView mv = new ModelAndView("ticket/detalhesChamados");
-        
-        mv.addObject("isAdmin", isAdmin);
-
-        if (isAdmin) {
-            Iterable<Chamado> chamados = chamadoRepository.findAll();
-            mv.addObject("chamados", chamados);
+        if (isAdmin || (chamado != null && chamado.getColaborador().equals(usuario.getColaborador()))) {
+            mv.addObject("chamado", chamado);
         } else {
-            Iterable<Chamado> chamados = chamadoRepository.findByColaborador(colaborador);
-            mv.addObject("chamados", chamados);
+            mv.addObject("error", "Você não tem permissão para acessar este chamado.");
         }
-        Iterable<Chamado> chamadinhos = chamadoRepository.findByColaborador(colaborador);
-        mv.addObject("chamadinhos",chamadinhos);
-
         return mv;
     }
 
-
-
-
-    
-    
 }

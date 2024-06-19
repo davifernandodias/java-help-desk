@@ -203,32 +203,13 @@
                                                     <span th:case="3" class="badge bg-info">Jurídico</span>
                                                 </span>
                                             </td>
-                                            <th>
-                                                <a href="#" class="btn-analisar" data-bs-toggle="modal" data-bs-target="#modalAnalisar">
-                                                    <i class="fas fa-circle" style="color: #00b32d; margin-right: 5px;"></i>Analisar
-                                                </a>
-                                            </th>                                            
+                                            <td>
+                                                <a th:href="@{/detalhes/{id}(id=${chamado.id})}">Analisar</a>
+                                            </td>                            
+                                                       
                                         </tr>
                                     </tbody>
                                 </table>
-                                <div class="modal fade" id="modalAnalisar" tabindex="-1" aria-labelledby="modalAnalisarLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="modalAnalisarLabel">Análise do Chamado</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <!-- Conteúdo do modal -->
-                                                <p>Aqui você pode adicionar detalhes adicionais sobre a análise do chamado.</p>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                                                <button type="button" class="btn btn-primary">Salvar Mudanças</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </main>
