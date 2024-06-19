@@ -67,15 +67,38 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            z-index: 500000000;
+            background-color: rgba(0,0,0,1);
+            z-index: 1040;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px); /* Manipular...
+            */
         }
+        #modal{
+            background-color: red;
+            z-index: 1041;
+            width: 400px;
+            height: 600px;
+
+        }
+
+        
     </style>
 
 </head>
 
 <body class="sb-nav-fixed">
-    <div id="fade"></div>
+
+    <div id="fade">    <div id="modal">
+        <div class="modal-header">
+            <h2>Detalhes do chamado</h2>
+        </div>
+        <button id="close-modal">Fechar</button>
+        <div class="modal-body">
+            <p>akakakkakakakkakak</p>
+        </div>
+    </div></div>
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <!-- Navbar Brand-->
             <a class="navbar-brand ps-3" href="/principal">DEMO</a>
@@ -180,15 +203,7 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container">
-                        <div id="modal">
-                            <div class="modal-header">
-                                <h2>Detalhes do chamado</h2>
-                            </div>
-                            <button id="close-modal">Fechar</button>
-                            <div class="modal-body">
-                                <p>akakakkakakakkakak</p>
-                            </div>
-                        </div>
+
 
 
 
