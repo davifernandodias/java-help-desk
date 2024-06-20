@@ -22,4 +22,9 @@ public class ChamadoService {
         chamadoRepository.save(chamado);
     }
     
+    public Chamado buscarChamadoPorId(Long id) {
+        return chamadoRepository.findById(id).orElse(null);
+    }
+    
+    
 }
