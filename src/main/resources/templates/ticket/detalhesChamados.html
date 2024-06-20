@@ -124,12 +124,19 @@
     padding-bottom: 1rem;
 }
 
-.modal-alert-body {
-    margin-bottom: 1rem;
+.modal-alert-footer {
+    display: flex; /* Utiliza flexbox para alinhar os botões na mesma linha */
+     /* Distribui os elementos igualmente */
+    margin-top: 1.5rem; /* Espaçamento acima dos botões */
 }
 
-.modal-alert-footer {
-    margin-top: 2rem;
+#modal-alert-nao{
+    margin-left: 2rem;
+}
+
+.modal-alert-footer button {
+    flex: 1; /* Faz com que os botões ocupem o mesmo espaço */
+    margin-left: 0.5rem; /* Espaçamento entre os botões */
 }
 
 #modal-alert.hide-modal-alert {
@@ -155,7 +162,9 @@
                             <input type="hidden" name="novoStatus" value="finalizado" />
                             <button type="submit" class="btn btn-primary">Sim</button>
                         </form>
-                        <button id="modal-alert-nao" class="btn btn-primary">Não</button>
+                        <form action="">       
+                             <button id="modal-alert-nao" class="btn btn-primary">Não</button>
+                        </form>
                     </div>
                 </div>
 
@@ -267,13 +276,12 @@
                     </div>
                     <div th:if="${chamado.status == 'andamento'}">
                         <form th:action="@{/update/{id}(id=${chamado.id})}" method="post">
-                            <div class="enviar-mensagem"> <label>Responder Chamado</label>
-                                <input type="text" placeholder="enviar" value="">
-                                <button type="submit" class="btn btn-primary"
-                                    style="background-color: rgb(55, 255, 0); ">enviar</button>
+                            <div class="enviar-mensagem">
+                                <label>Responder Chamado</label>
+                                <input type="text" name="newRespoAdmin" placeholder="enviar" value="">
+                                <input type="hidden" name="novoStatus" value="andamento" />
+                                <button type="submit" class="btn btn-primary" style="background-color: rgb(55, 255, 0);">Enviar</button>
                             </div>
-
-                            
                         </form>
                         <div class="finalizar"> 
                             <button class="btn btn-primary"  id="open-modal-alert" style="background-color: rgb(255, 0, 0);">Finalizar</button>

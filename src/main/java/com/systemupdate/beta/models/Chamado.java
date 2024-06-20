@@ -54,6 +54,8 @@ public class Chamado extends AbstractEntity {
     private Colaborador colaborador;
 
 
+
+
     // Atributos específicos de cada tipo de chamado
 
     // INFORMATICA

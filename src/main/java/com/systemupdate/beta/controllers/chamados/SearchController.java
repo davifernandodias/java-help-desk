@@ -1,6 +1,6 @@
 package com.systemupdate.beta.controllers.chamados;
 
-
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -16,12 +16,11 @@ import com.systemupdate.beta.models.Chamado;
 import com.systemupdate.beta.models.Colaborador;
 import com.systemupdate.beta.models.Usuario;
 import com.systemupdate.beta.repository.ChamadoRepository;
-
+import com.systemupdate.beta.repository.RespChamadoRepository;
 import com.systemupdate.beta.service.UsuarioService;
 
-
-
 import com.systemupdate.beta.models.PerfilTipo;
+import com.systemupdate.beta.models.RespChamado;
 
 @Controller
 public class SearchController {
@@ -32,11 +31,11 @@ public class SearchController {
     @Autowired
     private ChamadoRepository chamadoRepository;
 
-  
-
+    @Autowired
+    private RespChamadoRepository respChamadoRepository;
 
     @RequestMapping("/consultar")
-    public ModelAndView searchChamadosView(ModelMap model,String status) {
+    public ModelAndView searchChamadosView(ModelMap model, String status) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = auth.getName();
         boolean isAuthenticated = auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken);
@@ -62,10 +61,9 @@ public class SearchController {
             Iterable<Chamado> chamados = chamadoRepository.findByColaborador(colaborador);
             mv.addObject("chamados", chamados);
         }
-        
+
         return mv;
     }
-
 
     @RequestMapping("/detalhes/{id}")
     public ModelAndView consultaPorID(@PathVariable Long id, ModelMap model) {
@@ -87,10 +85,10 @@ public class SearchController {
         if (isAdmin || (chamado != null && chamado.getColaborador().equals(usuario.getColaborador()))) {
             mv.addObject("isAdmin", isAdmin);
             mv.addObject("chamado", chamado);
-            if(isAdmin){
+            if (isAdmin) {
                 Iterable<Chamado> chamados = chamadoRepository.findAll();
                 mv.addObject("chamados", chamados);
-            } else{
+            } else {
                 Iterable<Chamado> chamados = chamadoRepository.findByColaborador(colaborador);
                 mv.addObject("chamados", chamados);
             }
@@ -99,9 +97,11 @@ public class SearchController {
         }
         return mv;
     }
+
     @RequestMapping("/update/{id}")
-    public ModelAndView update(@PathVariable Long id,ModelMap model,
-        @RequestParam String novoStatus){
+    public ModelAndView update(@PathVariable Long id, ModelMap model,
+            @RequestParam String novoStatus,
+            @RequestParam String newRespoAdmin) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = auth.getName();
         boolean isAuthenticated = auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken);
@@ -120,12 +120,22 @@ public class SearchController {
         if (isAdmin || (chamado != null && chamado.getColaborador().equals(usuario.getColaborador()))) {
             mv.addObject("isAdmin", isAdmin);
             mv.addObject("chamado", chamado);
+            
             chamado.setStatus(novoStatus);
+
+            // Inicializa respChamado e salva a resposta administrativa
+            RespChamado respChamado = new RespChamado();
+            respChamado.setRespoAdmin(newRespoAdmin);
+            respChamado.setDataDeEnvio(LocalDateTime.now());
+            respChamado.setChamado(chamado);
+            respChamadoRepository.save(respChamado);
+
             chamadoRepository.save(chamado);
-            if(isAdmin){
+
+            if (isAdmin) {
                 Iterable<Chamado> chamados = chamadoRepository.findAll();
                 mv.addObject("chamados", chamados);
-            } else{
+            } else {
                 Iterable<Chamado> chamados = chamadoRepository.findByColaborador(colaborador);
                 mv.addObject("chamados", chamados);
             }
