@@ -1,6 +1,6 @@
 package com.systemupdate.beta.controllers.chamados;
 
-import java.time.LocalDateTime;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -101,7 +101,7 @@ public class SearchController {
     @RequestMapping("/update/{id}")
     public ModelAndView update(@PathVariable Long id, ModelMap model,
             @RequestParam String novoStatus,
-            @RequestParam String newRespoAdmin) {
+            @RequestParam(required = false) String newRespoAdmin) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = auth.getName();
         boolean isAuthenticated = auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken);
@@ -120,14 +120,12 @@ public class SearchController {
         if (isAdmin || (chamado != null && chamado.getColaborador().equals(usuario.getColaborador()))) {
             mv.addObject("isAdmin", isAdmin);
             mv.addObject("chamado", chamado);
-            
+
             chamado.setStatus(novoStatus);
 
             // Inicializa respChamado e salva a resposta administrativa
             RespChamado respChamado = new RespChamado();
             respChamado.setRespoAdmin(newRespoAdmin);
-            respChamado.setDataDeEnvio(LocalDateTime.now());
-            respChamado.setChamado(chamado);
             respChamadoRepository.save(respChamado);
 
             chamadoRepository.save(chamado);
@@ -144,5 +142,5 @@ public class SearchController {
         }
         return mv;
     }
+            }
 
-}

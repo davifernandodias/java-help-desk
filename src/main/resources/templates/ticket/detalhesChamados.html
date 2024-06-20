@@ -160,6 +160,7 @@
                     <div class="modal-alert-footer">
                         <form th:action="@{/update/{id}(id=${chamado.id})}" method="post">
                             <input type="hidden" name="novoStatus" value="finalizado" />
+                            <input type="hidden" name="newRespoAdmin" value="chamado finalizado">
                             <button type="submit" class="btn btn-primary">Sim</button>
                         </form>
                         <form action="">       
