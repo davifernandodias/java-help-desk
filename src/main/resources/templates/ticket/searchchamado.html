@@ -182,7 +182,7 @@
                                             <th>Título</th>
                                             <th>Descrição</th>
                                             <th>Status</th>
-                                            <th>Tipo do Chamado</th>
+                                            <th>Tempo Aberto</th>
                                             <th>Ação</th>
                                         </tr>
                                     </thead>
@@ -193,17 +193,17 @@
                                             <td th:text="${chamado.titulo}">Título</td>
                                             <td th:text="${chamado.descricao}">Descrição</td>
                                             <td>
-                                                <span th:classappend="${chamado.status == 'aberto'} ? 'badge bg-success' : 'badge bg-danger'">
+                                                <span th:classappend="${chamado.status == 'aberto' ? 'badge bg-success' : (chamado.status == 'andamento' ? 'badge bg-primary' : (chamado.status == 'finalizado' ? 'badge bg-danger' : 'badge bg-secondary'))}">
                                                     <span th:text="${chamado.status}"></span>
                                                 </span>
                                             </td>
+                                            <div  th:if="${chamado.status == 'finalizado'}">
+                                                <td>00:00:00:00</td>
+                                            </div>
+        
+                                            <div th:if="${chamado.status != 'finalizado'}"><td class="dataAberturaTable" th:text="${chamado.dataAbertura}"></td></div>
+                                        
                                             <td>
-                                                <span th:switch="${chamado.tipoDeChamado}">
-                                                    <span th:case="1" class="badge bg-primary">Informática</span>
-                                                    <span th:case="2" class="badge bg-orange">Financeiro</span>
-                                                    <span th:case="3" class="badge bg-info">Jurídico</span>
-                                                </span>
-                                            </td>
                                             <td>
                                                 <a th:href="@{/detalhes/{id}(id=${chamado.id})}">Analisar</a>
                                             </td>                              
@@ -275,7 +275,36 @@
                 }
             }
         </script>
+        <script>
+            // Calcular tempo decorrido desde a criação para cada elemento
+            document.addEventListener('DOMContentLoaded', function () {
+                const dataAberturaTableElements = document.querySelectorAll('.dataAberturaTable');
         
+                dataAberturaTableElements.forEach(element => {
+                    const dataHoraCriacao = new Date(element.textContent);
+        
+                    const diff = new Date() - dataHoraCriacao;
+                    const segundos = Math.floor(diff / 1000);
+                    const minutos = Math.floor(segundos / 60);
+                    const horas = Math.floor(minutos / 60);
+                    const dias = Math.floor(horas / 24);
+        
+                    let tempoDecorrido = '';
+        
+                    if (dias > 0) {
+                        tempoDecorrido = `${dias}d ${horas % 24}h ${minutos % 60}m ${segundos % 60}s`;
+                    } else if (horas > 0) {
+                        tempoDecorrido = `${horas}h ${minutos % 60}m ${segundos % 60}s`;
+                    } else if (minutos > 0) {
+                        tempoDecorrido = `${minutos}m ${segundos % 60}s`;
+                    } else {
+                        tempoDecorrido = `${segundos}s`;
+                    }
+        
+                    element.textContent = tempoDecorrido;
+                });
+            });
+        </script>
         
     </body>
 

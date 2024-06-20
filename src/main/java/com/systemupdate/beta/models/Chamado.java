@@ -53,6 +53,7 @@ public class Chamado extends AbstractEntity {
     @JoinColumn(name = "id_colaborador", nullable = false)
     private Colaborador colaborador;
 
+
     // Atributos específicos de cada tipo de chamado
 
     // INFORMATICA

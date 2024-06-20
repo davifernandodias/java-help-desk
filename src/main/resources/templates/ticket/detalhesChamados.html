@@ -206,13 +206,13 @@
                     <div th:if="${chamado.status == 'aberto'}">
                         <form th:action="@{/update/{id}(id=${chamado.id})}" method="post">
                             <input type="hidden" name="novoStatus" value="andamento" />
-                            <button type="submit" class="btn btn-primary" style="background-color: rebeccapurple;">Atender</button>
+                            <button type="submit" class="btn btn-primary" style="background-color: rgb(0, 255, 132);">Atender</button>
                         </form>
                     </div>
                     <div th:if="${chamado.status == 'andamento'}">
                         <form th:action="@{/update/{id}(id=${chamado.id})}" method="post">
                             <input type="hidden" name="novoStatus" value="finalizado" />
-                            <button type="submit" class="btn btn-primary" style="background-color: rebeccapurple;">Finalizar</button>
+                            <button type="submit" class="btn btn-primary" style="background-color: rgb(255, 0, 0);">Finalizar</button>
                         </form>
                     </div>
                     </div>
