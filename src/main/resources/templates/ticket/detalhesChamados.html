@@ -160,7 +160,6 @@
                     <div class="modal-alert-footer">
                         <form th:action="@{/update/{id}(id=${chamado.id})}" method="post">
                             <input type="hidden" name="novoStatus" value="finalizado" />
-                            <input type="hidden" name="newRespoAdmin" value="chamado finalizado">
                             <button type="submit" class="btn btn-primary">Sim</button>
                         </form>
                         <form action="">       
@@ -262,37 +261,39 @@
                             </div>
                         </div>
                     </div>
-                    <div th:if="${isAdmin}">
-                        <h2>CAMPO ADMINSTRADOR</h2>
-                    </div>
+            <div th:if="${isAdmin}">
+                        <h2 th:if="${isAdmin}">CAMPO ADMINSTRADOR</h2>
+                    
                 </div>
-                <div class="modal-footer">
+                <div th:if="${isAdmin}" class="modal-footer">
 
                     <div th:if="${chamado.status == 'aberto'}">
                         <form th:action="@{/update/{id}(id=${chamado.id})}" method="post">
-                            <input type="hidden" name="novoStatus" value="andamento" />
+                            <input type="hidden" name="novoStatus" value="andamento" /> 
                             <button type="submit" class="btn btn-primary"
                                 style="background-color: rgb(0, 255, 132);">Atender</button>
                         </form>
                     </div>
                     <div th:if="${chamado.status == 'andamento'}">
-                        <form th:action="@{/update/{id}(id=${chamado.id})}" method="post">
-                            <div class="enviar-mensagem">
-                                <label>Responder Chamado</label>
-                                <input type="text" name="newRespoAdmin" placeholder="enviar" value="">
-                                <input type="hidden" name="novoStatus" value="andamento" />
-                                <button type="submit" class="btn btn-primary" style="background-color: rgb(55, 255, 0);">Enviar</button>
-                            </div>
-                        </form>
-                        <div class="finalizar"> 
-                            <button class="btn btn-primary"  id="open-modal-alert" style="background-color: rgb(255, 0, 0);">Finalizar</button>
+                        <div>
+                            <form th:action="@{/update/{id}(id=${chamado.id})}" method="post">
+                                <div class="enviar-mensagem">
+                                    <label>Responder Chamado</label>
+                                    <input type="text" name="newRespoAdmin" placeholder="enviar" value="">
+                                    <button type="submit" class="btn btn-primary" style="background-color: rgb(55, 255, 0);">Enviar</button>
+                                </div>
+                            </form>
                         </div>
-                    </div>
+                        <div class="finalizar" th:if="${newRespoAdminExists}">
+                            <button class="btn btn-primary" id="open-modal-alert" style="background-color: rgb(255, 0, 0);">Finalizar</button>
+                        </div>
+                    </div>               
                 </div>
+            </div>
             </div>
         </div>
     </div>
-    </div>
+
 
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
         <!-- Navbar Brand-->

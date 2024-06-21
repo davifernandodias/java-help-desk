@@ -1,6 +1,6 @@
 package com.systemupdate.beta.controllers.chamados;
 
-
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -100,8 +100,8 @@ public class SearchController {
 
     @RequestMapping("/update/{id}")
     public ModelAndView update(@PathVariable Long id, ModelMap model,
-            @RequestParam String novoStatus,
-            @RequestParam(required = false) String newRespoAdmin) {
+                               @RequestParam(required = false) String novoStatus,
+                               @RequestParam(required = false) String newRespoAdmin) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = auth.getName();
         boolean isAuthenticated = auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken);
@@ -117,18 +117,35 @@ public class SearchController {
                 .anyMatch(perfil -> perfil.getDescricao().equals(PerfilTipo.ADMIN.getDescricao()));
 
         ModelAndView mv = new ModelAndView("ticket/detalhesChamados");
-        if (isAdmin || (chamado != null && chamado.getColaborador().equals(usuario.getColaborador()))) {
+        if (isAdmin || (chamado != null && chamado.getColaborador().equals(colaborador))) {
             mv.addObject("isAdmin", isAdmin);
             mv.addObject("chamado", chamado);
 
-            chamado.setStatus(novoStatus);
+            if (chamado != null) {
+                RespChamado respChamado = respChamadoRepository.findByChamado(chamado);
+                boolean newRespoAdminExists = respChamado != null && respChamado.getRespoAdmin() != null && !respChamado.getRespoAdmin().trim().isEmpty();
+                boolean isRespoAdminEmpty = respChamado == null || respChamado.getRespoAdmin() == null || respChamado.getRespoAdmin().trim().isEmpty();
+                mv.addObject("newRespoAdminExists", newRespoAdminExists);
+                mv.addObject("isRespoAdminEmpty", isRespoAdminEmpty);
 
-            // Inicializa respChamado e salva a resposta administrativa
-            RespChamado respChamado = new RespChamado();
-            respChamado.setRespoAdmin(newRespoAdmin);
-            respChamadoRepository.save(respChamado);
+                // Atualizar o status apenas se mudar de "aberto" para "andamento" ou de "andamento" para "finalizado"
+                if ("aberto".equals(chamado.getStatus()) && "andamento".equals(novoStatus)) {
+                    chamado.setStatus("andamento");
+                    chamadoRepository.save(chamado);
+                } else if ("andamento".equals(chamado.getStatus()) && "finalizado".equals(novoStatus)) {
+                    chamado.setStatus("finalizado");
+                    chamadoRepository.save(chamado);
+                }
 
-            chamadoRepository.save(chamado);
+                // Salvar nova resposta administrativa apenas se newRespoAdmin não estiver vazio
+                if (newRespoAdmin != null && !newRespoAdmin.trim().isEmpty()) {
+                    RespChamado newRespChamado = new RespChamado();
+                    newRespChamado.setRespoAdmin(newRespoAdmin);
+                    newRespChamado.setChamado(chamado);
+                    newRespChamado.setDataDeEnvio(LocalDateTime.now());
+                    respChamadoRepository.save(newRespChamado);
+                }
+            }
 
             if (isAdmin) {
                 Iterable<Chamado> chamados = chamadoRepository.findAll();
@@ -142,5 +159,4 @@ public class SearchController {
         }
         return mv;
     }
-            }
-
+}
