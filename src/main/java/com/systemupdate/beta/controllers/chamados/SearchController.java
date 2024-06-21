@@ -105,58 +105,65 @@ public class SearchController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = auth.getName();
         boolean isAuthenticated = auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken);
-
+    
         model.addAttribute("isAuthenticated", isAuthenticated);
         model.addAttribute("userEmail", userEmail);
-
+    
         Usuario usuario = usuarioService.findByEmail(userEmail);
         Chamado chamado = chamadoRepository.findById(id).orElse(null);
         Colaborador colaborador = usuario.getColaborador();
-
+    
         boolean isAdmin = usuario.getPerfis().stream()
                 .anyMatch(perfil -> perfil.getDescricao().equals(PerfilTipo.ADMIN.getDescricao()));
-
+    
         ModelAndView mv = new ModelAndView("ticket/detalhesChamados");
         if (isAdmin || (chamado != null && chamado.getColaborador().equals(colaborador))) {
             mv.addObject("isAdmin", isAdmin);
             mv.addObject("chamado", chamado);
-
-            if (chamado != null) {
-                RespChamado respChamado = respChamadoRepository.findByChamado(chamado);
-                boolean newRespoAdminExists = respChamado != null && respChamado.getRespoAdmin() != null && !respChamado.getRespoAdmin().trim().isEmpty();
-                boolean isRespoAdminEmpty = respChamado == null || respChamado.getRespoAdmin() == null || respChamado.getRespoAdmin().trim().isEmpty();
-                mv.addObject("newRespoAdminExists", newRespoAdminExists);
+    
+            // Verificar se há uma resposta administrativa associada ao chamado
+            RespChamado respChamado = respChamadoRepository.findByChamado(chamado);
+            if (respChamado != null) {
+                boolean isRespoAdminEmpty = respChamado.getRespoAdmin() == null || respChamado.getRespoAdmin().trim().isEmpty();
                 mv.addObject("isRespoAdminEmpty", isRespoAdminEmpty);
-
-                // Atualizar o status apenas se mudar de "aberto" para "andamento" ou de "andamento" para "finalizado"
-                if ("aberto".equals(chamado.getStatus()) && "andamento".equals(novoStatus)) {
-                    chamado.setStatus("andamento");
-                    chamadoRepository.save(chamado);
-                } else if ("andamento".equals(chamado.getStatus()) && "finalizado".equals(novoStatus)) {
-                    chamado.setStatus("finalizado");
-                    chamadoRepository.save(chamado);
-                }
-
-                // Salvar nova resposta administrativa apenas se newRespoAdmin não estiver vazio
-                if (newRespoAdmin != null && !newRespoAdmin.trim().isEmpty()) {
-                    RespChamado newRespChamado = new RespChamado();
-                    newRespChamado.setRespoAdmin(newRespoAdmin);
-                    newRespChamado.setChamado(chamado);
-                    newRespChamado.setDataDeEnvio(LocalDateTime.now());
-                    respChamadoRepository.save(newRespChamado);
-                }
-            }
-
-            if (isAdmin) {
-                Iterable<Chamado> chamados = chamadoRepository.findAll();
-                mv.addObject("chamados", chamados);
             } else {
-                Iterable<Chamado> chamados = chamadoRepository.findByColaborador(colaborador);
-                mv.addObject("chamados", chamados);
+                mv.addObject("isRespoAdminEmpty", true); // Se não houver RespChamado, considerar como vazio
             }
+    
+            // Atualizar o status apenas se mudar de "aberto" para "andamento" ou de "andamento" para "finalizado"
+            if ("aberto".equals(chamado.getStatus()) && "andamento".equals(novoStatus)) {
+                chamado.setStatus("andamento");
+                chamadoRepository.save(chamado);
+                return mv;
+            } else if ("andamento".equals(chamado.getStatus()) && "finalizado".equals(novoStatus)) {
+                chamado.setStatus("finalizado");
+                chamadoRepository.save(chamado);
+            }
+    
+            // Salvar nova resposta administrativa apenas se newRespoAdmin não estiver vazio
+            if (newRespoAdmin != null && !newRespoAdmin.trim().isEmpty()) {
+                if (respChamado == null) {
+                    respChamado = new RespChamado();
+                    respChamado.setChamado(chamado);
+                }
+                respChamado.setRespoAdmin(newRespoAdmin);
+                respChamado.setDataDeEnvio(LocalDateTime.now());
+                respChamadoRepository.save(respChamado);
+            }
+    
+            // Carregar os chamados novamente para exibição na página
+            Iterable<Chamado> chamados;
+            if (isAdmin) {
+                chamados = chamadoRepository.findAll();
+            } else {
+                chamados = chamadoRepository.findByColaborador(colaborador);
+            }
+            mv.addObject("chamados", chamados);
+    
         } else {
             mv.addObject("error", "Você não tem permissão para acessar este chamado.");
         }
+    
         return mv;
     }
 }
