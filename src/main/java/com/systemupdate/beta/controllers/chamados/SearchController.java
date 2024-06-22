@@ -1,6 +1,7 @@
 package com.systemupdate.beta.controllers.chamados;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -91,6 +92,21 @@ public class SearchController {
             } else {
                 Iterable<Chamado> chamados = chamadoRepository.findByColaborador(colaborador);
                 mv.addObject("chamados", chamados);
+
+                // Verificar se há uma resposta administrativa associada ao chamado
+                RespChamado respChamado = respChamadoRepository.findByChamado(chamado);
+                if (respChamado != null) {
+                    boolean isRespoAdmin = respChamado.getRespoAdmin() != null
+                            && !respChamado.getRespoAdmin().trim().isEmpty();
+                    mv.addObject("isRespoAdmin", isRespoAdmin);
+                    mv.addObject("respoAdmin", respChamado.getRespoAdmin());
+                    
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+                    String formattedDate = respChamado.getDataDeEnvio().format(formatter);
+                    mv.addObject("respoDataEnviado", formattedDate);
+                } else {
+                    mv.addObject("isRespoAdminEmpty", true); // Se não houver RespChamado, considerar como vazio
+                }
             }
         } else {
             mv.addObject("error", "Você não tem permissão para acessar este chamado.");
@@ -100,37 +116,39 @@ public class SearchController {
 
     @RequestMapping("/update/{id}")
     public ModelAndView updateFormPorId(@PathVariable Long id, ModelMap model,
-                               @RequestParam(required = false) String novoStatus,
-                               @RequestParam(required = false) String newRespoAdmin) {
+            @RequestParam(required = false) String novoStatus,
+            @RequestParam(required = false) String newRespoAdmin) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = auth.getName();
         boolean isAuthenticated = auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken);
-    
+
         model.addAttribute("isAuthenticated", isAuthenticated);
         model.addAttribute("userEmail", userEmail);
-    
+
         Usuario usuario = usuarioService.findByEmail(userEmail);
         Chamado chamado = chamadoRepository.findById(id).orElse(null);
         Colaborador colaborador = usuario.getColaborador();
-    
+
         boolean isAdmin = usuario.getPerfis().stream()
                 .anyMatch(perfil -> perfil.getDescricao().equals(PerfilTipo.ADMIN.getDescricao()));
-    
+
         ModelAndView mv = new ModelAndView("ticket/detalhesChamados");
         if (isAdmin || (chamado != null && chamado.getColaborador().equals(colaborador))) {
             mv.addObject("isAdmin", isAdmin);
             mv.addObject("chamado", chamado);
-    
+
             // Verificar se há uma resposta administrativa associada ao chamado
             RespChamado respChamado = respChamadoRepository.findByChamado(chamado);
             if (respChamado != null) {
-                boolean isRespoAdminEmpty = respChamado.getRespoAdmin() == null || respChamado.getRespoAdmin().trim().isEmpty();
+                boolean isRespoAdminEmpty = respChamado.getRespoAdmin() == null
+                        || respChamado.getRespoAdmin().trim().isEmpty();
                 mv.addObject("isRespoAdminEmpty", isRespoAdminEmpty);
             } else {
                 mv.addObject("isRespoAdminEmpty", true); // Se não houver RespChamado, considerar como vazio
             }
-    
-            // Atualizar o status apenas se mudar de "aberto" para "andamento" ou de "andamento" para "finalizado"
+
+            // Atualizar o status apenas se mudar de "aberto" para "andamento" ou de
+            // "andamento" para "finalizado"
             if ("aberto".equals(chamado.getStatus()) && "andamento".equals(novoStatus)) {
                 chamado.setStatus("andamento");
                 chamadoRepository.save(chamado);
@@ -139,7 +157,7 @@ public class SearchController {
                 chamado.setStatus("finalizado");
                 chamadoRepository.save(chamado);
             }
-    
+
             // Salvar nova resposta administrativa apenas se newRespoAdmin não estiver vazio
             if (newRespoAdmin != null && !newRespoAdmin.trim().isEmpty()) {
                 if (respChamado == null) {
@@ -150,7 +168,7 @@ public class SearchController {
                 respChamado.setDataDeEnvio(LocalDateTime.now());
                 respChamadoRepository.save(respChamado);
             }
-    
+
             // Carregar os chamados novamente para exibição na página
             Iterable<Chamado> chamados;
             if (isAdmin) {
@@ -159,12 +177,12 @@ public class SearchController {
                 chamados = chamadoRepository.findByColaborador(colaborador);
             }
             mv.addObject("chamados", chamados);
-    
+
         } else {
             mv.addObject("error", "Você não tem permissão para acessar este chamado.");
         }
-    
+
         return mv;
     }
-    
+
 }
