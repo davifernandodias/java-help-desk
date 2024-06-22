@@ -15,7 +15,7 @@ public class RespChamado extends AbstractEntity {
     @Column(name = "chat_admin")
     private String respoAdmin;
 
-     @Column(name = "data_envio", nullable = false)
+    @Column(name = "data_envio", nullable = false)
     private LocalDateTime dataDeEnvio;
 
     @OneToOne(cascade = CascadeType.REMOVE)
