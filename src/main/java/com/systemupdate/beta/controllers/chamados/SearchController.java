@@ -99,7 +99,7 @@ public class SearchController {
     }
 
     @RequestMapping("/update/{id}")
-    public ModelAndView update(@PathVariable Long id, ModelMap model,
+    public ModelAndView updateFormPorId(@PathVariable Long id, ModelMap model,
                                @RequestParam(required = false) String novoStatus,
                                @RequestParam(required = false) String newRespoAdmin) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

@@ -150,6 +150,33 @@
             pointer-events: none;
             /* Impede cliques quando oculto */
         }
+
+        .form-helpdesk {
+            max-width: 500px;
+            /* Define a largura máxima do formulário */
+            margin: 0 auto;
+            /* Centraliza o formulário na página */
+        }
+
+        .enviar-mensagem {
+            margin-bottom: 20px;
+            /* Espaçamento inferior entre o formulário e o botão de finalizar */
+        }
+
+        .input-group {
+            width: 100%;
+            /* Define a largura total do grupo de entrada */
+        }
+
+        .input-group-append .btn {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+
+        .btn {
+            font-size: 16px;
+            /* Tamanho da fonte dos botões */
+        }
     </style>
 </head>
 
@@ -157,7 +184,7 @@
     <div id="fade">
 
         <!-- Modal de alerta -->
-        <div id="modal-alert" class="hide-modal-alert">
+        <div th:if="${isAdmin}" id="modal-alert" class="hide-modal-alert">
             <div class="modal-alert-header">
                 Confirmação
             </div>
@@ -281,19 +308,24 @@
                                     style="background-color: rgb(0, 255, 132);">Atender</button>
                             </form>
                         </div>
-                        <div th:if="${chamado.status == 'andamento' }">
+                        <div th:if="${chamado.status == 'andamento'}">
                             <div>
-                                <form th:action="@{/update/{id}(id=${chamado.id})}" method="post" id="updateForm" onsubmit="submitForm(event)">
+                                <form th:action="@{/update/{id}(id=${chamado.id})}" method="post" id="updateForm"
+                                    onsubmit="submitForm(event)" class="form-helpdesk">
                                     <div th:if="${isRespoAdminEmpty}" class="enviar-mensagem">
-                                        <label>Responder Chamado</label>
-                                        <input type="text" name="newRespoAdmin" placeholder="enviar" value="">
-                                        <button type="submit" class="btn btn-primary" style="background-color: rgb(55, 255, 0);">Enviar</button>
+                                        <label for="newRespoAdmin">Responder Chamado:</label>
+                                        <div class="input-group">
+                                            <input type="text" id="newRespoAdmin" name="newRespoAdmin"
+                                                class="form-control" placeholder="Digite sua resposta">
+                                            <div class="input-group-append">
+                                                <button type="submit" class="btn btn-success">Enviar</button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </form>
                             </div>
                             <div class="finalizar" th:unless="${isRespoAdminEmpty}">
-                                <button class="btn btn-primary" id="open-modal-alert"
-                                    style="background-color: rgb(255, 0, 0);">Finalizar</button>
+                                <button class="btn btn-danger" id="open-modal-alert">Finalizar Chamado</button>
                             </div>
                         </div>
                     </div>
@@ -410,7 +442,7 @@
                         <button class="search-btn" onclick="filterTable()">Buscar</button>
                     </div>
                     <h1 class="listada" th:if="${isAdmin}">Todos Chamados</h1>
-                    <h1 class="listada" th:if="${!isAdmin}">Seus Chamdos</h1>
+                    <h1 class="listada" th:if="${!isAdmin}">Meus Chamados</h1>
                     <div>
                         <table class="table table-striped">
                             <thead>
@@ -472,26 +504,26 @@
     <script>
         function submitForm(event) {
             event.preventDefault(); // Previne o envio padrão do formulário
-    
+
             const form = document.getElementById('updateForm');
             const formData = new FormData(form);
-    
+
             fetch(form.action, {
                 method: form.method,
                 body: formData
             })
-            .then(response => {
-                if (response.ok) {
-                    // Recarrega a página após o envio bem-sucedido
-                    window.location.reload();
-                } else {
-                    console.error('Erro ao enviar formulário:', response.statusText);
-                }
-            })
-            .catch(error => console.error('Erro inesperado:', error));
+                .then(response => {
+                    if (response.ok) {
+                        // Recarrega a página após o envio bem-sucedido
+                        window.location.reload();
+                    } else {
+                        console.error('Erro ao enviar formulário:', response.statusText);
+                    }
+                })
+                .catch(error => console.error('Erro inesperado:', error));
         }
     </script>
-    
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const openModalButton = document.querySelector("#open-modal-alert");
