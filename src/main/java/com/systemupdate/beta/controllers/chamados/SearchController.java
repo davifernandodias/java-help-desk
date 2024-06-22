@@ -134,7 +134,7 @@ public class SearchController {
             if ("aberto".equals(chamado.getStatus()) && "andamento".equals(novoStatus)) {
                 chamado.setStatus("andamento");
                 chamadoRepository.save(chamado);
-                return mv;
+                return new ModelAndView("redirect:/update/" + id); // Redirecionar para a mesma página
             } else if ("andamento".equals(chamado.getStatus()) && "finalizado".equals(novoStatus)) {
                 chamado.setStatus("finalizado");
                 chamadoRepository.save(chamado);
@@ -166,4 +166,5 @@ public class SearchController {
     
         return mv;
     }
+    
 }
