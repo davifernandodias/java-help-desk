@@ -502,8 +502,8 @@
                             <tbody>
                                 <tr th:each="chamado, rowStat : ${chamados}" class="fade-in">
                                     <div th:if="${!isAdmin}">
-                                        <td th:if="${chamado.notificacao == 1}">Have noti</td>
-                                        <td th:if="${chamado.notificacao == 0}">No noti</td>
+                                        <td th:if="${chamado.notificacao == 1}">1</td>
+                                        <td th:if="${chamado.notificacao == 0}"></td>
                                     </div>
 
                                     <td class="codigoChamado" th:text="${chamado.codigoBusca}">CODIGO</td>
