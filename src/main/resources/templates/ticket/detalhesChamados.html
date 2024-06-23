@@ -208,6 +208,20 @@
             color: #6c757d;
             margin-left: 10px;
         }
+        .blinking-dot {
+            width: 10px;
+            height: 10px;
+            background-color: red;
+            border-radius: 50%;
+            display: inline-block;
+            animation: blinker 1s linear infinite;
+        }
+
+        @keyframes blinker {
+            50% {
+                opacity: 0;
+            }
+        }
     </style>
 
 
@@ -502,7 +516,7 @@
                             <tbody>
                                 <tr th:each="chamado, rowStat : ${chamados}" class="fade-in">
                                     <div th:if="${!isAdmin}">
-                                        <td th:if="${chamado.notificacao == 1}">1</td>
+                                        <td th:if="${chamado.notificacao == 1}"><div class="blinking-dot"></div></td>
                                         <td th:if="${chamado.notificacao == 0}"></td>
                                     </div>
 
