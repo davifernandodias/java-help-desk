@@ -93,8 +93,11 @@ public class SearchController {
                 Iterable<Chamado> chamados = chamadoRepository.findByColaborador(colaborador);
                 mv.addObject("chamados", chamados);
 
-                // Verificar se há uma resposta administrativa associada ao chamado
-                RespChamado respChamado = respChamadoRepository.findByChamado(chamado);
+                if (chamado.getNotificacao().equals(1)){
+                    chamado.setNotificacao(0);
+                    chamadoRepository.save(chamado);
+                }
+                RespChamado respChamado = respChamadoRepository.findByChamado(chamado); 
                 if (respChamado != null) {
                     boolean isRespoAdmin = respChamado.getRespoAdmin() != null
                             && !respChamado.getRespoAdmin().trim().isEmpty();
@@ -117,7 +120,8 @@ public class SearchController {
     @RequestMapping("/update/{id}")
     public ModelAndView updateFormPorId(@PathVariable Long id, ModelMap model,
             @RequestParam(required = false) String novoStatus,
-            @RequestParam(required = false) String newRespoAdmin) {
+            @RequestParam(required = false) String newRespoAdmin,
+            @RequestParam(required = false) Integer newNotificacao) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = auth.getName();
         boolean isAuthenticated = auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken);
@@ -165,6 +169,8 @@ public class SearchController {
                     respChamado.setChamado(chamado);
                 }
                 respChamado.setRespoAdmin(newRespoAdmin);
+                chamado.setNotificacao(newNotificacao);
+                chamadoRepository.save(chamado);
                 respChamado.setDataDeEnvio(LocalDateTime.now());
                 respChamadoRepository.save(respChamado);
             }

@@ -41,7 +41,8 @@ public class Chamado extends AbstractEntity {
     @Column(name = "supervisor", nullable = false)
     private String supervisor;
 
-    
+    @Column(name = "notificacao")
+    private Integer notificacao = 0;
 
     @Column(name = "tipo_de_chamado", nullable = false)
     private int tipoDeChamado;
@@ -88,6 +89,12 @@ public class Chamado extends AbstractEntity {
         this.codigoBusca = codigoBusca;
     }
 
+    public Integer getNotificacao() {
+        return notificacao;
+    }
+    public void setNotificacao(Integer notificacao) {
+        this.notificacao = notificacao;
+    }
     public LocalDateTime getDataAtualizacao() {
         return dataAtualizacao;
     }

@@ -21,7 +21,7 @@
             right: 20px;
             margin-top: 10px;
         }
-    
+
         .search-input {
             width: 250px;
             padding: 8px;
@@ -29,7 +29,7 @@
             border-radius: 4px;
             font-size: 14px;
         }
-    
+
         .search-btn {
             padding: 8px 12px;
             background-color: #007bff;
@@ -39,11 +39,11 @@
             border-radius: 4px;
             font-size: 14px;
         }
-    
+
         .search-btn:hover {
             background-color: #0056b3;
         }
-    
+
         #fade {
             position: fixed;
             top: 0;
@@ -59,7 +59,7 @@
             opacity: 0;
             transition: opacity 0.5s ease-in-out;
         }
-    
+
         /* Estilos para o modal */
         #modal {
             background-color: white;
@@ -70,36 +70,37 @@
             padding: 20px;
             transform: scale(0.7);
             transition: transform 0.5s ease-in-out;
-            font-size: 16px; /* Tamanho do texto */
+            font-size: 16px;
+            /* Tamanho do texto */
             position: relative;
         }
-    
+
         @media (min-width: 768px) {
             #modal {
                 width: 60%;
             }
         }
-    
+
         .modal-content {
             display: flex;
             flex-wrap: wrap;
             gap: 20px;
         }
-    
+
         .modal-content .modal-info {
             display: flex;
             gap: 20px;
             margin-bottom: 15px;
         }
-    
+
         .modal-content .modal-info .info-group {
             flex: 1 1 45%;
         }
-    
+
         .modal-content .modal-info p {
             margin: 0;
         }
-    
+
         /* Estilos para o modal de alerta */
         #modal-alert {
             position: fixed;
@@ -114,7 +115,7 @@
             border-radius: .5rem;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-    
+
         .modal-alert-header {
             display: flex;
             justify-content: space-between;
@@ -123,48 +124,48 @@
             margin-bottom: 1rem;
             padding-bottom: 1rem;
         }
-    
+
         .modal-alert-footer {
             display: flex;
             margin-top: 1.5rem;
         }
-    
+
         #modal-alert-nao {
             margin-left: 2rem;
         }
-    
+
         .modal-alert-footer button {
             flex: 1;
             margin-left: 0.5rem;
         }
-    
+
         .hide-modal-alert {
             opacity: 0;
             pointer-events: none;
         }
-    
+
         .form-helpdesk {
             max-width: 500px;
             margin: 0 auto;
         }
-    
+
         .enviar-mensagem {
             margin-bottom: 20px;
         }
-    
+
         .input-group {
             width: 100%;
         }
-    
+
         .input-group-append .btn {
             border-top-left-radius: 0;
             border-bottom-left-radius: 0;
         }
-    
+
         .btn {
             font-size: 16px;
         }
-    
+
         /* Estilos específicos para a resposta do administrador */
         .admin-response {
             background-color: #f1f1f1;
@@ -173,34 +174,34 @@
             border-radius: 5px;
             margin-bottom: 20px;
         }
-    
+
         .response-title {
             color: #007bff;
             margin-bottom: 10px;
         }
-    
+
         .admin-section-title {
             margin-top: 2rem;
             font-weight: bold;
             color: #343a40;
         }
-    
+
         .modal-footer {
             margin-top: 1rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-    
+
         .finalizar {
             margin-top: 1rem;
         }
-    
+
         .response-label {
             font-weight: bold;
             color: #28a745;
         }
-    
+
         /* Estilos para a data e hora da resposta */
         .response-time {
             font-size: 14px;
@@ -254,7 +255,7 @@
                             <p th:text="${chamado.status}"></p>
                         </div>
                     </div>
-                    
+
                     <!-- TIPO INFORMATICA -->
                     <div th:if="${chamado.tipoDeChamado == 1}">
                         <div class="modal-info">
@@ -290,7 +291,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <!-- TIPO JURIDICO -->
                     <div th:if="${chamado.tipoDeChamado == 3}">
                         <div class="modal-info">
@@ -312,29 +313,30 @@
                     <div th:if="${isRespoAdmin}">
                         <div class="modal-info">
                             <div class="info-group admin-response">
-                                <p><strong style="color: #007bff;">Resposta Administrativa:</strong> <span class="response-time"
-                                        th:text="${respoDataEnviado}"></span></p>
+                                <p><strong style="color: #007bff;">Resposta Administrativa:</strong> <span
+                                        class="response-time" th:text="${respoDataEnviado}"></span></p>
                                 <p th:text="${respoAdmin}"></p>
                             </div>
                         </div>
                     </div>
                     <div th:if="${isAdmin}">
                         <h2 th:if="${isAdmin}">CAMPO ADMINSTRADOR</h2>
-                        
+
                     </div>
                     <div th:if="${isAdmin}" class="modal-footer">
-                        
+
                         <div th:if="${chamado.status == 'aberto'}">
                             <form th:action="@{/update/{id}(id=${chamado.id})}" method="post">
                                 <input type="hidden" name="novoStatus" value="andamento" />
                                 <button type="submit" class="btn btn-primary"
-                                style="background-color: rgb(0, 255, 132);">Atender</button>
+                                    style="background-color: rgb(0, 255, 132);">Atender</button>
                             </form>
                         </div>
                         <div th:if="${chamado.status == 'andamento'}">
                             <div>
                                 <form th:action="@{/update/{id}(id=${chamado.id})}" method="post" id="updateForm"
                                     onsubmit="submitForm(event)" class="form-helpdesk">
+                                    <input type="hidden" name="newNotificacao" value="1" />
                                     <div th:if="${isRespoAdminEmpty}" class="enviar-mensagem">
                                         <label for="newRespoAdmin">Responder Chamado:</label>
                                         <div class="input-group">
@@ -366,7 +368,7 @@
             </div>
             <div class="modal-alert-footer">
                 <form th:action="@{/update/{id}(id=${chamado.id})}" method="post">
-                    <input type="hidden" name="novoStatus" value="finalizado"/>
+                    <input type="hidden" name="novoStatus" value="finalizado" />
                     <button type="submit" class="btn btn-primary">Sim, finalizar</button>
                 </form>
                 <button type="button" class="btn btn-secondary" id="modal-alert-nao">Não</button>
@@ -487,6 +489,7 @@
                         <table class="table table-striped">
                             <thead>
                                 <tr>
+                                    <th th:if="${!isAdmin}"></th>
                                     <th>Codigo</th>
                                     <th th:if="${isAdmin}">Nome</th>
                                     <th>Título</th>
@@ -498,6 +501,11 @@
                             </thead>
                             <tbody>
                                 <tr th:each="chamado, rowStat : ${chamados}" class="fade-in">
+                                    <div th:if="${!isAdmin}">
+                                        <td th:if="${chamado.notificacao == 1}">Have noti</td>
+                                        <td th:if="${chamado.notificacao == 0}">No noti</td>
+                                    </div>
+
                                     <td class="codigoChamado" th:text="${chamado.codigoBusca}">CODIGO</td>
                                     <td th:if="${isAdmin}" th:text="${chamado.colaborador.nome}">Nome</td>
                                     <td th:text="${chamado.titulo}">Título</td>

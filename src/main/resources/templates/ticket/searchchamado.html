@@ -182,6 +182,7 @@
                                 <table class="table table-striped">
                                     <thead>
                                         <tr>
+                                            <th></th>
                                             <th>Codigo</th>
                                             <th th:if="${isAdmin}">Nome</th>
                                             <th>Título</th>
@@ -193,6 +194,7 @@
                                     </thead>
                                     <tbody>
                                         <tr th:each="chamado, rowStat : ${chamados}" class="fade-in">
+                                            <td th:text="${chamado.notificacao}">Notificacão</td>
                                             <td class="codigoChamado" th:text="${chamado.codigoBusca}">CODIGO</td>
                                             <td th:if="${isAdmin}" th:text="${chamado.colaborador.nome}">Nome</td>
                                             <td th:text="${chamado.titulo}">Título</td>
