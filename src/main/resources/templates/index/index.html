@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Dashboard - SB Admin</title>
+    <title>Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
     <link type="text/css" rel="stylesheet" href="materialize/css/materialize.index.css" media="screen,projection" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -98,8 +98,8 @@
                                     style="margin-right: 5px;"></i></div>
                             Tables
                         </a>
-                        <div class="sb-sidenav-menu-heading">Admistrador</div>
-                        <a class="nav-link" href="tables.html">
+                        <div th:if="${isAdmin}" class="sb-sidenav-menu-heading">Admistrador</div>
+                        <a th:if="${isAdmin}" class="nav-link" href="tables.html">
                             <div class="sb-nav-link-icon"><i class="fa-solid fa-users" style="margin-right: 5px;"></i>
                             </div>
                             Gerenciamento user

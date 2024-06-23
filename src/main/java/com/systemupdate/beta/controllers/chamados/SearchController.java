@@ -36,7 +36,7 @@ public class SearchController {
     private RespChamadoRepository respChamadoRepository;
 
     @RequestMapping("/consultar")
-    public ModelAndView searchChamadosView(ModelMap model, String status) {
+    public ModelAndView searchChamadosView(ModelMap model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = auth.getName();
         boolean isAuthenticated = auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken);
