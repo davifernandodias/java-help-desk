@@ -12,6 +12,52 @@
     <link type="text/css" rel="stylesheet" href="materialize/css/materialize.index.css" media="screen,projection" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 </head>
+<style>
+    .main-colaborador {
+        background-color: #f8f9fa; /* Cor de fundo mais suave */
+        padding: 50px 0;
+    }
+
+    .main-colaborador h1 {
+        font-size: 2.5rem;
+        color: #333;
+    }
+
+    .card {
+        border: none;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+        background-color: #ffffff;
+    }
+
+    .card:hover {
+        transform: translateY(-10px);
+    }
+
+    .card h2 {
+        color: #007bff; /* Cor azul padrão do Bootstrap */
+    }
+
+    .card i {
+        color: #007bff; /* Cor azul para ícones */
+    }
+
+    .card-body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .additional-content {
+        font-size: 1.1rem;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 5px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+
 
 <body class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -31,7 +77,7 @@
                 <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
                     aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="profile">Settings</a></li>
+                    <li><a class="dropdown-item" href="/profile">Settings</a></li>
                     <form th:action="@{/logout}" method="post">
                         <li>
                             <hr class="dropdown-divider" />
@@ -49,10 +95,15 @@
                 <div class="sb-sidenav-menu">
                     <div class="nav">
                         <div class="sb-sidenav-menu-heading">Core</div>
-                        <a class="nav-link" href="/principal">
+                        <a th:if="${isAdmin}" class="nav-link" href="/principal">
                             <div class="sb-nav-link-icon"><i class="fa-solid fa-chart-simple"
                                     style="margin-right: 10px;"></i></div>
                             Dashboard
+                        </a>
+                        <a th:unless="${isAdmin}" class="nav-link" href="/principal">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-chart-simple"
+                                    style="margin-right: 10px;"></i></div>
+                            Home
                         </a>
                         <div class="sb-sidenav-menu-heading">Interface</div>
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
@@ -71,16 +122,16 @@
                                         style="margin-right: 10px;"></i>Consultar chamado</a>
                             </nav>
                         </div>
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages"
+                        <a th:if="${isAdmin}" class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages"
                             aria-expanded="false" aria-controls="collapsePages">
-                            <div class="sb-nav-link-icon"><i class="fa-solid fa-clipboard-user"
+                            <div th:if="${isAdmin}" class="sb-nav-link-icon"><i class="fa-solid fa-clipboard-user"
                                     style="margin-right: 10px;"></i></div>
                             Gerenciamento
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
-                        <div class="collapse" id="collapsePages" aria-labelledby="headingTwo"
+                        <div th:if="${isAdmin}" class="collapse" id="collapsePages" aria-labelledby="headingTwo"
                             data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav">
+                            <nav th:if="${isAdmin}" class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="/colaborador"><i class="fa-solid fa-address-card"
                                         style="margin-right: 10px;"></i>Novo Colaborador</a>
                                 <a class="nav-link" href="layout-static.html"><i class="fa-solid fa-magnifying-glass"
@@ -112,8 +163,33 @@
                 </div>
             </nav>
         </div>
-        <div id="layoutSidenav_content">
-            <main>
+        <div id="layoutSidenav_content" style="background-color: #f8f9fa;">
+            <main class="main-colaborador">
+                <div class="container">
+                    <div class="text-center">
+                        <h1 class="my-5">Bem-vindo ao Sistema de Help Desk</h1>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-lg-4 col-md-6 mb-4">
+                            <div class="card text-center py-4">
+                                <div class="card-body">
+                                    <h2><i class="fas fa-plus fa-2x mb-3"></i></h2>
+                                    <a href="/chamado" class="btn btn-primary mt-3">Novo Chamado</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-6 mb-4">
+                            <div class="card text-center py-4">
+                                <div class="card-body">
+                                    <h2><i class="fas fa-search fa-2x mb-3"></i></h2>
+                                    <a href="/consultar" class="btn btn-primary mt-3">Consultar Chamado</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <main th:if="${isAdmin}">
                 <div class="container-fluid px-4">
                     <h1 class="mt-4">Dashboard</h1>
                     <ol class="breadcrumb mb-4">
@@ -122,48 +198,56 @@
                     <div class="row">
                         <div class="col-xl-3 col-md-6">
                             <div class="card bg-primary text-white mb-4">
-                                <div class="card-body" style="font-size: 35px; text-align: center;">10</div>
+                                <div class="card-body" style="font-size: 35px; text-align: center;">
+                                    <span th:text="${ticketAberto}"></span>
+                                </div>
                                 <p class="card-text" style="text-align: center; margin-left: 10px; font-size: 15px;">
                                     <strong>TICKET ABERTO</strong>
                                 </p>
                                 <div class="card-footer d-flex align-items-center justify-content-between">
-                                    <a class="small text-white stretched-link" href="#">Ver Detalhes</a>
+                                    <a class="small text-white stretched-link" href="/consultar">Ver detalhes</a>
                                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-xl-3 col-md-6">
                             <div class="card bg-warning text-white mb-4">
-                                <div class="card-body" style="font-size: 35px; text-align: center;">10</div>
+                                <div class="card-body" style="font-size: 35px; text-align: center;">
+                                    <span th:text="${ticketEmAndamento}"></span>
+                                </div>
                                 <p class="card-text" style="text-align: center; margin-left: 10px; font-size: 15px;">
                                     <strong>TICKET EM ANDAMENTO</strong>
                                 </p>
                                 <div class="card-footer d-flex align-items-center justify-content-between">
-                                    <a class="small text-white stretched-link" href="#">Ver Detalhes</a>
+                                    <a class="small text-white stretched-link" href="/consultar">Ver detalhes</a>
                                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-xl-3 col-md-6">
                             <div class="card bg-success text-white mb-4">
-                                <div class="card-body" style="font-size: 35px; text-align: center;">10</div>
+                                <div class="card-body" style="font-size: 35px; text-align: center;">
+                                    <span th:text="${ticketConcluido}"></span>
+                                </div>
                                 <p class="card-text" style="text-align: center; margin-left: 10px; font-size: 15px;">
                                     <strong>TICKET CONCLUÍDOS</strong>
                                 </p>
                                 <div class="card-footer d-flex align-items-center justify-content-between">
-                                    <a class="small text-white stretched-link" href="#">Ver Detalhes</a>
+                                    <a class="small text-white stretched-link" href="/consultar">Ver detalhes</a>
                                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-xl-3 col-md-6">
                             <div class="card bg-danger text-white mb-4">
-                                <div class="card-body" style="font-size: 35px; text-align: center;">10</div>
+                                <div class="card-body" style="font-size: 35px; text-align: center;">
+                                    <span th:text="${ticketAguardandoInfoAdd}"></span>
+                                </div>
                                 <p class="card-text" style="text-align: center; margin-left: 10px; font-size: 15px;">
                                     <strong>TICKET AGUARDANDO INFO ADD</strong>
                                 </p>
                                 <div class="card-footer d-flex align-items-center justify-content-between">
-                                    <a class="small text-white stretched-link" href="#">Ver Detalhes</a>
+                                    <a class="small text-white stretched-link" href="/consultar">Ver detalhes</a>
                                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                                 </div>
                             </div>
@@ -269,7 +353,7 @@
             linhas.forEach(function (linha) {
                 var dataNascimento = linha.querySelector(".data-nascimento").textContent;
                 var idade = calcularIdade(dataNascimento);
-                linha.querySelector(".idade").textContent = idade; 
+                linha.querySelector(".idade").textContent = idade;
             });
         });
 

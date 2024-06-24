@@ -408,7 +408,7 @@
                 <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
                     aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="profile">Settings</a></li>
+                    <li><a class="dropdown-item" href="/profile">Settings</a></li>
                     <form th:action="@{/logout}" method="post">
                         <li>
                             <hr class="dropdown-divider" />
@@ -475,8 +475,8 @@
                                     style="margin-right: 5px;"></i></div>
                             Tables
                         </a>
-                        <div class="sb-sidenav-menu-heading">Admistrador</div>
-                        <a class="nav-link" href="tables.html">
+                        <div th:if="${isAdmin}" class="sb-sidenav-menu-heading">Admistrador</div>
+                        <a  th:if="${isAdmin}" class="nav-link" href="tables.html">
                             <div class="sb-nav-link-icon"><i class="fa-solid fa-users" style="margin-right: 5px;"></i>
                             </div>
                             Gerenciamento user

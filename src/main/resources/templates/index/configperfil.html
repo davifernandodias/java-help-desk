@@ -7,101 +7,69 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Cadastrar Chamado</title>
+    <title>Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
     <link type="text/css" rel="stylesheet" href="materialize/css/materialize.index.css" media="screen,projection" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-        }
-
-        .container-fluid {
-            padding: 30px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            font-weight: bold;
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        input[type="text"],
-        input[type="number"],
-        textarea,
-        select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ced4da;
-            border-radius: 5px;
-            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-
-        input[type="text"]:focus,
-        input[type="number"]:focus,
-        textarea:focus,
-        select:focus {
-            border-color: #80bdff;
-            box-shadow: 0 0 5px rgba(128, 189, 255, 0.5);
-        }
-
-        .btn-primary {
-            background-color: #007bff;
-            border-color: #007bff;
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-size: 16px;
-            transition: background-color 0.2s, border-color 0.2s;
-        }
-
-        .btn-primary:hover {
-            background-color: #0056b3;
-            border-color: #0056b3;
-        }
-
-        .breadcrumb {
-            background-color: #e9ecef;
-            border-radius: 5px;
-            padding: 10px 15px;
-            margin-bottom: 20px;
-        }
-
-        .breadcrumb-item a {
-            text-decoration: none;
-            color: #007bff;
-        }
-
-        .breadcrumb-item.active {
-            color: #6c757d;
-        }
-
-        .breadcrumb-item+.breadcrumb-item::before {
-            content: ">";
-            color: #6c757d;
-            margin: 0 5px;
-        }
-
-        #additionalFields .form-group {
-            margin-top: 20px;
-        }
-    </style>
 </head>
+<style>
+    .main-colaborador {
+        background-color: #f8f9fa; /* Cor de fundo mais suave */
+        padding: 50px 0;
+    }
+
+    .main-colaborador h1 {
+        font-size: 2.5rem;
+        color: #333;
+    }
+
+    .card {
+        border: none;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+        background-color: #ffffff;
+    }
+
+    .card:hover {
+        transform: translateY(-10px);
+    }
+
+    .card h2 {
+        color: #007bff; /* Cor azul padrão do Bootstrap */
+    }
+
+    .card i {
+        color: #007bff; /* Cor azul para ícones */
+    }
+
+    .card-body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .additional-content {
+        font-size: 1.1rem;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 5px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+
 
 <body class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
         <!-- Navbar Brand-->
-        <a class="navbar-brand ps-3" href="principal">DEMO</a>
+        <a class="navbar-brand ps-3" href="/principal">DEMO</a>
         <!-- Sidebar Toggle-->
         <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i
                 class="fas fa-bars"></i></button>
         <!-- Navbar Search-->
         <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0" th:if="${isAuthenticated}">
             <i class="fas fa-user"></i> <span th:text="${userEmail}" style="color: white;"></span>
+
         </form>
         <!-- Navbar-->
         <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
@@ -116,6 +84,7 @@
                         </li>
                         <li><button class="dropdown-item" type="submit">Sair</button></li>
                     </form>
+
                 </ul>
             </li>
         </ul>
@@ -126,10 +95,15 @@
                 <div class="sb-sidenav-menu">
                     <div class="nav">
                         <div class="sb-sidenav-menu-heading">Core</div>
-                        <a class="nav-link" href="/principal">
+                        <a th:if="${isAdmin}" class="nav-link" href="/principal">
                             <div class="sb-nav-link-icon"><i class="fa-solid fa-chart-simple"
                                     style="margin-right: 10px;"></i></div>
                             Dashboard
+                        </a>
+                        <a th:unless="${isAdmin}" class="nav-link" href="/principal">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-chart-simple"
+                                    style="margin-right: 10px;"></i></div>
+                            Home
                         </a>
                         <div class="sb-sidenav-menu-heading">Interface</div>
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
@@ -155,9 +129,9 @@
                             Gerenciamento
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
-                        <div class="collapse" id="collapsePages" aria-labelledby="headingTwo"
+                        <div th:if="${isAdmin}" class="collapse" id="collapsePages" aria-labelledby="headingTwo"
                             data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav">
+                            <nav th:if="${isAdmin}" class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="/colaborador"><i class="fa-solid fa-address-card"
                                         style="margin-right: 10px;"></i>Novo Colaborador</a>
                                 <a class="nav-link" href="layout-static.html"><i class="fa-solid fa-magnifying-glass"
@@ -175,8 +149,8 @@
                                     style="margin-right: 5px;"></i></div>
                             Tables
                         </a>
-                        <div class="sb-sidenav-menu-heading">Admistrador</div>
-                        <a class="nav-link" href="tables.html">
+                        <div th:if="${isAdmin}" class="sb-sidenav-menu-heading">Admistrador</div>
+                        <a th:if="${isAdmin}" class="nav-link" href="tables.html">
                             <div class="sb-nav-link-icon"><i class="fa-solid fa-users" style="margin-right: 5px;"></i>
                             </div>
                             Gerenciamento user
@@ -189,46 +163,11 @@
                 </div>
             </nav>
         </div>
-        <div id="layoutSidenav_content">
-            <main>
-                <div class="container-fluid px-4">
-                    <h1 class="mt-4">Cadastro de Chamados</h1>
-                    <ol class="breadcrumb mb-4">
-                        <li class="breadcrumb-item"><a href="index.html">FAQ</a></li>
-                        <li class="breadcrumb-item active">Tipos de chamados</li>
-                    </ol>
-                    <form th:action="@{/chamado/salvar}" method="post" class="was-validated" id="chamadoForm">
-                        <!-- Campos básicos -->
-                        <div class="form-group">
-                            <label for="titulo">Título:</label>
-                            <input type="text" class="form-control" id="titulo" name="titulo" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="descricao">Descrição:</label>
-                            <textarea class="form-control" id="descricao" name="descricao" rows="3" required></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="supervisor">Nome do supervisor(a):</label>
-                            <input type="text" class="form-control" id="supervisor" name="supervisor" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="tipoDeChamado">Tipo de Chamado:</label>
-                            <select class="form-control" name="tipoDeChamado" id="tipoDeChamado"
-                                onchange="showAdditionalFields()">
-                                <option value="">Selecione</option>
-                                <option value="1">Informática</option>
-                                <option value="2">Financeiro</option>
-                                <option value="3">Jurídico</option>
-                            </select>
-                        </div>
-
-
-                        <!-- Local onde os campos adicionais serão inseridos -->
-                        <div id="additionalFields"></div>
-
-                        <button type="submit" class="btn btn-primary">Salvar</button>
-                    </form>
-                </div>
+        <div id="layoutSidenav_content" style="background-color: #f8f9fa;">
+            <main class="main-colaborador">
+                
+            </main>
+            <main th:if="${isAdmin}">
             </main>
             <footer class="py-4 bg-light mt-auto">
                 <div class="container-fluid px-4">
@@ -248,51 +187,12 @@
         crossorigin="anonymous"></script>
     <script src="materialize/js/materialize.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-    <script>
-        function showAdditionalFields() {
-            var tipoChamado = document.getElementById("tipoDeChamado").value;
-            var additionalFields = document.getElementById("additionalFields");
+    <script src="materialize/assets/demo/chart-area-demo.js"></script>
+    <script src="materialize/assets/demo/chart-bar-demo.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
+        crossorigin="anonymous"></script>
+    <script src="materialize/js/materialize.table.js"></script>
 
-            // Limpar campos adicionais existentes
-            additionalFields.innerHTML = "";
-
-            // Criar campos adicionais de acordo com o tipo de chamado selecionado
-            if (tipoChamado == "1") {
-                additionalFields.innerHTML += `
-                    <div class="form-group">
-                        <label for="problema">Problema:</label>
-                        <input type="text" class="form-control" id="problema" name="problema" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="equipamento">Equipamento:</label>
-                        <input type="text" class="form-control" id="equipamento" name="equipamento" required>
-                    </div>
-                `;
-            } else if (tipoChamado == "2") {//botar restrição de intenger, erro do intenger limitar no form
-                additionalFields.innerHTML += `
-                    <div class="form-group">
-                        <label for="valor">Valor:</label>
-                        <input type="number" class="form-control" id="valor" name="valor" required min="0" max="50000">
-                    </div>
-                    <div class="form-group">
-                        <label for="conta">Conta:</label>
-                        <input type="text" class="form-control" id="conta" name="conta" required>
-                    </div>
-                `;
-            } else if (tipoChamado == "3") {
-                additionalFields.innerHTML += `
-                    <div class="form-group">
-                        <label for="advogado">Advogado:</label>
-                        <input type="text" class="form-control" id="advogado" name="advogado" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="processo">Processo:</label>
-                        <input type="text" class="form-control" id="processo" name="processo" required>
-                    </div>
-                `;
-            }
-        }
-    </script>
 
 </body>
 

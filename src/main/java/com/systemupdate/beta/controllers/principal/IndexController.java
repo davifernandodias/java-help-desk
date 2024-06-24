@@ -1,6 +1,5 @@
 package com.systemupdate.beta.controllers.principal;
 
-
 import java.util.List;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,10 +27,10 @@ public class IndexController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = auth.getName();
         boolean isAuthenticated = auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken);
-        
+
         model.addAttribute("isAuthenticated", isAuthenticated);
         model.addAttribute("userEmail", userEmail);
-        
+
         if (isAuthenticated && auth.getPrincipal() instanceof CustomUserDetails) {
             CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
             String role = userDetails.getRole();
@@ -39,11 +38,11 @@ public class IndexController {
         } else {
             model.addAttribute("isAdmin", false);
         }
-        
-        int ticketAberto = chamadoService.contarChamadosPorStatus("Aberto");
-        int ticketEmAndamento = chamadoService.contarChamadosPorStatus("Em Andamento");
-        int ticketConcluido = chamadoService.contarChamadosPorStatus("Concluído");
-        int ticketAguardandoInfoAdd = chamadoService.contarChamadosPorStatus("Aguardando Informações Adicionais");
+
+        int ticketAberto = chamadoService.contarChamadosPorStatus("aberto");
+        int ticketEmAndamento = chamadoService.contarChamadosPorStatus("andamento");
+        int ticketConcluido = chamadoService.contarChamadosPorStatus("finalizado");
+        int ticketAguardandoInfoAdd = chamadoService.contarChamadosPorStatus("andamento");
 
         model.addAttribute("ticketAberto", ticketAberto);
         model.addAttribute("ticketEmAndamento", ticketEmAndamento);
@@ -51,13 +50,10 @@ public class IndexController {
         model.addAttribute("ticketAguardandoInfoAdd", ticketAguardandoInfoAdd);
 
         List<Colaborador> colaboradores = colaboradorService.buscarTodos();
-        
-     
-        
+
         model.addAttribute("colaboradores", colaboradores);
 
         return "index/index";
     }
-
 
 }
