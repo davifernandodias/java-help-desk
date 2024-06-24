@@ -17,4 +17,5 @@ public class ColaboradorService {
     public List<Colaborador> buscarTodos() {
         return colaboradorRepository.findAll();
     }
+
 }

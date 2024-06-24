@@ -6,11 +6,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.systemupdate.beta.models.Colaborador;
+import com.systemupdate.beta.models.Chamado;
 
-public class CreateController {
+
+
+public class CreateColaboradorController {
     
-    @GetMapping("/colaboradorCreate")
+    @GetMapping("/funcionarios")
     public String principal(ModelMap model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = auth.getName();
@@ -18,7 +20,7 @@ public class CreateController {
 
         model.addAttribute("isAuthenticated", isAuthenticated);
         model.addAttribute("userEmail", userEmail);
-        model.addAttribute("colaborador", new Colaborador());
-        return "cadastroColaborador";
+        model.addAttribute("chamado", new Chamado());
+        return "index/configperfil";
     }
 }

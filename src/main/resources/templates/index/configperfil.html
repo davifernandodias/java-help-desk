@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Dashboard</title>
+    <title>Profile</title>
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
     <link type="text/css" rel="stylesheet" href="materialize/css/materialize.index.css" media="screen,projection" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -164,10 +164,24 @@
             </nav>
         </div>
         <div id="layoutSidenav_content" style="background-color: #f8f9fa;">
-            <main class="main-colaborador">
+            <main th:if="${isAdmin}">
+                <h2>admin</h2>
+                <p><span >Cargo: Admin</span></p>
+                <p>Nome: <span th:text="${colaborador.nome}"></span></p>
+                <p>Data de nascimento: <span th:text="${colaborador.dataNascimento}"></span></p>
+                <p>Id de usuario: <span th:text="${colaborador.usuario.id}"></span></p>
+                <p>Id de colaborador: <span th:text="${colaborador.id}"></span></p>
+                <p>Email/Usuario: <span th:text="${colaborador.usuario.email}"></span></p>
+                <p>Cargo: <span th:text="${colaborador.cargo}"></span></p>
+                <p>Salario: <span th:text="${colaborador.salario}"></span></p>
+                <p>Regiao: <span th:text="${colaborador.regiao}"></span></p>
+                <p>CPF: <span th:text="${informacao.cpf}"></span></p>
+                <p>RG: <span th:text="${informacao.rg}"></span></p>
+                <p>TEPEFONE: <span th:text="${informacao.telefone}"></span></p>
                 
             </main>
-            <main th:if="${isAdmin}">
+            <main th:unless="${isAdmin}" class="main-colaborador">
+                <h2>dakdakda</h2>
             </main>
             <footer class="py-4 bg-light mt-auto">
                 <div class="container-fluid px-4">

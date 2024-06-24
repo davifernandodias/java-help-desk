@@ -27,7 +27,7 @@ public class Endereco extends AbstractEntity {
     private String cep;
 
     @OneToOne(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "id_endereco", nullable = false)
+    @JoinColumn(name = "id_informacao_adicionais", nullable = false)
     private InformacaoAdicionaisColaborador informacaoAdicionaisColaborador;
 
     public String getLogradouro() {

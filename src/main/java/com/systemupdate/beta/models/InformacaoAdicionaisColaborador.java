@@ -12,6 +12,7 @@ public class InformacaoAdicionaisColaborador extends AbstractEntity {
     @Column(name = "telefone")
     private String telefone;
     
+    
     @Column(name = "cpf")
     private Integer cpf;
     

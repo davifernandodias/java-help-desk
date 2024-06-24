@@ -41,8 +41,18 @@ public class Colaborador extends AbstractEntity {
     @OneToMany(mappedBy = "colaborador")
     private List<Chamado> chamados;
 
+    @OneToOne(mappedBy = "colaborador", cascade = CascadeType.ALL)
+    private InformacaoAdicionaisColaborador informacaoAdicionais;
+
 
     // Getters and Setters
+
+    public InformacaoAdicionaisColaborador getInformacaoAdicionais() {
+        return informacaoAdicionais;
+    }
+    public void setInformacaoAdicionais(InformacaoAdicionaisColaborador informacaoAdicionais) {
+        this.informacaoAdicionais = informacaoAdicionais;
+    }
 
     public Long getId() {
         return id;
