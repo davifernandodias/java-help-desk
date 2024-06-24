@@ -23,32 +23,32 @@
         color: #333;
     }
 
-    .card {
+    .card-colaborador {
         border: none;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         transition: transform 0.3s ease;
         background-color: #ffffff;
     }
 
-    .card:hover {
+    .card-colaborador:hover {
         transform: translateY(-10px);
     }
 
-    .card h2 {
+    .card-colaborador h2 {
         color: #007bff; /* Cor azul padrão do Bootstrap */
     }
 
-    .card i {
+    .card-colaborador i {
         color: #007bff; /* Cor azul para ícones */
     }
 
-    .card-body {
+    .card-body-colaborador {
         display: flex;
         flex-direction: column;
         align-items: center;
     }
 
-    .additional-content {
+    .additional-content-colaborador {
         font-size: 1.1rem;
         padding: 20px;
         background-color: #ffffff;
@@ -164,23 +164,23 @@
             </nav>
         </div>
         <div id="layoutSidenav_content" style="background-color: #f8f9fa;">
-            <main class="main-colaborador">
+            <main class="main-colaborador" th:if="${!isAdmin}">
                 <div class="container">
                     <div class="text-center">
                         <h1 class="my-5">Bem-vindo ao Sistema de Help Desk</h1>
                     </div>
                     <div class="row justify-content-center">
                         <div class="col-lg-4 col-md-6 mb-4">
-                            <div class="card text-center py-4">
-                                <div class="card-body">
+                            <div class="card-colaborador text-center py-4">
+                                <div class="card-body-colaborador">
                                     <h2><i class="fas fa-plus fa-2x mb-3"></i></h2>
                                     <a href="/chamado" class="btn btn-primary mt-3">Novo Chamado</a>
                                 </div>
                             </div>
                         </div>
                         <div class="col-lg-4 col-md-6 mb-4">
-                            <div class="card text-center py-4">
-                                <div class="card-body">
+                            <div class="card-colaborador text-center py-4">
+                                <div class="card-body-colaborador">
                                     <h2><i class="fas fa-search fa-2x mb-3"></i></h2>
                                     <a href="/consultar" class="btn btn-primary mt-3">Consultar Chamado</a>
                                 </div>

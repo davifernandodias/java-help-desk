@@ -11,6 +11,7 @@ import com.systemupdate.beta.models.Chamado;
 
 @Controller
 public class PerfilColaboradorController {
+    
     @GetMapping("/profile")
     public String principal(ModelMap model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -22,4 +23,7 @@ public class PerfilColaboradorController {
         model.addAttribute("chamado", new Chamado());
         return "index/configperfil";
     }
+
+
+    
 }
