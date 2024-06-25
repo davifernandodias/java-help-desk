@@ -55,11 +55,11 @@ public class SearchController {
         mv.addObject("isAdmin", isAdmin);
 
         if (isAdmin) {
-            Iterable<Chamado> chamados = chamadoRepository.findAll();
+            Iterable<Chamado> chamados = chamadoRepository.findAllOrderByStatus();
             mv.addObject("chamados", chamados);
 
         } else {
-            Iterable<Chamado> chamados = chamadoRepository.findByColaborador(colaborador);
+            Iterable<Chamado> chamados = chamadoRepository.findByColaboradorOrderByStatus(colaborador);
             mv.addObject("chamados", chamados);
         }
 
