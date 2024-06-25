@@ -30,6 +30,7 @@ public class Endereco extends AbstractEntity {
     @JoinColumn(name = "id_informacao_adicionais", nullable = false)
     private InformacaoAdicionaisColaborador informacaoAdicionaisColaborador;
 
+    
     public String getLogradouro() {
         return logradouro;
     }

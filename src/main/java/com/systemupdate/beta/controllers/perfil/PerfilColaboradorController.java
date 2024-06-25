@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 
 import com.systemupdate.beta.models.Colaborador;
+import com.systemupdate.beta.models.Endereco;
 import com.systemupdate.beta.models.InformacaoAdicionaisColaborador;
 import com.systemupdate.beta.models.PerfilTipo;
 import com.systemupdate.beta.models.Usuario;
@@ -57,6 +58,8 @@ public class PerfilColaboradorController {
             // Tratar caso as informações adicionais não sejam encontradas
             informacaoAdicionaisColaborador = new InformacaoAdicionaisColaborador(); // ou outro tratamento adequado
         }
+        // Obtém o endereço associado às informações adicionais do colaborador
+        Endereco endereco = informacaoAdicionaisColaborador.getEndereco();
 
         // Verifica se o usuário é administrador
         boolean isAdmin = usuario.getPerfis().stream()
@@ -65,7 +68,8 @@ public class PerfilColaboradorController {
         model.addAttribute("isAdmin", isAdmin);
         model.addAttribute("colaborador", colaborador);
         model.addAttribute("informacao", informacaoAdicionaisColaborador);
-
+        model.addAttribute("endereco", endereco); // Adiciona o endereço ao modelo
+       
         return "index/configperfil"; // Retorna o nome do template a ser renderizado
     }
 }

@@ -1,5 +1,6 @@
 package com.systemupdate.beta.models;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -19,9 +20,29 @@ public class InformacaoAdicionaisColaborador extends AbstractEntity {
     @Column(name = "rg")
     private String rg;
 
+    @Column(name = "sobrenome")
+    private String sobrenome;
+
     @OneToOne
     @JoinColumn(name = "id_colaborador", nullable = false)
     private Colaborador colaborador;
+
+    @OneToOne(mappedBy = "informacaoAdicionaisColaborador", cascade = CascadeType.ALL)
+    private Endereco endereco;
+
+
+    public String getSobrenome() {
+        return sobrenome;
+    }
+    public void setSobrenome(String sobrenome) {
+        this.sobrenome = sobrenome;
+    }
+    public Endereco getEndereco() {
+        return endereco;
+    }
+    public void setEndereco(Endereco endereco) {
+        this.endereco = endereco;
+    }
     
     public String getTelefone() {
         return telefone;
