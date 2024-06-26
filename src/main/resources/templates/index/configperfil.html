@@ -234,7 +234,7 @@
             </div>
         <div id="layoutSidenav_content">
             <main>
-                <div class="container text-center"> <!-- Adicionado text-center para centralizar -->
+                <div class="container text-center" style="margin-left: 320px;"> <!-- Adicionado text-center para centralizar -->
                     <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
                         <div class="card h-100">
                             <div class="card-body">
@@ -247,7 +247,7 @@
                                             <label for="nome">Nome Completo</label>
                                             <div class="input-group">
                                                 <input type="text" id="nome" name="nome" class="form-control"
-                                                    th:value="${colaborador.nome}" readonly />
+                                                    th:value="${colaborador.nome + ' ' + informacao.sobrenome}" readonly />
                                                 <span class="email-icon">
                                                     <i class="fas fa-pencil-alt"></i>
                                                 </span>

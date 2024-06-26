@@ -1,6 +1,7 @@
 package com.systemupdate.beta.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,22 +24,24 @@ public class UsuarioService implements UserDetailsService {
     private UsuarioRepository usuarioRepository;
 
     @Transactional
-    public Usuario buscarPorEmail(String email) {
-        return usuarioRepository.findByEmail(email);
+    public Optional<Usuario> buscarPorEmailEAtivo(String email) {
+        return usuarioRepository.findByEmailAndAtivo(email);
     }
 
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Usuario usuario = buscarPorEmail(username);
-        if (usuario == null) {
-            throw new UsernameNotFoundException("Usuário não encontrado");
+        Usuario usuario = buscarPorEmailEAtivo(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
+    
+        if (!usuario.isAtivo()) {
+            throw new UsernameNotFoundException("Conta desativada. Entre em contato com o suporte.");
         }
-
+    
         List<GrantedAuthority> authorities = usuario.getPerfis().stream()
                 .map(perfil -> new SimpleGrantedAuthority(perfil.getDescricao()))
                 .collect(Collectors.toList());
-
+    
         return new CustomUserDetails(
             usuario.getEmail(),
             usuario.getSenha(),
@@ -46,6 +49,8 @@ public class UsuarioService implements UserDetailsService {
             authorities.isEmpty() ? null : authorities.get(0).getAuthority()
         );
     }
+    
+    
     
     @Transactional
     public Usuario salvar(Usuario usuario) {
