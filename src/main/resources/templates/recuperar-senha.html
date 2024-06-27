@@ -59,6 +59,10 @@
                 <p class="text-muted">Verifique seu e-mail para continuar!</p>
             </div>
 
+            <div th:if="${falha != null}" class="text-sucess">
+                <p th:text="${sucesso}"></p>
+            </div>
+
             <div th:if="${falha != null}" class="text-danger">
                 <p th:text="${falha}"></p>
             </div>

@@ -38,7 +38,13 @@ public class SecurityConfig {
                 .failureUrl("/login-error")
                 .permitAll()
             )
+            .rememberMe(rememberMe -> rememberMe
+            .key("uniqueAndSecret")
+            .tokenValiditySeconds(86400) // tempo de validade do token (em segundos)
+            .userDetailsService(usuarioService)
+        )
             .logout(logout -> logout.permitAll());
+            
 
         return http.build();
     }
