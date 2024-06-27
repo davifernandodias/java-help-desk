@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import com.systemupdate.beta.models.Chamado;
 import com.systemupdate.beta.models.Colaborador;
 import com.systemupdate.beta.repository.ChamadoRepository;
+import com.systemupdate.beta.service.EmailService;
 import com.systemupdate.beta.service.UsuarioService;
 
 @Controller
@@ -23,9 +24,12 @@ public class CreateController {
 
     @Autowired
     UsuarioService usuarioService;
-
+    
     @Autowired
     ChamadoRepository chamadoRepository;
+    
+    @Autowired
+    EmailService emailService;
 
     @GetMapping("/chamado")
     public String principal(ModelMap model) {
@@ -46,16 +50,18 @@ public class CreateController {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             String userEmail = auth.getName();
             Colaborador colaborador = usuarioService.findByEmail(userEmail).getColaborador();
+
             
             // Configurar o colaborador no objeto Chamado
             chamado.setColaborador(colaborador);
             chamado.setDataAtualizacao(LocalDateTime.now());
             chamado.setDataAbertura(LocalDateTime.now());
             chamado.setStatus("aberto");
-    
+            
             // Salvar o chamado no banco de dados através do repositório
             chamadoRepository.save(chamado);
-    
+            emailService.enviarEmailCriacaoDeChamado(userEmail, chamado.getCodigoBusca());
+            System.out.println(chamado.getCodigoBusca());
             // Redirecionar para a página de listagem de chamados ou outra ação desejada
             return "redirect:/chamado";
         } catch (Exception e) {
