@@ -103,7 +103,7 @@ public class Usuario extends AbstractEntity {
     public String getCodigoVerificador() {
         return codigoVerificador;
     }
-
+    
     public void setCodigoVerificador(String codigoVerificador) {
         this.codigoVerificador = codigoVerificador;
     }

@@ -28,7 +28,7 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/materialize/**", "/css/**", "/image/**", "/js/**").permitAll()
-                .requestMatchers("/", "/home").permitAll() 
+                .requestMatchers("/", "/home","/login-redefinir-senha","login-nova-senha","login-recuperar-senha").permitAll() 
                 
                 .anyRequest().authenticated()
             )

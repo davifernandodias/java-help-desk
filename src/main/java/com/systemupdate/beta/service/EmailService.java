@@ -42,4 +42,23 @@ public class EmailService {
         
         mailSender.send(message);
     }
+    public void enviarPedidoRedefinicaoSenha(String destino, String verificador) throws MessagingException{
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message,MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,"UTF-8");
+        Context context = new Context();
+        context.setVariable("titulo", "Solicitação de redefinição solicitada com sucesso");
+        context.setVariable("texto", "Codigo do chamado abaixo");
+        
+        context.setVariable("verificador", verificador);
+
+        String html = templateEngine.process("email/redefinirsenha", context); 
+        helper.setTo(destino);
+        helper.setText(html,true);
+        helper.setSubject("Refinicao de senha");
+        helper.setFrom("nao-responder@demohelpdesk.com.br");
+        
+        mailSender.send(message);
+    }
+
+    
 }

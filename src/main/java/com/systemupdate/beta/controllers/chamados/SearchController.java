@@ -18,7 +18,10 @@ import com.systemupdate.beta.models.Colaborador;
 import com.systemupdate.beta.models.Usuario;
 import com.systemupdate.beta.repository.ChamadoRepository;
 import com.systemupdate.beta.repository.RespChamadoRepository;
+import com.systemupdate.beta.service.EmailService;
 import com.systemupdate.beta.service.UsuarioService;
+
+import jakarta.mail.MessagingException;
 
 import com.systemupdate.beta.models.PerfilTipo;
 import com.systemupdate.beta.models.RespChamado;
@@ -34,6 +37,9 @@ public class SearchController {
 
     @Autowired
     private RespChamadoRepository respChamadoRepository;
+
+    @Autowired
+    private EmailService emailService;
 
     @RequestMapping("/consultar")
     public ModelAndView searchChamadosView(ModelMap model) {
@@ -87,23 +93,23 @@ public class SearchController {
             mv.addObject("isAdmin", isAdmin);
             mv.addObject("chamado", chamado);
             if (isAdmin) {
-                Iterable<Chamado> chamados = chamadoRepository.findAll();
+                Iterable<Chamado> chamados = chamadoRepository.findAllOrderByStatus();
                 mv.addObject("chamados", chamados);
             } else {
                 Iterable<Chamado> chamados = chamadoRepository.findByColaborador(colaborador);
                 mv.addObject("chamados", chamados);
 
-                if (chamado.getNotificacao().equals(1)){
+                if (chamado.getNotificacao().equals(1)) {
                     chamado.setNotificacao(0);
                     chamadoRepository.save(chamado);
                 }
-                RespChamado respChamado = respChamadoRepository.findByChamado(chamado); 
+                RespChamado respChamado = respChamadoRepository.findByChamado(chamado);
                 if (respChamado != null) {
                     boolean isRespoAdmin = respChamado.getRespoAdmin() != null
                             && !respChamado.getRespoAdmin().trim().isEmpty();
                     mv.addObject("isRespoAdmin", isRespoAdmin);
                     mv.addObject("respoAdmin", respChamado.getRespoAdmin());
-                    
+
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
                     String formattedDate = respChamado.getDataDeEnvio().format(formatter);
                     mv.addObject("respoDataEnviado", formattedDate);
@@ -121,7 +127,7 @@ public class SearchController {
     public ModelAndView updateFormPorId(@PathVariable Long id, ModelMap model,
             @RequestParam(required = false) String novoStatus,
             @RequestParam(required = false) String newRespoAdmin,
-            @RequestParam(required = false) Integer newNotificacao) {
+            @RequestParam(required = false) Integer newNotificacao) throws MessagingException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = auth.getName();
         boolean isAuthenticated = auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken);
@@ -173,14 +179,21 @@ public class SearchController {
                 chamadoRepository.save(chamado);
                 respChamado.setDataDeEnvio(LocalDateTime.now());
                 respChamadoRepository.save(respChamado);
+
+                
+                String emailChamado = chamado.getColaborador().getUsuario().getEmail(); 
+                emailService.enviarEmailCriacaoDeChamado(emailChamado,chamado.getCodigoBusca()); 
+
+                
+
             }
 
             // Carregar os chamados novamente para exibição na página
             Iterable<Chamado> chamados;
             if (isAdmin) {
-                chamados = chamadoRepository.findAll();
+                chamados = chamadoRepository.findAllOrderByStatus();
             } else {
-                chamados = chamadoRepository.findByColaborador(colaborador);
+                chamados = chamadoRepository.findByColaboradorOrderByStatus(colaborador);
             }
             mv.addObject("chamados", chamados);
 
