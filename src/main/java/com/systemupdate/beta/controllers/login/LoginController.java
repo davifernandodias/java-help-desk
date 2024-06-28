@@ -1,6 +1,7 @@
 package com.systemupdate.beta.controllers.login;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.web.authentication.session.SessionAuthenticationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +11,8 @@ import com.systemupdate.beta.models.Usuario;
 import com.systemupdate.beta.service.UsuarioService;
 
 import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class LoginController {
@@ -23,7 +26,16 @@ public class LoginController {
     }
 
     @GetMapping("/login-error")
-    public String loginError(ModelMap model) {
+    public String loginError(ModelMap model, HttpServletRequest resp) {
+        HttpSession session = resp.getSession();
+        String lastExpection = String.valueOf( session.getAttribute("SPRING_SECURITY_LAST_EXCEPTION"));
+        if(lastExpection.contains(SessionAuthenticationException.class.getName())){
+            model.addAttribute("alerta", "erro");
+            model.addAttribute("titulo", "Acesso recusado");
+            model.addAttribute("texto", "Você já está logado em outro dispositivo.");
+            model.addAttribute("subtexto", "Faça logout ou espere sua sessão expirar.");
+            return "login";
+        }
         model.addAttribute("alerta", "erro");
         model.addAttribute("titulo", "Credenciais inválidas");
         model.addAttribute("texto", "Login ou senha incorretos, tente novamente.");

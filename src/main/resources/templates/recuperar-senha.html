@@ -59,12 +59,10 @@
                 <p class="text-muted">Verifique seu e-mail para continuar!</p>
             </div>
 
-            <div th:if="${falha != null}" class="text-sucess">
-                <p th:text="${sucesso}"></p>
-            </div>
-
-            <div th:if="${falha != null}" class="text-danger">
-                <p th:text="${falha}"></p>
+            <!-- Mensagem de sucesso ou alerta -->
+            <div th:if="${alerta != null}" th:classappend="${alerta == 'sucesso'} ? 'alert alert-success' : 'alert alert-danger'" role="alert">
+                <h4 th:text="${titulo}"></h4>
+                <p th:text="${texto}"></p>
             </div>
 
             <div class="form-group">
