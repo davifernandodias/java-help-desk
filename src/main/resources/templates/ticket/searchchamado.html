@@ -171,9 +171,9 @@
                                     style="margin-right: 5px;"></i></div>
                             Tables
                         </a>
-                        <div class="sb-sidenav-menu-heading">Admistrador</div>
-                        <a class="nav-link" href="tables.html">
-                            <div class="sb-nav-link-icon"><i class="fa-solid fa-users" style="margin-right: 5px;"></i>
+                        <div th:if="${isAdmin}" class="sb-sidenav-menu-heading">Admistrador</div>
+                        <a th:if="${isAdmin}" class="nav-link" href="tables.html">
+                            <div th:if="${isAdmin}" class="sb-nav-link-icon"><i class="fa-solid fa-users" style="margin-right: 5px;"></i>
                             </div>
                             Gerenciamento user
                         </a>
@@ -295,7 +295,7 @@
             tr = table.getElementsByTagName("tr");
 
             for (i = 0; i < tr.length; i++) {
-                td = tr[i].getElementsByTagName("td")[0]; // Coluna do Código
+                td = tr[i].getElementsByTagName("td")[1]; // Coluna do Código
 
                 if (td) {
                     txtValue = td.textContent || td.innerText;

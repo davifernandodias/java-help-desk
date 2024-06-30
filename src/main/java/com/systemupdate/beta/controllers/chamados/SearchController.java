@@ -182,7 +182,7 @@ public class SearchController {
 
                 
                 String emailChamado = chamado.getColaborador().getUsuario().getEmail(); 
-                emailService.enviarEmailCriacaoDeChamado(emailChamado,chamado.getCodigoBusca()); 
+                emailService.enviarEmailDeNotificacao(emailChamado,chamado.getCodigoBusca()); 
 
                 
 

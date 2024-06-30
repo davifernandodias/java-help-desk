@@ -199,9 +199,9 @@
                                     style="margin-right: 5px;"></i></div>
                             Tables
                         </a>
-                        <div class="sb-sidenav-menu-heading">Admistrador</div>
-                        <a class="nav-link" href="tables.html">
-                            <div class="sb-nav-link-icon"><i class="fa-solid fa-users" style="margin-right: 5px;"></i>
+                        <div th:if="${isAdmin}" class="sb-sidenav-menu-heading">Admistrador</div>
+                        <a  th:if="${isAdmin}" class="nav-link" href="tables.html">
+                            <div th:if="${isAdmin}" class="sb-nav-link-icon"><i class="fa-solid fa-users" style="margin-right: 5px;"></i>
                             </div>
                             Gerenciamento user
                         </a>
