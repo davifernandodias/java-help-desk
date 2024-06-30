@@ -180,15 +180,12 @@ public class SearchController {
                 respChamado.setDataDeEnvio(LocalDateTime.now());
                 respChamadoRepository.save(respChamado);
 
-                
-                String emailChamado = chamado.getColaborador().getUsuario().getEmail(); 
-                emailService.enviarEmailDeNotificacao(emailChamado,chamado.getCodigoBusca()); 
-
-                
+                String emailChamado = chamado.getColaborador().getUsuario().getEmail();
+                emailService.enviarEmailDeNotificacao(emailChamado, chamado.getCodigoBusca());
 
             }
 
-            // Carregar os chamados novamente para exibição na página
+
             Iterable<Chamado> chamados;
             if (isAdmin) {
                 chamados = chamadoRepository.findAllOrderByStatus();
@@ -203,5 +200,19 @@ public class SearchController {
 
         return mv;
     }
+
+    @RequestMapping("/delete/{id}")
+    public String deleteChamado(@PathVariable Long id) {
+        Chamado chamado = chamadoRepository.findById(id).orElse(null);
+        if (chamado != null) {
+            RespChamado respChamado = respChamadoRepository.findByChamado(chamado);
+            if (respChamado != null) {
+                respChamadoRepository.delete(respChamado);
+            }chamadoRepository.delete(chamado);
+        }
+        return "redirect:/consultar";
+    }
+
+
 
 }

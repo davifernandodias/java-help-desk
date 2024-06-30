@@ -238,7 +238,9 @@
                                     <td>
                                     <td>
                                         <a th:href="@{/detalhes/{id}(id=${chamado.id})}">Analisar</a>
+                                        <a th:if="${isAdmin}" th:href="@{${(#mvc.url('SC#deleteChamado').arg(0,chamado.id)).build()}}" style="margin-left: 20px;">Excluir</a>
                                     </td>
+                                    
                                 </tr>
                             </tbody>
                         </table>
@@ -260,6 +262,7 @@
         </div>
     </div>
     </div>
+    
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
