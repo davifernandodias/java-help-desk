@@ -47,7 +47,7 @@ public class EmailService {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message,MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,"UTF-8");
         Context context = new Context();
-        context.setVariable("titulo", "Chamado foi");
+        context.setVariable("titulo", "Chamado foi respondido");
         context.setVariable("texto", "Codigo do chamado abaixo");
         
         String codigo = codigoBusca.toString().substring(0, 6);
@@ -78,6 +78,4 @@ public class EmailService {
         
         mailSender.send(message);
     }
-
-    
 }
