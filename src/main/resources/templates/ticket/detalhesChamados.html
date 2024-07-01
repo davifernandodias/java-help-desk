@@ -231,6 +231,18 @@
 
 <body class="sb-nav-fixed">
     <div id="fade">
+        <!-- Mensagem de sucesso -->
+<div id="successMessage" class="alert alert-success" style="display: none;">
+    Chamado respondido com sucesso!
+    <button id="successButton" class="btn btn-primary" style="margin-top: 10px;">OK</button>
+</div>
+<!-- Animação de carregamento -->
+<div id="loadingOverlay" style="display: none;">
+    <!-- Adicione aqui a sua animação de carregamento, por exemplo, um spinner -->
+    <div class="spinner-border" role="status">
+        <span class="sr-only">Carregando...</span>
+    </div>
+</div>
 
         <div id="modal">
             <div class="modal-header">
@@ -350,19 +362,19 @@
                         <div th:if="${chamado.status == 'andamento'}">
                             <div>
                                 <form th:action="@{/update/{id}(id=${chamado.id})}" method="post" id="updateForm"
-                                    onsubmit="submitForm(event)" class="form-helpdesk">
-                                    <input type="hidden" name="newNotificacao" value="1" />
-                                    <div th:if="${isRespoAdminEmpty}" class="enviar-mensagem">
-                                        <label for="newRespoAdmin">Responder Chamado:</label>
-                                        <div class="input-group">
-                                            <input type="text" id="newRespoAdmin" name="newRespoAdmin"
-                                                class="form-control" placeholder="Digite sua resposta">
-                                            <div class="input-group-append">
-                                                <button type="submit" class="btn btn-primary">Enviar</button>
-                                            </div>
+                                onsubmit="submitForm(event)" class="form-helpdesk">
+                                <input type="hidden" name="newNotificacao" value="1" />
+                                <div th:if="${isRespoAdminEmpty}" class="enviar-mensagem">
+                                    <label for="newRespoAdmin">Responder Chamado:</label>
+                                    <div class="input-group">
+                                        <input type="text" id="newRespoAdmin" name="newRespoAdmin"
+                                            class="form-control" placeholder="Digite sua resposta">
+                                        <div class="input-group-append">
+                                            <button type="submit" class="btn btn-primary">Enviar</button>
                                         </div>
                                     </div>
-                                </form>
+                                </div>
+                            </form>
                             </div>
                             <div class="finalizar" th:unless="${isRespoAdminEmpty}">
                                 <button class="btn btn-danger" id="open-modal-alert">Finalizar Chamado</button>
@@ -459,9 +471,9 @@
                         <div class="collapse" id="collapsePages" aria-labelledby="headingTwo"
                             data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="layout-static.html"><i class="fa-solid fa-address-card"
+                                <a class="nav-link" href="/criarColaboradores"><i class="fa-solid fa-address-card"
                                         style="margin-right: 10px;"></i>Novo Colaborador</a>
-                                <a class="nav-link" href="layout-static.html"><i class="fa-solid fa-magnifying-glass"
+                                <a class="nav-link" href="/consultarColaborador"><i class="fa-solid fa-magnifying-glass"
                                         style="margin-right: 10px;"></i>Consultar Colaborador</a>
                             </nav>
                         </div>
@@ -565,6 +577,40 @@
         </div>
     </div>
     </div>
+    <script>
+        function submitForm(event) {
+            event.preventDefault(); // Impedir envio automático para adicionar comportamento personalizado
+    
+            var loadingOverlay = document.getElementById('loadingOverlay');
+            loadingOverlay.style.display = 'block'; // Mostrar a animação de carregamento
+    
+            var form = document.getElementById('updateForm');
+            var formData = new FormData(form);
+    
+            // Simular uma solicitação assíncrona (AJAX)
+            fetch(form.action, {
+                method: form.method,
+                body: formData
+            }).then(function (response) {
+                return response.text(); // ou response.json() dependendo do tipo de resposta esperada
+            }).then(function (text) {
+                loadingOverlay.style.display = 'none'; // Esconder a animação de carregamento
+                var successMessage = document.getElementById('successMessage');
+                successMessage.style.display = 'block'; // Mostrar a mensagem de sucesso
+    
+                // Adicionar evento de clique ao botão "OK"
+                var successButton = document.getElementById('successButton');
+                successButton.addEventListener('click', function () {
+                    successMessage.style.display = 'none'; // Esconder a mensagem de sucesso
+                    window.location.href = "/consultar"; // Redirecionar para a página principal
+                });
+            }).catch(function (error) {
+                loadingOverlay.style.display = 'none'; // Esconder a animação de carregamento
+                alert('Erro ao responder este chamado. Tente novamente.');
+            });
+        }
+    </script>
+    
     <script>
         function submitForm(event) {
             event.preventDefault(); // Previne o envio padrão do formulário

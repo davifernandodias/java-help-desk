@@ -2,7 +2,6 @@ package com.systemupdate.beta.controllers.chamados;
 
 import java.time.LocalDateTime;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import com.systemupdate.beta.models.Chamado;
 import com.systemupdate.beta.models.Colaborador;
 import com.systemupdate.beta.repository.ChamadoRepository;
+import com.systemupdate.beta.security.CustomUserDetails;
 import com.systemupdate.beta.service.EmailService;
 import com.systemupdate.beta.service.UsuarioService;
 
@@ -24,10 +24,10 @@ public class CreateController {
 
     @Autowired
     UsuarioService usuarioService;
-    
+
     @Autowired
     ChamadoRepository chamadoRepository;
-    
+
     @Autowired
     EmailService emailService;
 
@@ -39,6 +39,13 @@ public class CreateController {
 
         model.addAttribute("isAuthenticated", isAuthenticated);
         model.addAttribute("userEmail", userEmail);
+        if (isAuthenticated && auth.getPrincipal() instanceof CustomUserDetails) {
+            CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
+            String role = userDetails.getRole();
+            model.addAttribute("isAdmin", "ADMIN".equals(role));
+        } else {
+            model.addAttribute("isAdmin", false);
+        }
         model.addAttribute("chamado", new Chamado());
         return "ticket/cadastrarChamado";
     }
@@ -51,13 +58,12 @@ public class CreateController {
             String userEmail = auth.getName();
             Colaborador colaborador = usuarioService.findByEmail(userEmail).getColaborador();
 
-            
             // Configurar o colaborador no objeto Chamado
             chamado.setColaborador(colaborador);
             chamado.setDataAtualizacao(LocalDateTime.now());
             chamado.setDataAbertura(LocalDateTime.now());
             chamado.setStatus("aberto");
-            
+
             // Salvar o chamado no banco de dados através do repositório
             chamadoRepository.save(chamado);
             emailService.enviarEmailCriacaoDeChamado(userEmail, chamado.getCodigoBusca());
@@ -70,6 +76,5 @@ public class CreateController {
             return "redirect:/error";
         }
     }
-    
-    
+
 }

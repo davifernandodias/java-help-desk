@@ -134,10 +134,10 @@
                         </a>
                         <div th:if="${isAdmin}" class="collapse" id="collapsePages" aria-labelledby="headingTwo"
                             data-bs-parent="#sidenavAccordion">
-                            <nav th:if="${isAdmin}" class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="/colaborador"><i class="fa-solid fa-address-card"
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="/criarColaboradores"><i class="fa-solid fa-address-card"
                                         style="margin-right: 10px;"></i>Novo Colaborador</a>
-                                <a class="nav-link" href="layout-static.html"><i class="fa-solid fa-magnifying-glass"
+                                <a class="nav-link" href="/consultarColaborador"><i class="fa-solid fa-magnifying-glass"
                                         style="margin-right: 10px;"></i>Consultar Colaborador</a>
                             </nav>
                         </div>
@@ -277,7 +277,7 @@
                                     <canvas id="myRadarChart" style="width: 100%; height: 400px;"></canvas>
                                 </div>
                             </div>
-                        </div>                        
+                        </div>
                     </div>
 
 
@@ -292,25 +292,22 @@
                                     <tr>
                                         <th>Name</th>
                                         <th>Cargo</th>
-                                        <th>idade</th>
-                                        <th>Regiao</th>
-                                        <th>Salario</th>
+                                        <th>Idade</th>
+                                        <th>Região</th>
+                                        <th>Salário</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr th:each="colaborador : ${colaboradores}">
                                         <td th:text="${colaborador.nome}">Nome do Colaborador</td>
                                         <td th:text="${colaborador.cargo}">Cargo do Colaborador</td>
-                                        <td class="idade" th:text="${colaborador.dataNascimento}">idade</td>
+                                        <td th:text="${colaborador.dataNascimento}" class="data-nascimento"></td> <!-- Data de nascimento será substituída pela idade -->
                                         <td th:text="${colaborador.regiao}">Região do Colaborador</td>
                                         <td th:text="${colaborador.salario}">Salário do Colaborador</td>
-
-
-
-                                        <!-- Adicione outras colunas conforme necessário -->
                                     </tr>
                                 </tbody>
                             </table>
+                            
                         </div>
                     </div>
                 </div>
@@ -337,7 +334,7 @@
     <script src="materialize/assets/demo/chart-bar-demo.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
         crossorigin="anonymous"></script>
-    <script src="materialize/js/materialize.table.js"></script> 
+    <script src="materialize/js/materialize.table.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             // Captura os valores dos elementos HTML
@@ -345,7 +342,7 @@
             var ticketEmAndamento = parseInt(document.getElementById("ticket_andamento").textContent);
             var ticketAberto = parseInt(document.getElementById("ticket_aberto").textContent);
             var ticketAguardandoInfoAdd = parseInt(document.getElementById("ticket_aguardando_info").textContent);
-    
+
             // Dados para o gráfico de radar
             var radarChartData = {
                 labels: ['Concluído', 'Em Andamento', 'Aberto', 'Aguardando Informação'],
@@ -360,7 +357,7 @@
                     pointHoverBorderColor: 'rgba(119, 3, 252)',
                 }]
             };
-    
+
             // Configuração do gráfico de radar
             var radarChartConfig = {
                 type: 'radar',
@@ -426,16 +423,16 @@
                     }
                 }
             };
-    
+
             // Inicialização do gráfico de radar
             var ctxRadar = document.getElementById('myRadarChart').getContext('2d');
             var myRadarChart = new Chart(ctxRadar, radarChartConfig);
         });
-    
-    </script>
-    
 
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    </script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -474,34 +471,37 @@
             });
         });
     </script>
-    <script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Função para calcular a idade com base na data de nascimento
         function calcularIdade(dataNascimento) {
-            var hoje = new Date();
-            var partes = dataNascimento.split('-');
-            var nascimento = new Date(partes[0], partes[1] - 1, partes[2]); // -1 porque os meses em JavaScript são indexados a partir de 0
-            var idade = hoje.getFullYear() - nascimento.getFullYear();
-            var mes = hoje.getMonth() - nascimento.getMonth();
-            var dia = hoje.getDate() - nascimento.getDate();
-
-            if (mes < 0 || (mes === 0 && dia < 0)) {
+            const hoje = new Date();
+            const nascimento = new Date(dataNascimento);
+            let idade = hoje.getFullYear() - nascimento.getFullYear();
+            const mes = hoje.getMonth() - nascimento.getMonth();
+            if (mes < 0 || (mes === 0 && hoje.getDate() < nascimento.getDate())) {
                 idade--;
             }
-
             return idade;
         }
 
-        // Chamada da função para cada linha da tabela
-        document.addEventListener("DOMContentLoaded", function () {
-            var linhas = document.querySelectorAll("#datatablesSimple tbody tr");
+        // Seleciona todas as linhas da tabela
+        const linhas = document.querySelectorAll("#datatablesSimple tbody tr");
 
-            linhas.forEach(function (linha) {
-                var dataNascimento = linha.querySelector(".data-nascimento").textContent;
-                var idade = calcularIdade(dataNascimento);
-                linha.querySelector(".idade").textContent = idade;
-            });
+        // Itera sobre as linhas e calcula a idade
+        linhas.forEach(linha => {
+            const dataNascimentoElemento = linha.querySelector(".data-nascimento");
+            const dataNascimento = dataNascimentoElemento.textContent.trim();
+
+            if (dataNascimento) {
+                const idade = calcularIdade(dataNascimento);
+                dataNascimentoElemento.textContent = idade;
+            }
         });
+    });
+</script>
 
-    </script>
+
 
 
 </body>

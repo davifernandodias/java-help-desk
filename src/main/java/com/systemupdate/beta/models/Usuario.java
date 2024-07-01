@@ -52,12 +52,12 @@ public class Usuario extends AbstractEntity {
         this.email = email;
     }
 
-    // Adiciona perfis à lista
-    public void addPerfil(PerfilTipo tipo) {
+    // Método para adicionar um perfil à lista
+    public void addPerfil(Perfil perfil) {
         if (this.perfis == null) {
             this.perfis = new ArrayList<>();
         }
-        this.perfis.add(new Perfil(tipo.getCod()));
+        this.perfis.add(perfil);
     }
 
     public Long getId() {
