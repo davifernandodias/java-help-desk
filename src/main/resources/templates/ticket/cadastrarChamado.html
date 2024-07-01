@@ -10,6 +10,8 @@
     <title>Cadastrar Chamado</title>
     <link type="text/css" rel="stylesheet" href="materialize/css/materialize.index.css" media="screen,projection" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        crossorigin="anonymous" />
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -89,8 +91,9 @@
         #additionalFields .form-group {
             margin-top: 20px;
         }
-                /* Estilo para a div de carregamento */
-                .loading-overlay {
+
+        /* Estilo para a div de carregamento */
+        .loading-overlay {
             display: none;
             position: fixed;
             top: 0;
@@ -107,13 +110,53 @@
             font-size: 50px;
             color: #007bff;
         }
+
+        #successMessage {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #f8f9fa;
+            /* Cor de fundo neutra */
+            color: black;
+            /* Texto preto */
+            padding: 15px 30px;
+            /* Tamanho reduzido */
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 10000;
+            /* Alto z-index para garantir que apareça sobre outros elementos */
+            font-size: 16px;
+            /* Tamanho reduzido */
+            text-align: center;
+        }
+
+        #successButton {
+            background-color: #007bff;
+            /* Cor do botão */
+            border-color: #007bff;
+            color: white;
+            padding: 5px 10px;
+            /* Tamanho reduzido */
+            border-radius: 5px;
+            font-size: 14px;
+            /* Tamanho reduzido */
+            margin-top: 10px;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+
+        #successButton:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
     </style>
 </head>
 
 <body class="sb-nav-fixed">
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loading-icon">
-            <i class="fas fa-spinner fa-spin"></i> <!-- Ícone de carregamento (pode ser alterado conforme necessário) -->
+            <i class="fas fa-spinner fa-spin"></i>
+            <!-- Ícone de carregamento (pode ser alterado conforme necessário) -->
         </div>
         <p>Aguarde, salvando chamado...</p>
     </div>
@@ -172,8 +215,8 @@
                                         style="margin-right: 10px;"></i>Consultar chamado</a>
                             </nav>
                         </div>
-                        <a th:if="${isAdmin}" class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages"
-                            aria-expanded="false" aria-controls="collapsePages">
+                        <a th:if="${isAdmin}" class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                            data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
                             <div th:if="${isAdmin}" class="sb-nav-link-icon"><i class="fa-solid fa-clipboard-user"
                                     style="margin-right: 10px;"></i></div>
                             Gerenciamento
@@ -200,8 +243,9 @@
                             Tables
                         </a>
                         <div th:if="${isAdmin}" class="sb-sidenav-menu-heading">Admistrador</div>
-                        <a  th:if="${isAdmin}" class="nav-link" href="tables.html">
-                            <div th:if="${isAdmin}" class="sb-nav-link-icon"><i class="fa-solid fa-users" style="margin-right: 5px;"></i>
+                        <a th:if="${isAdmin}" class="nav-link" href="tables.html">
+                            <div th:if="${isAdmin}" class="sb-nav-link-icon"><i class="fa-solid fa-users"
+                                    style="margin-right: 5px;"></i>
                             </div>
                             Gerenciamento user
                         </a>
@@ -215,6 +259,10 @@
         </div>
         <div id="layoutSidenav_content">
             <main>
+                <div id="successMessage" class="alert alert-success" style="display: none;">
+                    Chamado salvo com sucesso!
+                    <button id="successButton" class="btn btn-primary" style="margin-top: 10px;">OK</button>
+                </div>
                 <div class="container-fluid px-4">
                     <h1 class="mt-4">Cadastro de Chamados</h1>
                     <ol class="breadcrumb mb-4">
@@ -231,21 +279,26 @@
                             <label for="descricao">Descrição:</label>
                             <textarea class="form-control" id="descricao" name="descricao" rows="3" required></textarea>
                         </div>
-                        <div class="form-group">
-                            <label for="supervisor">Nome do supervisor(a):</label>
-                            <input type="text" class="form-control" id="supervisor" name="supervisor" required>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="supervisor">Nome do supervisor(a):</label>
+                                    <input type="text" class="form-control" id="supervisor" name="supervisor" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="tipoDeChamado">Tipo de Chamado:</label>
+                                    <select class="form-control" name="tipoDeChamado" id="tipoDeChamado"
+                                        onchange="showAdditionalFields()">
+                                        <option value="">Selecione</option>
+                                        <option value="1">Informática</option>
+                                        <option value="2">Financeiro</option>
+                                        <option value="3">Jurídico</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="tipoDeChamado">Tipo de Chamado:</label>
-                            <select class="form-control" name="tipoDeChamado" id="tipoDeChamado"
-                                onchange="showAdditionalFields()">
-                                <option value="">Selecione</option>
-                                <option value="1">Informática</option>
-                                <option value="2">Financeiro</option>
-                                <option value="3">Jurídico</option>
-                            </select>
-                        </div>
-
 
                         <!-- Local onde os campos adicionais serão inseridos -->
                         <div id="additionalFields"></div>
@@ -268,8 +321,8 @@
             </footer>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous">
+    </script>
     <script src="materialize/js/materialize.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
     <script>
@@ -292,7 +345,7 @@
                         <input type="text" class="form-control" id="equipamento" name="equipamento" required>
                     </div>
                 `;
-            } else if (tipoChamado == "2") {//botar restrição de intenger, erro do intenger limitar no form
+            } else if (tipoChamado == "2") {
                 additionalFields.innerHTML += `
                     <div class="form-group">
                         <label for="valor">Valor:</label>
@@ -316,8 +369,42 @@
                 `;
             }
         }
-    </script>
 
+        // Script para mostrar a animação de carregamento enquanto o formulário é enviado
+        document.getElementById('chamadoForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // Impedir envio automático para adicionar comportamento personalizado
+
+            var loadingOverlay = document.getElementById('loadingOverlay');
+            loadingOverlay.style.display = 'block'; // Mostrar a animação de carregamento
+
+            var form = this;
+            var formData = new FormData(form);
+
+            // Simular uma solicitação assíncrona (AJAX)
+            fetch(form.action, {
+                method: form.method,
+                body: formData
+            }).then(function (response) {
+                return response.text(); // ou response.json() dependendo do tipo de resposta esperada
+            }).then(function (text) {
+                loadingOverlay.style.display = 'none'; // Esconder a animação de carregamento
+                var successMessage = document.getElementById('successMessage');
+                successMessage.style.display = 'block'; // Mostrar a mensagem de sucesso
+
+                // Adicionar evento de clique ao botão "OK"
+                var successButton = document.getElementById('successButton');
+                successButton.addEventListener('click', function () {
+                    successMessage.style.display = 'none'; // Esconder a mensagem de sucesso
+                    window.location.href = "/chamado"; // Redirecionar para a página principal
+                });
+            }).catch(function (error) {
+                loadingOverlay.style.display = 'none'; // Esconder a animação de carregamento
+                alert('Erro ao salvar chamado. Tente novamente.');
+            });
+        });
+
+
+    </script>
 </body>
 
 </html>

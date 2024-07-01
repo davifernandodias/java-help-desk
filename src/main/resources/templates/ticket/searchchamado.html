@@ -12,6 +12,7 @@
         crossorigin="anonymous" />
     <link type="text/css" rel="stylesheet" href="materialize/css/materialize.index.css" media="screen,projection" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
 
     <style>
@@ -237,8 +238,8 @@
 
                                     <td>
                                     <td>
-                                        <a th:href="@{/detalhes/{id}(id=${chamado.id})}">Analisar</a>
-                                        <a th:if="${isAdmin}" th:href="@{${(#mvc.url('SC#deleteChamado').arg(0,chamado.id)).build()}}" style="margin-left: 20px;">Excluir</a>
+                                        <a th:href="@{/detalhes/{id}(id=${chamado.id})}"> <i class="material-icons">search</i></a>
+                                        <a th:if="${isAdmin}" th:href="@{${(#mvc.url('SC#deleteChamado').arg(0,chamado.id)).build()}}" style="margin-left: 20px; color: red;"> <i class="material-icons">delete</i></a>
                                     </td>
                                     
                                 </tr>
@@ -298,7 +299,7 @@
             tr = table.getElementsByTagName("tr");
 
             for (i = 0; i < tr.length; i++) {
-                td = tr[i].getElementsByTagName("td")[1]; // Coluna do Código
+                td = tr[i].getElementsByTagName("td")[0]; // Coluna do Código
 
                 if (td) {
                     txtValue = td.textContent || td.innerText;
