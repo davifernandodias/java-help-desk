@@ -7,5 +7,5 @@ import com.systemupdate.beta.models.InformacaoAdicionaisColaborador;
 
 @Repository
 public interface InformacaoAddRepository extends JpaRepository<InformacaoAdicionaisColaborador,Long>{
-
+    
 } 

@@ -165,13 +165,31 @@
         </div>
         <div id="layoutSidenav_content" style="background-color: #f8f9fa;">
             <main class="main-colaborador">
-                <div th:each="colaborador : ${colaboradores}">
-                    <div th:text="${colaborador.nome}">Nome do Colaborador</div>
-                    <div th:text="${colaborador.cargo}">Cargo do Colaborador</div>
-                    <div th:text="${colaborador.dataNascimento}" class="data-nascimento"></div> 
-                    <div th:text="${colaborador.regiao}">Região do Colaborador</div>
-                    <div th:text="${colaborador.salario}">Salário do Colaborador</div>
-                </div>
+                <h1>informações inicias</h1>
+                <table class="table table-striped" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Cargo</th>
+                            <th>Idade</th>
+                            <th>Região</th>
+                            <th>Salário</th>
+                            <th>Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="colaborador : ${colaboradores}">
+                            <a><td th:text="${colaborador.nome}">Nome do Colaborador</td></a>
+                            <td th:text="${colaborador.cargo}">Cargo do Colaborador</td>
+                            <td th:text="${colaborador.dataNascimento}" class="data-nascimento"></td> 
+                            <td th:text="${colaborador.regiao}">Região do Colaborador</td>
+                            <td th:text="${colaborador.salario}">Salário do Colaborador</td>
+                            <td>
+                                <a th:href="${(#mvc.url('CCC#consultarPorIdColaborador').arg(0,colaborador.id)).build()}">consultar</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </main>
             <main th:if="${isAdmin}">
             </main>
@@ -201,5 +219,33 @@
 
 
 </body>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Função para calcular a idade com base na data de nascimento
+        function calcularIdade(dataNascimento) {
+            const hoje = new Date();
+            const nascimento = new Date(dataNascimento);
+            let idade = hoje.getFullYear() - nascimento.getFullYear();
+            const mes = hoje.getMonth() - nascimento.getMonth();
+            if (mes < 0 || (mes === 0 && hoje.getDate() < nascimento.getDate())) {
+                idade--;
+            }
+            return idade;
+        }
 
+        // Seleciona todas as linhas da tabela
+        const linhas = document.querySelectorAll("#dataTable tbody tr");
+
+        // Itera sobre as linhas e calcula a idade
+        linhas.forEach(linha => {
+            const dataNascimentoElemento = linha.querySelector(".data-nascimento");
+            const dataNascimento = dataNascimentoElemento.textContent.trim();
+
+            if (dataNascimento) {
+                const idade = calcularIdade(dataNascimento);
+                dataNascimentoElemento.textContent = idade;
+            }
+        });
+    });
+</script>
 </html>

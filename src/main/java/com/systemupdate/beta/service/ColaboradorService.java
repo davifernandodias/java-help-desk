@@ -2,6 +2,7 @@ package com.systemupdate.beta.service;
 
 import java.util.List;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,4 +19,10 @@ public class ColaboradorService {
         return colaboradorRepository.findAll();
     }
 
+    public Colaborador buscarPorId(Long id) {
+        return colaboradorRepository.findById(id).orElseThrow();
+    }
+
+    
+    
 }

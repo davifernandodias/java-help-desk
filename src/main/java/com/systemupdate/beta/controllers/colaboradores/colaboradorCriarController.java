@@ -1,6 +1,5 @@
 package com.systemupdate.beta.controllers.colaboradores;
 
-
 import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +28,7 @@ import com.systemupdate.beta.repository.UsuarioRepository;
 import com.systemupdate.beta.security.CustomUserDetails;
 
 @Controller
-public class colaboradorCriarController {
+public class ColaboradorCriarController {
 
     @Autowired
     ColaboradorRepository colaboradorRepository;
@@ -61,101 +60,99 @@ public class colaboradorCriarController {
     }
 
     @PostMapping("/criarColaboradores/salvar")
-public String salvarUsuario(@ModelAttribute Usuario usuario,
-                            @RequestParam String email,
-                            @RequestParam String senha,
-                            @RequestParam PerfilTipo perfilTipo,
-                            @RequestParam String regiao,
-                            @RequestParam String nome,
-                            @RequestParam String cargo,
-                            @RequestParam LocalDate dataNascimento,
-                            @RequestParam Double salario,
-                            @RequestParam String telefone,
-                            @RequestParam Integer cpf,
-                            @RequestParam String rg,
-                            @RequestParam String sobrenome,
-                            @RequestParam String logradouro,
-                            @RequestParam String cidade,
-                            @RequestParam String estado,
-                            @RequestParam String bairro,
-                            @RequestParam String rua,
-                            @RequestParam String numero,
-                            @RequestParam String cep,
-                            Model model) {
+    public String salvarUsuario(@ModelAttribute Usuario usuario,
+            @RequestParam String email,
+            @RequestParam String senha,
+            @RequestParam PerfilTipo perfilTipo,
+            @RequestParam String regiao,
+            @RequestParam String nome,
+            @RequestParam String cargo,
+            @RequestParam LocalDate dataNascimento,
+            @RequestParam Double salario,
+            @RequestParam String telefone,
+            @RequestParam Integer cpf,
+            @RequestParam String rg,
+            @RequestParam String sobrenome,
+            @RequestParam String logradouro,
+            @RequestParam String cidade,
+            @RequestParam String estado,
+            @RequestParam String bairro,
+            @RequestParam String rua,
+            @RequestParam String numero,
+            @RequestParam String cep,
+            Model model) {
 
-    // Busca o perfil com base no tipo escolhido
-    Perfil perfil = perfilRepository.findByDescricao(perfilTipo.getDescricao());
+        // Busca o perfil com base no tipo escolhido
+        Perfil perfil = perfilRepository.findByDescricao(perfilTipo.getDescricao());
 
-    // Verifica se o perfil foi encontrado
-    if (perfil != null) {
-        // Adiciona o perfil ao usuário
-        usuario.addPerfil(perfil);
+        // Verifica se o perfil foi encontrado
+        if (perfil != null) {
+            // Adiciona o perfil ao usuário
+            usuario.addPerfil(perfil);
 
-        // Define outras propriedades do usuário
-        usuario.setAtivo(true);
-        usuario.setEmail(email);
-        usuario.setSenha(senha);
+            // Define outras propriedades do usuário
+            usuario.setAtivo(true);
+            usuario.setEmail(email);
+            usuario.setSenha(senha);
 
-        // Verifica se o colaborador já existe
-        Colaborador colaborador = usuario.getColaborador();
-        if (colaborador == null) {
-            colaborador = new Colaborador();
-            colaborador.setUsuario(usuario); // Associa o colaborador ao usuário
-            usuario.setColaborador(colaborador); // Associa o colaborador ao usuário
+            // Verifica se o colaborador já existe
+            Colaborador colaborador = usuario.getColaborador();
+            if (colaborador == null) {
+                colaborador = new Colaborador();
+                colaborador.setUsuario(usuario); // Associa o colaborador ao usuário
+                usuario.setColaborador(colaborador); // Associa o colaborador ao usuário
+            }
+
+            // Define as propriedades do colaborador
+            colaborador.setNome(nome);
+            colaborador.setCargo(cargo);
+            colaborador.setDataNascimento(dataNascimento);
+            colaborador.setSalario(salario);
+            colaborador.setRegiao(regiao);
+
+            // Verifica se InformacaoAdicionaisColaborador já existe
+            InformacaoAdicionaisColaborador infoadd = colaborador.getInformacaoAdicionais();
+            if (infoadd == null) {
+                infoadd = new InformacaoAdicionaisColaborador();
+                colaborador.setInformacaoAdicionais(infoadd);
+                infoadd.setColaborador(colaborador); // Associa a informação adicional ao colaborador
+            }
+
+            // Define as propriedades de InformacaoAdicionaisColaborador
+            infoadd.setCpf(cpf);
+            infoadd.setRg(rg);
+            infoadd.setTelefone(telefone);
+            infoadd.setSobrenome(sobrenome);
+
+            // Verifica se Endereco já existe
+            Endereco endereco = infoadd.getEndereco();
+            if (endereco == null) {
+                endereco = new Endereco();
+                infoadd.setEndereco(endereco);
+                endereco.setInformacaoAdicionaisColaborador(infoadd); // Associa o endereço à informação adicional
+            }
+
+            // Define as propriedades do Endereco
+            endereco.setLogradouro(logradouro);
+            endereco.setCidade(cidade);
+            endereco.setEstado(estado);
+            endereco.setBairro(bairro);
+            endereco.setRua(rua);
+            endereco.setNumero(numero);
+            endereco.setCep(cep);
+
+            // Salva o usuário e o colaborador no banco de dados
+            usuarioRepository.save(usuario);
+
+            // Salva as informações adicionais e endereço no banco de dados
+            informacaoAddRepository.save(infoadd);
+            enderecoRepository.save(endereco);
+
+            // Redireciona para página adequada após salvar
+            return "redirect:/criarColaboradores";
+        } else {
+            throw new IllegalArgumentException("Perfil não encontrado: " + perfilTipo.getDescricao());
         }
-
-        // Define as propriedades do colaborador
-        colaborador.setNome(nome);
-        colaborador.setCargo(cargo);
-        colaborador.setDataNascimento(dataNascimento);
-        colaborador.setSalario(salario);
-        colaborador.setRegiao(regiao);
-
-        // Verifica se InformacaoAdicionaisColaborador já existe
-        InformacaoAdicionaisColaborador infoadd = colaborador.getInformacaoAdicionais();
-        if(infoadd == null){
-            infoadd = new InformacaoAdicionaisColaborador();
-            colaborador.setInformacaoAdicionais(infoadd);
-            infoadd.setColaborador(colaborador); // Associa a informação adicional ao colaborador
-        }
-
-        // Define as propriedades de InformacaoAdicionaisColaborador
-        infoadd.setCpf(cpf);
-        infoadd.setRg(rg);
-        infoadd.setTelefone(telefone);
-        infoadd.setSobrenome(sobrenome);
-
-        // Verifica se Endereco já existe
-        Endereco endereco = infoadd.getEndereco();
-        if(endereco == null){
-            endereco = new Endereco();
-            infoadd.setEndereco(endereco);
-            endereco.setInformacaoAdicionaisColaborador(infoadd); // Associa o endereço à informação adicional
-        }
-
-        // Define as propriedades do Endereco
-        endereco.setLogradouro(logradouro);
-        endereco.setCidade(cidade);
-        endereco.setEstado(estado);
-        endereco.setBairro(bairro);
-        endereco.setRua(rua);
-        endereco.setNumero(numero);
-        endereco.setCep(cep);
-
-        // Salva o usuário e o colaborador no banco de dados
-        usuarioRepository.save(usuario);
-
-        // Salva as informações adicionais e endereço no banco de dados
-        informacaoAddRepository.save(infoadd);
-        enderecoRepository.save(endereco);
-
-        // Redireciona para página adequada após salvar
-        return "redirect:/criarColaboradores";
-    } else {
-        throw new IllegalArgumentException("Perfil não encontrado: " + perfilTipo.getDescricao());
     }
-}
-
-    
 
 }
