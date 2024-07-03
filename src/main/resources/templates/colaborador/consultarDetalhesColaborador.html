@@ -16,109 +16,172 @@
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 </head>
 <style>
-    .main-colaborador {
-        background-color: #f8f9fa; /* Cor de fundo mais suave */
-        padding: 50px 0;
-    }
 
-    .main-colaborador h1 {
-        font-size: 2.5rem;
-        color: #333;
-    }
+.fade {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 1040;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(0.8px);
+    opacity: 1; /* Inicialmente visível */
+    transition: opacity 0.5s ease-in-out;
+}
 
-    .card {
-        border: none;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease;
-        background-color: #ffffff;
-    }
+#modal {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1040;
+    background-color: #fff;
+    padding: 1.2rem;
+    border-radius: 1.3rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Adiciona uma sombra suave */
+    max-width: 600px; /* Define a largura máxima do modal */
+    width: 100%; /* Faz o modal ocupar toda a largura disponível */
+}
 
-    .card:hover {
-        transform: translateY(-10px);
-    }
+.modal-header {
+    padding: 1rem;
+    border-bottom: 1px solid #dee2e6; /* Linha separadora na parte inferior do cabeçalho */
+    background-color: #f8f9fa; /* Cor de fundo do cabeçalho */
+    border-top-left-radius: 1.3rem; /* Arredonda os cantos superiores do cabeçalho */
+    border-top-right-radius: 1.3rem;
+}
 
-    .card h2 {
-        color: #007bff; /* Cor azul padrão do Bootstrap */
-    }
+.modal-header h2 {
+    margin-top: 0;
+    font-size: 1.5rem;
+}
 
-    .card i {
-        color: #007bff; /* Cor azul para ícones */
-    }
+.modal-body {
+    padding: 1rem;
+}
 
-    .card-body {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
+.modal-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
 
-    .additional-content {
-        font-size: 1.1rem;
-        padding: 20px;
-        background-color: #ffffff;
-        border-radius: 5px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-    #fade {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.3);
-            z-index: 1040;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(0.8px);
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out;
-        }
+.info-group {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column; 
+    gap: 10px; 
+}
 
-        /* Estilos para o modal */
-        #modal {
-            background-color: white;
-            z-index: 1041;
-            width: 90%;
-            max-width: 800px;
-            border-radius: 8px;
-            padding: 20px;
-            transform: scale(0.7);
-            transition: transform 0.5s ease-in-out;
-            font-size: 16px;
-            /* Tamanho do texto */
-            position: relative;
-        }
+.info-group p {
+    margin-bottom: 0; 
+}
 
-        @media (min-width: 768px) {
-            #modal {
-                width: 60%;
-            }
-        }
 
-        .modal-content {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-
-        .modal-content .modal-info {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 15px;
-        }
-
-        .modal-content .modal-info .info-group {
-            flex: 1 1 45%;
-        }
-
-        .modal-content .modal-info p {
-            margin: 0;
-        }
 </style>
 
 
 
 <body class="sb-nav-fixed">
+    <div class="fade"></div>
+    <div id="modal">
+        <div class="modal-header">
+            <h2>COLABORADOR INFO</h2>
+            <button type="button" class="btn-close" id="fecharModal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body modal-content">
+            <div th:if="${colaboradorid != null}">
+                <div class="modal-info">
+                    <div class="info-group">
+                        <p><strong>ID:</strong></p>
+                        <p th:text="${colaboradorid.id}"></p>
+                    </div>
+                    <div class="info-group">
+                        <p><strong>Nome:</strong></p>
+                        <p th:text="${colaboradorid.nome}"></p>
+                    </div>
+                    <div class="info-group">
+                        <p><strong>Sobrenome:</strong></p>
+                        <p th:text="${infoAdicionais.sobrenome}"></p>
+                    </div>
+                </div>
+                <div class="modal-info">
+                    <div class="info-group">
+                        <p><strong>User/Email:</strong></p>
+                        <p th:text="${colaboradorid.usuario.email}"></p>
+                    </div>
+                    <div class="info-group">
+                        <p><strong>Telefone:</strong></p>
+                        <p th:text="${infoAdicionais.telefone}"></p>
+                    </div>
+                </div>
+                <hr/>
+                <div th:if="${infoAdicionais != null}">
+                    <div class="modal-info">
+                        <div class="info-group">
+                            <p><strong>CPF:</strong></p>
+                            <p th:text="${infoAdicionais.cpf}"></p>
+                        </div>
+                        <div class="info-group">
+                            <p><strong>RG:</strong></p>
+                            <p th:text="${infoAdicionais.rg}"></p>
+                        </div>
+                    </div>
+                </div>
+                <div th:if="${infoAdicionais == null}">
+                    <p><em>Nenhuma informação adicional encontrada para este colaborador.</em></p>
+                </div>
+                <hr/>
+                <div class="modal-info">
+                    <div th:if="${endereco != null}">
+                        <div class="info-group">
+                            <p><strong>Região:</strong></p>
+                            <p th:text="${colaboradorid.regiao}"></p>
+                        </div>
+                        <div class="info-group">
+                            <p><strong>Logradouro:</strong></p>
+                            <p th:text="${endereco.logradouro}"></p>
+                        </div>
+                        <div class="info-group">
+                            <p><strong>Estado:</strong></p>
+                            <p th:text="${endereco.estado}"></p>
+                        </div>
+                        <div class="info-group">
+                            <p><strong>Bairro:</strong></p>
+                            <p th:text="${endereco.bairro}"></p>
+                        </div>
+                        <div class="info-group">
+                            <p><strong>Cidade:</strong></p>
+                            <p th:text="${endereco.cidade}"></p>
+                        </div>
+                        <div class="info-group">
+                            <p><strong>Rua:</strong></p>
+                            <p th:text="${endereco.rua}"></p>
+                        </div>
+                        <div class="info-group">
+                            <p><strong>Número:</strong></p>
+                            <p th:text="${endereco.numero}"></p>
+                        </div>
+                        <div class="info-group">
+                            <p><strong>CEP:</strong></p>
+                            <p th:text="${endereco.cep}"></p>
+                        </div>
+                    </div>
+                    <div th:if="${endereco == null}">
+                        <p><em>Nenhum endereço encontrado para este colaborador.</em></p>
+                    </div>
+                </div>
+            </div>
+            <div th:if="${colaboradorid == null}">
+                <p><em>Colaborador não encontrado.</em></p>
+            </div>
+        </div>
+    </div>
+    
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
         <!-- Navbar Brand-->
         <a class="navbar-brand ps-3" href="/principal">DEMO</a>
@@ -154,122 +217,70 @@
                     <div class="sb-sidenav-menu">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">Core</div>
-                            <a th:if="${isAdmin}" class="nav-link" href="/principal">
+                            <a class="nav-link" href="/principal">
                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-chart-simple"
-                                    style="margin-right: 10px;"></i></div>
-                                    Dashboard
-                                </a>
-                                <a th:unless="${isAdmin}" class="nav-link" href="/principal">
-                                    <div class="sb-nav-link-icon"><i class="fa-solid fa-chart-simple"
                                         style="margin-right: 10px;"></i></div>
-                                        Home
-                                    </a>
-                                    <div class="sb-sidenav-menu-heading">Interface</div>
-                                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                                    data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                                    <div class="sb-nav-link-icon"><i class="fa-solid fa-bars" style="margin-right: 10px;"></i>
-                                    </div>
-                                    Chamados
-                                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                                </a>
-                                <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne"
+                                Dashboard
+                            </a>
+                            <div class="sb-sidenav-menu-heading">Interface</div>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                                data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-bars" style="margin-right: 10px;"></i>
+                                </div>
+                                Chamados
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne"
                                 data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="/chamado"><i class="fa-solid fa-plus"
-                                        style="margin-right: 10px;"></i>Novo chamado</a>
-                                        <a class="nav-link" href="/consultar"><i class="fa-solid fa-magnifying-glass"
+                                            style="margin-right: 10px;"></i>Novo chamado</a>
+                                    <a class="nav-link" href="/consultar"><i class="fa-solid fa-magnifying-glass"
                                             style="margin-right: 10px;"></i>Consultar chamado</a>
-                                        </nav>
-                                    </div>
-                                    <a th:if="${isAdmin}" class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages"
-                                    aria-expanded="false" aria-controls="collapsePages">
-                                    <div th:if="${isAdmin}" class="sb-nav-link-icon"><i class="fa-solid fa-clipboard-user"
-                                        style="margin-right: 10px;"></i></div>
-                                        Gerenciamento
-                                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                                    </a>
-                                    <div th:if="${isAdmin}" class="collapse" id="collapsePages" aria-labelledby="headingTwo"
-                                    data-bs-parent="#sidenavAccordion">
-                                    <nav class="sb-sidenav-menu-nested nav">
-                                        <a class="nav-link" href="/criarColaboradores"><i class="fa-solid fa-address-card"
-                                            style="margin-right: 10px;"></i>Novo Colaborador</a>
-                                            <a class="nav-link" href="/consultarColaborador"><i class="fa-solid fa-magnifying-glass"
-                                                style="margin-right: 10px;"></i>Consultar Colaborador</a>
-                                            </nav>
-                                        </div>
-                                        <div class="sb-sidenav-menu-heading">Addons</div>
-                                        <a class="nav-link" href="charts.html">
-                                            <div class="sb-nav-link-icon"><i class="fa-solid fa-chart-pie"
-                                                style="margin-right: 5px;"></i></div>
-                                                Charts
-                                            </a>
-                                            <a class="nav-link" href="tables.html">
-                                                <div class="sb-nav-link-icon"><i class="fa-solid fa-clipboard-list"
-                                                    style="margin-right: 5px;"></i></div>
-                            Tables
-                        </a>
-                        <div th:if="${isAdmin}" class="sb-sidenav-menu-heading">Admistrador</div>
-                        <a th:if="${isAdmin}" class="nav-link" href="tables.html">
-                            <div th:if="${isAdmin}" class="sb-nav-link-icon"><i class="fa-solid fa-users" style="margin-right: 5px;"></i>
+                                </nav>
                             </div>
-                            Gerenciamento user
-                        </a>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages"
+                                aria-expanded="false" aria-controls="collapsePages">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-clipboard-user"
+                                        style="margin-right: 10px;"></i></div>
+                                Gerenciamento
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapsePages" aria-labelledby="headingTwo"
+                                data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="/criarColaboradores"><i class="fa-solid fa-address-card"
+                                            style="margin-right: 10px;"></i>Novo Colaborador</a>
+                                    <a class="nav-link" href="/consultarColaborador"><i class="fa-solid fa-magnifying-glass"
+                                            style="margin-right: 10px;"></i>Consultar Colaborador</a>
+                                </nav>
+                            </div>
+                            <div class="sb-sidenav-menu-heading">Addons</div>
+                            <a class="nav-link" href="charts.html">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-chart-pie"
+                                        style="margin-right: 5px;"></i></div>
+                                Charts
+                            </a>
+                            <a class="nav-link" href="tables.html">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-clipboard-list"
+                                        style="margin-right: 5px;"></i></div>
+                                Tables
+                            </a>
+                            <div th:if="${isAdmin}" class="sb-sidenav-menu-heading">Admistrador</div>
+                            <a th:if="${isAdmin}" class="nav-link" href="tables.html">
+                                <div th:if="${isAdmin}" class="sb-nav-link-icon"><i class="fa-solid fa-users" style="margin-right: 5px;"></i>
+                                </div>
+                                Gerenciamento user
+                            </a>
+                        </div>
                     </div>
-                </div>
-                <div class="sb-sidenav-footer">
-                    <div class="small">Logado no:</div>
-                    Sistema Demo
-                </div>
-            </nav>
-        </div>
-        <div id="layoutSidenav_content" style="background-color: #f8f9fa;">
-            <div class="fade"></div>
-            <div id="modal">
-                <div class="modal-header">
-                    <h2>informações adicionais</h2>
-                </div>
-                <div class="modal-body">
-                    <div th:if="${colaboradorid != null}">
-                        <p><strong>ID:</strong> <span th:text="${colaboradorid.id}"></span></p>
-                        <p><strong>Nome:</strong> <span th:text="${colaboradorid.nome}"></span></p>
-                        <p><strong>Email:</strong> <span th:text="${colaboradorid.usuario.email}"></span></p>
-                        
-                        <hr/>
-                        
-                        <h3>Informações Adicionais</h3>
-                        <div th:if="${infoAdicionais != null}">
-                            <p><strong>Telefone:</strong> <span th:text="${infoAdicionais.telefone}"></span></p>
-                            <p><strong>CPF:</strong> <span th:text="${infoAdicionais.cpf}"></span></p>
-                            <p><strong>RG:</strong> <span th:text="${infoAdicionais.rg}"></span></p>
-                        </div>
-                        <div th:if="${infoAdicionais == null}">
-                            <p><em>Nenhuma informação adicional encontrada para este colaborador.</em></p>
-                        </div>
-                                                
-                        <h3>Informações Adicionais</h3>
-                        <div th:if="${endereco != null}">
-                            <p><strong>Logradouro:</strong> <span th:text="${endereco.logradouro}"></span></p>
-                            <p><strong>Estado:</strong> <span th:text="${endereco.estado}"></span></p>
-                            <p><strong>Bairro:</strong> <span th:text="${endereco.bairro}"></span></p>
-                            <p><strong>Cidade:</strong> <span th:text="${endereco.cidade}"></span></p>
-                            <p><strong>Rua:</strong> <span th:text="${endereco.rua}"></span></p>
-                            <p><strong>Numero:</strong> <span th:text="${endereco.numero}"></span></p>
-                            <p><strong>CEP:</strong> <span th:text="${endereco.cep}"></span></p>
-                        </div>
-                        <div th:if="${endereco == null}">
-                            <p><em>Nenhuma endereço foi encontrada para este colaborador.</em></p>
-                        </div>
-                        
+                    <div class="sb-sidenav-footer">
+                        <div class="small">Logado no:</div>
+                        Sistema Demo
                     </div>
-                    <div th:if="${colaboradorid == null}">
-                        <p><em>Colaborador não encontrado.</em></p>
-                    </div>
-                    
-                    <hr/>
-                    
-                    <p><a th:href="@{/consultarColaborador}">Voltar para a lista de colaboradores</a></p>             
-                </div>
+                </nav>
             </div>
+        <div id="layoutSidenav_content" style="background-color: #f8f9fa;">
             <main class="main-colaborador">
                 <h1>informações inicias</h1>
                 <table class="table table-striped" id="dataTable" width="100%" cellspacing="0">
@@ -325,6 +336,33 @@
 
 
 </body>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Seleciona o botão de fechar o modal
+        const fecharModalBtn = document.getElementById('fecharModal');
+        // Seleciona o modal
+        const modal = document.getElementById('modal');
+        // Seleciona o fade
+        const fade = document.querySelector('.fade');
+
+        // Adiciona um ouvinte de evento para o botão de fechar
+        fecharModalBtn.addEventListener('click', function() {
+            // Esconde o modal
+            modal.style.display = 'none';
+            // Esconde o fade
+            fade.style.opacity = '0';
+            fade.style.zIndex = '-1050';
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Mostra o fade
+        const fade = document.querySelector('.fade');
+        fade.style.opacity = '1';
+    });
+</script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         // Função para calcular a idade com base na data de nascimento
