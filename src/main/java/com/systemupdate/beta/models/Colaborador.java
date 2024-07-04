@@ -47,6 +47,8 @@ public class Colaborador extends AbstractEntity {
 
     // Getters and Setters
 
+    
+
     public InformacaoAdicionaisColaborador getInformacaoAdicionais() {
         return informacaoAdicionais;
     }

@@ -10,30 +10,30 @@
     <title>Detalhes colaboradores</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
         crossorigin="anonymous" />
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <link type="text/css" rel="stylesheet" href="/materialize/css/materialize.index.css" media="screen,projection" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 </head>
 <style>
+    .fade {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.3);
+        z-index: 1040;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(0.8px);
+        opacity: 1;
+        /* Inicialmente visível */
+        transition: opacity 0.5s ease-in-out;
+    }
 
-.fade {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.3);
-    z-index: 1040;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(0.8px);
-    opacity: 1; /* Inicialmente visível */
-    transition: opacity 0.5s ease-in-out;
-}
-
-#modal {
+    #modal {
         position: fixed;
         left: 50%;
         top: 50%;
@@ -43,7 +43,7 @@
         padding: 1.2rem;
         border-radius: 1.3rem;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-        max-width: 600px;
+        max-width: 900px;
         width: 100%;
     }
 
@@ -74,6 +74,7 @@
         display: flex;
         gap: 5px;
         align-items: center;
+        flex: 1 1 45%;
     }
 
     .info-group p {
@@ -96,112 +97,140 @@
         display: flex;
         align-items: center;
     }
-
 </style>
-
-
-
 <body class="sb-nav-fixed">
     <div class="fade"></div>
     <div id="modal">
         <div class="modal-header">
+            <p th:if="${isAdmin}">admin</p>
+            <p th:unless="${isAdmin}">colaborador</p>
             <h2>COLABORADOR INFO</h2>
             <button type="button" class="btn-close" id="fecharModal" aria-label="Fechar"></button>
         </div>
         <div class="modal-body modal-content">
-            <div th:if="${colaboradorid != null}">
-                <div class="modal-info">
-                    <div class="info-group">
-                        <p><strong>PERFIL:</strong></p>
-                        <p th:text="${perfilDescricao}" style="margin-left: -90; margin-right: 100px;"></p>
-                    </div>
-                    <div class="info-group">
-                        <p><strong>ID:</strong></p>
-                        <p th:text="${colaboradorid.id}" style="margin-left: -100px; margin-right: 100px;"></p>
-                    </div>
-                    <div class="info-group">
-                        <p><strong>Nome:</strong></p>
-                        <p th:text="${colaboradorid.nome}" style="margin-left: -90px; margin-right: 100px;"></p>
-                    </div>
-                    <div class="info-group">
-                        <p><strong>Sobrenome:</strong></p>
-                        <p th:text="${infoAdicionais.sobrenome}" style="margin-left: -60px;"></p>
-                    </div>
-                </div>
-                <div class="modal-info">
-                    <div class="info-group">
-                        <p style="margin-top: 40px;"><strong>User/Email:</strong></p>
-                        <p th:text="${colaboradorid.usuario.email} " style="margin-left: -40px; margin-top: 40px;"></p>
-                    </div>
-                    <div class="info-group">
-                        <p><strong>Telefone:</strong></p>
-                        <p th:text="${infoAdicionais.telefone}"></p>
-                    </div>
-                </div>
-                <hr/>
-                <div th:if="${infoAdicionais != null}">
+            <form th:action="@{/atualizarColaborador}" method="post">
+                <div th:if="${colaboradorid != null}">
                     <div class="modal-info">
                         <div class="info-group">
-                            <p><strong>CPF:</strong></p>
-                            <p th:text="${infoAdicionais.cpf}" style="margin-left: -100px;"></p>
+                            <label for="perfilDescricao"><strong>PERFIL:</strong></label>
+                            <select class="form-control" id="perfilTipo" name="perfilTipo" >
+                            <div th:if="${isAdmin}">
+                                <option value="ADMIN">Administrador</option>
+                                <option value="COLABORADOR">Colaborador</option>
+                            </div>
+                            <div th:unless="${isAdmin}">
+                                <p>cola</p>
+                                <option value="COLABORADOR">Colaborador</option>
+                                <option value="ADMIN">Administrador</option>
+                            </div>
+
+                            </select>
                         </div>
                         <div class="info-group">
-                            <p><strong>RG:</strong></p>
-                            <p th:text="${infoAdicionais.rg}" style="margin-left: -100px;"></p>
+                            <p for="colaboradorid"><strong>ID:</strong></p>
+                            <p  id="colaboradorid" name="colaboradorid"
+                                ><span th:text="${colaboradorid.id}"></span></p>
+                        </div>
+                        <div class="info-group">
+                            <label for="nome"><strong>Nome:</strong></label>
+                            <input type="text" id="nome" name="nome" th:placeholder="${colaboradorid.nome}"
+                                class="form-control" />
+                        </div>
+                        <div class="info-group">
+                            <label for="sobrenome"><strong>Sobrenome:</strong></label>
+                            <input type="text" id="sobrenome" name="sobrenome"  th:placeholder="${infoAdicionais.sobrenome}"
+                                class="form-control" />
+                        </div>
+                        <div class="info-group">
+                            <label for="email"><strong>User/Email:</strong></label>
+                            <input type="email" id="email" name="email"  th:placeholder="${colaboradorid.usuario.email}"
+                                class="form-control" />
+                        </div>
+                        <div class="info-group">
+                            <label for="senha"><strong>Senha:</strong></label>
+                            <input type="senha" id="senha" name="senha"  th:placeholder="${colaboradorid.usuario.senha}"
+                                class="form-control" />
+                        </div>
+                        <div class="info-group">
+                            <label for="telefone"><strong>Telefone:</strong></label>
+                            <input type="text" id="telefone" name="telefone"  th:placeholder="${infoAdicionais.telefone}"
+                                class="form-control" />
                         </div>
                     </div>
-                </div>
-                <div th:if="${infoAdicionais == null}">
-                    <p><em>Nenhuma informação adicional encontrada para este colaborador.</em></p>
-                </div>
-                <hr/>
-                <div class="modal-info">
-                    <div th:if="${endereco != null}">
+                    <hr />
+                    <div th:if="${infoAdicionais != null}">
+                        <div class="modal-info">
+                            <div class="info-group">
+                                <label for="cpf"><strong>CPF:</strong></label>
+                                <input type="text" id="cpf" name="cpf"  th:placeholder="${infoAdicionais.cpf}"
+                                    class="form-control" />
+                            </div>
+                            <div class="info-group">
+                                <label for="rg"><strong>RG:</strong></label>
+                                <input type="text" id="rg" name="rg"  th:placeholder="${infoAdicionais.rg}"
+                                    class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div th:if="${infoAdicionais == null}">
+                        <p><em>Nenhuma informação adicional encontrada para este colaborador.</em></p>
+                    </div>
+                    <hr />
+                    <div class="modal-info">
                         <div class="info-group">
-                            <p><strong>Região:</strong></p>
-                            <p th:text="${colaboradorid.regiao}"></p>
+                            <label for="regiao"><strong>Região:</strong></label>
+                            <input type="text" id="regiao" name="regiao"  th:placeholder="${colaboradorid.regiao}"
+                                class="form-control" />
                         </div>
                         <div class="info-group">
-                            <p><strong>Logradouro:</strong></p>
-                            <p th:text="${endereco.logradouro}"></p>
+                            <label for="logradouro"><strong>Logradouro:</strong></label>
+                            <input type="text" id="logradouro" name="logradouro"  th:placeholder="${endereco.logradouro}"
+                                class="form-control" />
                         </div>
                         <div class="info-group">
-                            <p><strong>Estado:</strong></p>
-                            <p th:text="${endereco.estado}"></p>
+                            <label for="estado"><strong>Estado:</strong></label>
+                            <input type="text" id="estado" name="estado"  th:placeholder="${endereco.estado}"
+                                class="form-control" />
                         </div>
                         <div class="info-group">
-                            <p><strong>Bairro:</strong></p>
-                            <p th:text="${endereco.bairro}"></p>
+                            <label for="bairro"><strong>Bairro:</strong></label>
+                            <input type="text" id="bairro" name="bairro"  th:placeholder="${endereco.bairro}"
+                                class="form-control" />
                         </div>
                         <div class="info-group">
-                            <p><strong>Cidade:</strong></p>
-                            <p th:text="${endereco.cidade}"></p>
+                            <label for="cidade"><strong>Cidade:</strong></label>
+                            <input type="text" id="cidade" name="cidade"  th:placeholder="${endereco.cidade}"
+                                class="form-control" />
                         </div>
                         <div class="info-group">
-                            <p><strong>Rua:</strong></p>
-                            <p th:text="${endereco.rua}"></p>
+                            <label for="rua"><strong>Rua:</strong></label>
+                            <input type="text" id="rua" name="rua"  th:placeholder="${endereco.rua}" class="form-control" />
                         </div>
                         <div class="info-group">
-                            <p><strong>Número:</strong></p>
-                            <p th:text="${endereco.numero}"></p>
+                            <label for="numero"><strong>Número:</strong></label>
+                            <input type="text" id="numero" name="numero"  th:placeholder="${endereco.numero}"
+                                class="form-control" />
                         </div>
                         <div class="info-group">
-                            <p><strong>CEP:</strong></p>
-                            <p th:text="${endereco.cep}"></p>
+                            <label for="cep"><strong>CEP:</strong></label>
+                            <input type="text" id="cep" name="cep"  th:placeholder="${endereco.cep}" class="form-control" />
                         </div>
                     </div>
                     <div th:if="${endereco == null}">
                         <p><em>Nenhum endereço encontrado para este colaborador.</em></p>
                     </div>
-                </div>                
-            </div>
-            <div th:if="${colaboradorid == null}">
-                <p><em>Colaborador não encontrado.</em></p>
-            </div>
+                </div>
+                <button type="submit" class="btn btn-primary" style="margin-top: 50px;">Salvar</button>
+                
         </div>
+        <div th:if="${colaboradorid == null}">
+            <p><em>Colaborador não encontrado.</em></p>
+        </div>
+        </form>
     </div>
-    
+    </div>
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+        <!-- Navbar Brand-->
         <a class="navbar-brand ps-3" href="/principal">DEMO</a>
         <!-- Sidebar Toggle-->
         <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i
@@ -235,15 +264,10 @@
                 <div class="sb-sidenav-menu">
                     <div class="nav">
                         <div class="sb-sidenav-menu-heading">Core</div>
-                        <a th:if="${isAdmin}" class="nav-link" href="/principal">
+                        <a class="nav-link" href="/principal">
                             <div class="sb-nav-link-icon"><i class="fa-solid fa-chart-simple"
                                     style="margin-right: 10px;"></i></div>
                             Dashboard
-                        </a>
-                        <a th:unless="${isAdmin}" class="nav-link" href="/principal">
-                            <div class="sb-nav-link-icon"><i class="fa-solid fa-chart-simple"
-                                    style="margin-right: 10px;"></i></div>
-                            Home
                         </a>
                         <div class="sb-sidenav-menu-heading">Interface</div>
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
@@ -262,14 +286,14 @@
                                         style="margin-right: 10px;"></i>Consultar chamado</a>
                             </nav>
                         </div>
-                        <a th:if="${isAdmin}" class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages"
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages"
                             aria-expanded="false" aria-controls="collapsePages">
-                            <div th:if="${isAdmin}" class="sb-nav-link-icon"><i class="fa-solid fa-clipboard-user"
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-clipboard-user"
                                     style="margin-right: 10px;"></i></div>
                             Gerenciamento
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
-                        <div th:if="${isAdmin}" class="collapse" id="collapsePages" aria-labelledby="headingTwo"
+                        <div class="collapse" id="collapsePages" aria-labelledby="headingTwo"
                             data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="/criarColaboradores"><i class="fa-solid fa-address-card"
@@ -291,7 +315,8 @@
                         </a>
                         <div th:if="${isAdmin}" class="sb-sidenav-menu-heading">Admistrador</div>
                         <a th:if="${isAdmin}" class="nav-link" href="tables.html">
-                            <div th:if="${isAdmin}" class="sb-nav-link-icon"><i class="fa-solid fa-users" style="margin-right: 5px;"></i>
+                            <div th:if="${isAdmin}" class="sb-nav-link-icon"><i class="fa-solid fa-users"
+                                    style="margin-right: 5px;"></i>
                             </div>
                             Gerenciamento user
                         </a>
@@ -319,14 +344,17 @@
                     </thead>
                     <tbody>
                         <tr th:each="colaborador : ${colaboradores}">
-                            <a><td th:text="${colaborador.nome}">Nome do Colaborador</td></a>
+                            <a>
+                                <td th:text="${colaborador.nome}">Nome do Colaborador</td>
+                            </a>
                             <td th:text="${colaborador.cargo}">Cargo do Colaborador</td>
-                            <td th:text="${colaborador.dataNascimento}" class="data-nascimento"></td> 
+                            <td th:text="${colaborador.dataNascimento}" class="data-nascimento"></td>
                             <td th:text="${colaborador.regiao}">Região do Colaborador</td>
                             <td th:text="${colaborador.salario}">Salário do Colaborador</td>
                             <td>
-                                <a th:href="${(#mvc.url('CCC#consultarPorIdColaborador').arg(0,colaborador.id)).build()}">consultar</a>
-                                <a th:href="${(#mvc.url('CCC#updateColaboradorPorId').arg(0,colaborador.id)).build()}">editar</a>
+                                <a
+                                    th:href="${(#mvc.url('CCC#consultarPorIdColaborador').arg(0,colaborador.id)).build()}">consultar</a>
+                                    <a th:href="${(#mvc.url('CCC#updateColaboradorPorId').arg(0,colaborador.id)).build()}">editar</a>
                             </td>
                         </tr>
                     </tbody>
@@ -361,7 +389,7 @@
 
 </body>
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         // Seleciona o botão de fechar o modal
         const fecharModalBtn = document.getElementById('fecharModal');
         // Seleciona o modal
@@ -370,7 +398,7 @@
         const fade = document.querySelector('.fade');
 
         // Adiciona um ouvinte de evento para o botão de fechar
-        fecharModalBtn.addEventListener('click', function() {
+        fecharModalBtn.addEventListener('click', function () {
             // Esconde o modal
             modal.style.display = 'none';
             // Esconde o fade
@@ -381,14 +409,14 @@
 </script>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         // Mostra o fade
         const fade = document.querySelector('.fade');
         fade.style.opacity = '1';
     });
 </script>
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         // Função para calcular a idade com base na data de nascimento
         function calcularIdade(dataNascimento) {
             const hoje = new Date();
@@ -416,4 +444,5 @@
         });
     });
 </script>
+
 </html>
