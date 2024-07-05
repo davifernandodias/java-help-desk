@@ -301,13 +301,14 @@
                                     <tr th:each="colaborador : ${colaboradores}">
                                         <td th:text="${colaborador.nome}">Nome do Colaborador</td>
                                         <td th:text="${colaborador.cargo}">Cargo do Colaborador</td>
-                                        <td th:text="${colaborador.dataNascimento}" class="data-nascimento"></td> <!-- Data de nascimento será substituída pela idade -->
+                                        <td th:text="${colaborador.dataNascimento}" class="data-nascimento"></td>
+                                        <!-- Data de nascimento será substituída pela idade -->
                                         <td th:text="${colaborador.regiao}">Região do Colaborador</td>
                                         <td th:text="${colaborador.salario}">Salário do Colaborador</td>
                                     </tr>
                                 </tbody>
                             </table>
-                            
+
                         </div>
                     </div>
                 </div>
@@ -349,12 +350,12 @@
                 datasets: [{
                     label: 'Quantidade de Chamados',
                     data: [ticketConcluido, ticketEmAndamento, ticketAberto, ticketAguardandoInfoAdd],
-                    backgroundColor: 'rgba(119, 3, 252, 0.2)',
-                    borderColor: 'rgba(119, 3, 252)',
-                    pointBackgroundColor: 'rgba(119, 3, 252)',
-                    pointBorderColor: '#fff',
-                    pointHoverBackgroundColor: '#fff',
-                    pointHoverBorderColor: 'rgba(119, 3, 252)',
+                    backgroundColor: 'rgba(173, 216, 230, 0.2)', // Azul claro com transparência
+                    borderColor: 'rgba(70, 130, 180)', // Azul mais escuro
+                    pointBackgroundColor: 'rgba(70, 130, 180)', // Mesmo tom para os pontos
+                    pointBorderColor: '#fff', // Branco para a cor dos pontos
+                    pointHoverBackgroundColor: '#fff', // Branco para a cor dos pontos ao passar o mouse
+                    pointHoverBorderColor: 'rgba(70, 130, 180)' // Azul mais escuro ao passar o mouse
                 }]
             };
 
@@ -471,35 +472,35 @@
             });
         });
     </script>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        // Função para calcular a idade com base na data de nascimento
-        function calcularIdade(dataNascimento) {
-            const hoje = new Date();
-            const nascimento = new Date(dataNascimento);
-            let idade = hoje.getFullYear() - nascimento.getFullYear();
-            const mes = hoje.getMonth() - nascimento.getMonth();
-            if (mes < 0 || (mes === 0 && hoje.getDate() < nascimento.getDate())) {
-                idade--;
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Função para calcular a idade com base na data de nascimento
+            function calcularIdade(dataNascimento) {
+                const hoje = new Date();
+                const nascimento = new Date(dataNascimento);
+                let idade = hoje.getFullYear() - nascimento.getFullYear();
+                const mes = hoje.getMonth() - nascimento.getMonth();
+                if (mes < 0 || (mes === 0 && hoje.getDate() < nascimento.getDate())) {
+                    idade--;
+                }
+                return idade;
             }
-            return idade;
-        }
 
-        // Seleciona todas as linhas da tabela
-        const linhas = document.querySelectorAll("#datatablesSimple tbody tr");
+            // Seleciona todas as linhas da tabela
+            const linhas = document.querySelectorAll("#datatablesSimple tbody tr");
 
-        // Itera sobre as linhas e calcula a idade
-        linhas.forEach(linha => {
-            const dataNascimentoElemento = linha.querySelector(".data-nascimento");
-            const dataNascimento = dataNascimentoElemento.textContent.trim();
+            // Itera sobre as linhas e calcula a idade
+            linhas.forEach(linha => {
+                const dataNascimentoElemento = linha.querySelector(".data-nascimento");
+                const dataNascimento = dataNascimentoElemento.textContent.trim();
 
-            if (dataNascimento) {
-                const idade = calcularIdade(dataNascimento);
-                dataNascimentoElemento.textContent = idade;
-            }
+                if (dataNascimento) {
+                    const idade = calcularIdade(dataNascimento);
+                    dataNascimentoElemento.textContent = idade;
+                }
+            });
         });
-    });
-</script>
+    </script>
 
 
 

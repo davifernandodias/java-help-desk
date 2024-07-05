@@ -10,92 +10,140 @@
     <title>Detalhes colaboradores</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
         crossorigin="anonymous" />
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <link type="text/css" rel="stylesheet" href="/materialize/css/materialize.index.css" media="screen,projection" />
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+
+    <!-- jQuery -->
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+
+    <!-- DataTables JS -->
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 </head>
 <style>
-
 .fade {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: rgba(0, 0, 0, 0.5); /* Ajustei o valor alpha para um fundo mais escuro */
     z-index: 1040;
     display: flex;
     align-items: center;
     justify-content: center;
-    backdrop-filter: blur(0.8px);
-    opacity: 1; /* Inicialmente visível */
-    transition: opacity 0.5s ease-in-out;
+    backdrop-filter: blur(8px); /* Ajustei o valor para um efeito mais visível de desfoque */
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
 }
 
 #modal {
-        position: fixed;
-        left: 50%;
-        top: 50%;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1050; /* Aumentei o z-index para garantir que fique sobre o fade */
+    background-color: #fff;
+    padding: 20px; /* Aumentei o padding para melhorar o espaçamento interno */
+    border-radius: 10px; /* Arredondei os cantos do modal */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); /* Aumentei o blur da sombra */
+    max-width: 80%; /* Ajustei para que o modal não fique tão grande */
+    width: 600px; /* Defini um tamanho fixo para o modal */
+}
+
+.modal-header {
+    padding: 1rem;
+    border-bottom: 1px solid #dee2e6;
+    background-color: #f8f9fa;
+    border-top-left-radius: 10px; /* Arredondei os cantos superiores do cabeçalho */
+    border-top-right-radius: 10px;
+}
+
+.modal-header h2 {
+    margin-top: 0;
+    font-size: 1.5rem;
+}
+
+.modal-body {
+    padding: 1rem;
+}
+
+.modal-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+
+
+/* Adicionei a seguir um estilo para a animação de entrada do modal */
+#modal.show {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -60%);
+    }
+    to {
+        opacity: 1;
         transform: translate(-50%, -50%);
-        z-index: 1040;
-        background-color: #fff;
-        padding: 1.2rem;
-        border-radius: 1.3rem;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-        max-width: 600px;
-        width: 100%;
     }
+}
 
-    .modal-header {
-        padding: 1rem;
-        border-bottom: 1px solid #dee2e6;
-        background-color: #f8f9fa;
-        border-top-left-radius: 1.3rem;
-        border-top-right-radius: 1.3rem;
-    }
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+    font-weight: bold;
+    color: #343a40;
+}
+.modal-header {
+    background-color: #8f8f8f;
+    color: #fff;
+    padding: 10px 20px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
 
-    .modal-header h2 {
-        margin-top: 0;
-        font-size: 1.5rem;
-    }
+.modal-body {
+    padding: 20px;
+}
 
-    .modal-body {
-        padding: 1rem;
-    }
+.info-group {
+    margin-bottom: 10px;
+}
 
-    .modal-info {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-    }
+.info-group p {
+    margin: 5px 0;
+}
+.info-group.address {
+    display: flex;
+    flex-wrap: wrap; /* Permite que os itens quebrem para a próxima linha se não couberem */
+}
 
-    .info-group {
-        display: flex;
-        gap: 5px;
-        align-items: center;
-    }
+.info-group.address p {
+    margin-right: 20px; /* Espaçamento entre os itens (opcional, ajuste conforme necessário) */
+}
 
-    .info-group p {
-        margin: 0;
-        font-size: 0.9rem;
-    }
+.info-group.address p:last-child {
+    margin-right: 0; /* Remove a margem à direita do último item para evitar espaço extra */
+}
 
-    .info-group strong {
-        width: 120px;
-        display: inline-block;
-        font-weight: 600;
-    }
+.info-group.address strong {
+    min-width: 100px; /* Largura mínima para os rótulos (opcional, ajuste conforme necessário) */
+}
 
-    .info-group p,
-    .info-group strong {
-        margin-right: 10px;
-    }
 
-    .info-group div {
-        display: flex;
-        align-items: center;
-    }
+
+.btn-close:hover {
+    background-color: white;
+    color: #ffffff;
+}
 
 </style>
 
@@ -104,103 +152,58 @@
 <body class="sb-nav-fixed">
     <div class="fade"></div>
     <div id="modal">
-        <div class="modal-header">
+        <div class="modal-header card-header">
             <h2>COLABORADOR INFO</h2>
-            <button type="button" class="btn-close" id="fecharModal" aria-label="Fechar"></button>
+            <a href="/consultarColaborador"><button type="button" style="color: white;" class="btn-close" id="fecharModal" aria-label="Fechar"></button></a>
         </div>
         <div class="modal-body modal-content">
             <div th:if="${colaboradorid != null}">
                 <div class="modal-info">
                     <div class="info-group">
-                        <p><strong>PERFIL:</strong></p>
-                        <p th:text="${perfilDescricao}" style="margin-left: -90; margin-right: 100px;"></p>
+                        <p><strong>PERFIL:</strong> <span th:text="${perfilDescricao}"></span></p>
+                        <p><strong>ID:</strong> <span th:text="${colaboradorid.id}"></span></p>
+                        <p><strong>Nome:</strong> <span th:text="${colaboradorid.nome}"></span></p>
+                        <p><strong>Sobrenome:</strong> <span th:text="${infoAdicionais.sobrenome}"></span></p>
                     </div>
                     <div class="info-group">
-                        <p><strong>ID:</strong></p>
-                        <p th:text="${colaboradorid.id}" style="margin-left: -100px; margin-right: 100px;"></p>
-                    </div>
-                    <div class="info-group">
-                        <p><strong>Nome:</strong></p>
-                        <p th:text="${colaboradorid.nome}" style="margin-left: -90px; margin-right: 100px;"></p>
-                    </div>
-                    <div class="info-group">
-                        <p><strong>Sobrenome:</strong></p>
-                        <p th:text="${infoAdicionais.sobrenome}" style="margin-left: -60px;"></p>
+                        <p><strong>User/Email:</strong> <span th:text="${colaboradorid.usuario.email}"></span></p>
+                        <p><strong>Telefone:</strong> <span th:text="${infoAdicionais.telefone}"></span></p>
                     </div>
                 </div>
-                <div class="modal-info">
-                    <div class="info-group">
-                        <p style="margin-top: 40px;"><strong>User/Email:</strong></p>
-                        <p th:text="${colaboradorid.usuario.email} " style="margin-left: -40px; margin-top: 40px;"></p>
-                    </div>
-                    <div class="info-group">
-                        <p><strong>Telefone:</strong></p>
-                        <p th:text="${infoAdicionais.telefone}"></p>
-                    </div>
-                </div>
-                <hr/>
+                <hr />
                 <div th:if="${infoAdicionais != null}">
                     <div class="modal-info">
                         <div class="info-group">
-                            <p><strong>CPF:</strong></p>
-                            <p th:text="${infoAdicionais.cpf}" style="margin-left: -100px;"></p>
-                        </div>
-                        <div class="info-group">
-                            <p><strong>RG:</strong></p>
-                            <p th:text="${infoAdicionais.rg}" style="margin-left: -100px;"></p>
+                            <p><strong>CPF:</strong> <span th:text="${infoAdicionais.cpf}"></span></p>
+                            <p><strong>RG:</strong> <span th:text="${infoAdicionais.rg}"></span></p>
                         </div>
                     </div>
                 </div>
-                <div th:if="${infoAdicionais == null}">
-                    <p><em>Nenhuma informação adicional encontrada para este colaborador.</em></p>
-                </div>
-                <hr/>
+                <hr />
                 <div class="modal-info">
                     <div th:if="${endereco != null}">
-                        <div class="info-group">
-                            <p><strong>Região:</strong></p>
-                            <p th:text="${colaboradorid.regiao}"></p>
-                        </div>
-                        <div class="info-group">
-                            <p><strong>Logradouro:</strong></p>
-                            <p th:text="${endereco.logradouro}"></p>
-                        </div>
-                        <div class="info-group">
-                            <p><strong>Estado:</strong></p>
-                            <p th:text="${endereco.estado}"></p>
-                        </div>
-                        <div class="info-group">
-                            <p><strong>Bairro:</strong></p>
-                            <p th:text="${endereco.bairro}"></p>
-                        </div>
-                        <div class="info-group">
-                            <p><strong>Cidade:</strong></p>
-                            <p th:text="${endereco.cidade}"></p>
-                        </div>
-                        <div class="info-group">
-                            <p><strong>Rua:</strong></p>
-                            <p th:text="${endereco.rua}"></p>
-                        </div>
-                        <div class="info-group">
-                            <p><strong>Número:</strong></p>
-                            <p th:text="${endereco.numero}"></p>
-                        </div>
-                        <div class="info-group">
-                            <p><strong>CEP:</strong></p>
-                            <p th:text="${endereco.cep}"></p>
+                        <div class="info-group address">
+                            <p><strong>Região:</strong> <span th:text="${colaboradorid.regiao}"></span></p>
+                            <p><strong>Logradouro:</strong> <span th:text="${endereco.logradouro}"></span></p>
+                            <p><strong>Estado:</strong> <span th:text="${endereco.estado}"></span></p>
+                            <p><strong>Bairro:</strong> <span th:text="${endereco.bairro}"></span></p>
+                            <p><strong>Cidade:</strong> <span th:text="${endereco.cidade}"></span></p>
+                            <p><strong>Rua:</strong> <span th:text="${endereco.rua}"></span></p>
+                            <p><strong>Número:</strong> <span th:text="${endereco.numero}"></span></p>
+                            <p><strong>CEP:</strong> <span th:text="${endereco.cep}"></span></p>
                         </div>
                     </div>
                     <div th:if="${endereco == null}">
                         <p><em>Nenhum endereço encontrado para este colaborador.</em></p>
                     </div>
-                </div>                
+                </div>
             </div>
             <div th:if="${colaboradorid == null}">
                 <p><em>Colaborador não encontrado.</em></p>
             </div>
         </div>
     </div>
-    
+
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
         <a class="navbar-brand ps-3" href="/principal">DEMO</a>
         <!-- Sidebar Toggle-->
@@ -262,8 +265,8 @@
                                         style="margin-right: 10px;"></i>Consultar chamado</a>
                             </nav>
                         </div>
-                        <a th:if="${isAdmin}" class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages"
-                            aria-expanded="false" aria-controls="collapsePages">
+                        <a th:if="${isAdmin}" class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                            data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
                             <div th:if="${isAdmin}" class="sb-nav-link-icon"><i class="fa-solid fa-clipboard-user"
                                     style="margin-right: 10px;"></i></div>
                             Gerenciamento
@@ -291,7 +294,8 @@
                         </a>
                         <div th:if="${isAdmin}" class="sb-sidenav-menu-heading">Admistrador</div>
                         <a th:if="${isAdmin}" class="nav-link" href="tables.html">
-                            <div th:if="${isAdmin}" class="sb-nav-link-icon"><i class="fa-solid fa-users" style="margin-right: 5px;"></i>
+                            <div th:if="${isAdmin}" class="sb-nav-link-icon"><i class="fa-solid fa-users"
+                                    style="margin-right: 5px;"></i>
                             </div>
                             Gerenciamento user
                         </a>
@@ -306,31 +310,40 @@
         <div id="layoutSidenav_content" style="background-color: #f8f9fa;">
             <main class="main-colaborador">
                 <h1>informações inicias</h1>
-                <table class="table table-striped" id="dataTable" width="100%" cellspacing="0">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Cargo</th>
-                            <th>Idade</th>
-                            <th>Região</th>
-                            <th>Salário</th>
-                            <th>Ação</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="colaborador : ${colaboradores}">
-                            <a><td th:text="${colaborador.nome}">Nome do Colaborador</td></a>
-                            <td th:text="${colaborador.cargo}">Cargo do Colaborador</td>
-                            <td th:text="${colaborador.dataNascimento}" class="data-nascimento"></td> 
-                            <td th:text="${colaborador.regiao}">Região do Colaborador</td>
-                            <td th:text="${colaborador.salario}">Salário do Colaborador</td>
-                            <td>
-                                <a th:href="${(#mvc.url('CCC#consultarPorIdColaborador').arg(0,colaborador.id)).build()}">consultar</a>
-                                <a th:href="${(#mvc.url('CCC#updateColaboradorPorId').arg(0,colaborador.id)).build()}">editar</a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fa-solid fa-database" style="margin-right: 10px;"></i>
+                        DataTable Colaboradores
+                    </div>
+                    <div class="card-body">
+                        <table id="datatablesSimple">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Cargo</th>
+                                    <th>Idade</th>
+                                    <th>Região</th>
+                                    <th>Salário</th>
+                                    <th>Email</th>
+                                    <th>Ação</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="colaborador : ${colaboradores}">
+                                    <td th:text="${colaborador.nome}">Nome do Colaborador</td>
+                                    <td th:text="${colaborador.cargo}">Cargo do Colaborador</td>
+                                    <td th:text="${colaborador.dataNascimento}" class="data-nascimento"></td>
+                                    <td th:text="${colaborador.regiao}">Região do Colaborador</td>
+                                    <td th:text="${colaborador.salario}">Salário do Colaborador</td>
+                                    <td th:text="${colaborador.usuario.email}">Salário do Colaborador</td>
+                                    <td>
+                                        <a th:href="${(#mvc.url('CCC#consultarPorIdColaborador').arg(0,colaborador.id)).build()}"><i class="material-icons">search</i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </main>
             <main th:if="${isAdmin}">
             </main>
@@ -356,12 +369,64 @@
     <script src="materialize/assets/demo/chart-bar-demo.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
         crossorigin="anonymous"></script>
+
     <script src="materialize/js/materialize.table.js"></script>
 
 
 </body>
 <script>
+    $(document).ready(function () {
+        var table = $('#datatablesSimple').DataTable({
+            "paging": true,
+            "lengthMenu": [5, 10, 15, 20],
+            "language": {
+                "lengthMenu": "Exibir _MENU_ registros por página",
+                "zeroRecords": "Nenhum registro encontrado",
+                "info": "Mostrando página _PAGE_ de _PAGES_",
+                "infoEmpty": "Nenhum registro disponível",
+                "infoFiltered": "(filtrado de _MAX_ registros no total)",
+                "search": "Pesquisar:",
+                "paginate": {
+                    "first": "Primeiro",
+                    "last": "Último",
+                    "next": "Próximo",
+                    "previous": "Anterior"
+                }
+            }
+        });
+    });
+</script>
+<script>
     document.addEventListener("DOMContentLoaded", function() {
+    // Função para calcular a idade com base na data de nascimento
+    function calcularIdade(dataNascimento) {
+        const hoje = new Date();
+        const nascimento = new Date(dataNascimento);
+        let idade = hoje.getFullYear() - nascimento.getFullYear();
+        const mes = hoje.getMonth() - nascimento.getMonth();
+        if (mes < 0 || (mes === 0 && hoje.getDate() < nascimento.getDate())) {
+            idade--;
+        }
+        return idade;
+    }
+
+    // Seleciona todas as linhas da tabela
+    const linhas = document.querySelectorAll("#datatablesSimple tbody tr");
+
+    // Itera sobre as linhas e calcula a idade
+    linhas.forEach(linha => {
+        const dataNascimentoElemento = linha.querySelector(".data-nascimento");
+        const dataNascimento = dataNascimentoElemento.textContent.trim();
+
+        if (dataNascimento) {
+            const idade = calcularIdade(dataNascimento);
+            dataNascimentoElemento.textContent = idade;
+        }
+    });
+});
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
         // Seleciona o botão de fechar o modal
         const fecharModalBtn = document.getElementById('fecharModal');
         // Seleciona o modal
@@ -370,7 +435,7 @@
         const fade = document.querySelector('.fade');
 
         // Adiciona um ouvinte de evento para o botão de fechar
-        fecharModalBtn.addEventListener('click', function() {
+        fecharModalBtn.addEventListener('click', function () {
             // Esconde o modal
             modal.style.display = 'none';
             // Esconde o fade
@@ -381,14 +446,15 @@
 </script>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         // Mostra o fade
         const fade = document.querySelector('.fade');
         fade.style.opacity = '1';
     });
-</script>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
+
+
+
+    document.addEventListener("DOMContentLoaded", function () {
         // Função para calcular a idade com base na data de nascimento
         function calcularIdade(dataNascimento) {
             const hoje = new Date();
@@ -414,6 +480,15 @@
                 dataNascimentoElemento.textContent = idade;
             }
         });
+
+        // Adiciona a classe "show" às linhas da tabela para a animação
+        const rows = document.querySelectorAll(".table tbody tr");
+        rows.forEach((row, index) => {
+            setTimeout(() => {
+                row.classList.add("show");
+            }, index * 100); // Atraso de 100ms entre cada linha
+        });
     });
 </script>
+
 </html>

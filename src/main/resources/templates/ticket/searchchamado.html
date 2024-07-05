@@ -145,16 +145,16 @@
                                         style="margin-right: 10px;"></i>Consultar chamado</a>
                             </nav>
                         </div>
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages"
+                        <a th:if="${isAdmin}" class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages"
                             aria-expanded="false" aria-controls="collapsePages">
-                            <div class="sb-nav-link-icon"><i class="fa-solid fa-clipboard-user"
+                            <div th:if="${isAdmin}" class="sb-nav-link-icon"><i class="fa-solid fa-clipboard-user"
                                     style="margin-right: 10px;"></i></div>
                             Gerenciamento
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            <div  th:if="${isAdmin}" class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
-                        <div class="collapse" id="collapsePages" aria-labelledby="headingTwo"
+                        <div th:if="${isAdmin}" class="collapse" id="collapsePages" aria-labelledby="headingTwo"
                             data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav">
+                            <nav  th:if="${isAdmin}" class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="/criarColaboradores"><i class="fa-solid fa-address-card"
                                         style="margin-right: 10px;"></i>Novo Colaborador</a>
                                 <a class="nav-link" href="/consultarColaborador"><i class="fa-solid fa-magnifying-glass"

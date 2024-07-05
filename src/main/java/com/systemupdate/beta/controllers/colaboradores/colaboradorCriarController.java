@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -87,12 +88,12 @@ public class ColaboradorCriarController {
         if (perfil != null) {
             // Adiciona o perfil ao usuário
             usuario.addPerfil(perfil);
-
+            
             // Define outras propriedades do usuário
             usuario.setAtivo(true);
             usuario.setEmail(email);
-            usuario.setSenha(senha);
-
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+            usuario.setSenha(encoder.encode(senha));
             // Verifica se o colaborador já existe
             Colaborador colaborador = usuario.getColaborador();
             if (colaborador == null) {

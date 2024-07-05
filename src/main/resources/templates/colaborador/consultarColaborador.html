@@ -11,115 +11,21 @@
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
     <link type="text/css" rel="stylesheet" href="materialize/css/materialize.index.css" media="screen,projection" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <!-- DataTables CSS -->
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    
+        <!-- jQuery -->
+        <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+        
+        <!-- DataTables JS -->
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+        
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 </head>
 <style>
-    .main-colaborador {
-        background-color: #f8f9fa; /* Cor de fundo mais suave */
-        padding: 50px 0;
-    }
 
-    .main-colaborador h1 {
-        font-size: 2.5rem;
-        color: #333;
-    }
 
-    .card {
-        border: none;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease;
-        background-color: #ffffff;
-    }
 
-    .card:hover {
-        transform: translateY(-10px);
-    }
-
-    .card h2 {
-        color: #007bff; /* Cor azul padrão do Bootstrap */
-    }
-
-    .card i {
-        color: #007bff; /* Cor azul para ícones */
-    }
-
-    .card-body {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .additional-content {
-        font-size: 1.1rem;
-        padding: 20px;
-        background-color: #ffffff;
-        border-radius: 5px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    /* Estilos para a barra de pesquisa */
-    .search-bar {
-        position: absolute;
-        top: 0;
-        right: 20px;
-        margin-top: 10px;
-    }
-
-    .search-input {
-        width: 250px;
-        padding: 8px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        font-size: 14px;
-    }
-
-    .search-btn {
-        padding: 8px 12px;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        cursor: pointer;
-        border-radius: 4px;
-        font-size: 14px;
-    }
-
-    .search-btn:hover {
-        background-color: #0056b3;
-    }
-
-    /* Estilos para a tabela */
-    table.table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-    }
-
-    table.table th, table.table td {
-        padding: 12px 15px;
-        border: 1px solid #ddd;
-        text-align: left;
-    }
-
-    table.table th {
-        background-color: #007bff;
-        color: white;
-        font-weight: bold;
-    }
-
-    table.table tr:nth-child(even) {
-        background-color: #f2f2f2;
-    }
-
-    table.table tbody tr {
-        opacity: 0;
-        transform: translateY(20px);
-        transition: opacity 0.5s ease, transform 0.5s ease;
-    }
-
-    table.table tbody tr.show {
-        opacity: 1;
-        transform: translateY(0);
-    }
 </style>
 
 <body class="sb-nav-fixed">
@@ -210,35 +116,41 @@
         <div id="layoutSidenav_content" style="background-color: #f8f9fa;">
             <main class="main-colaborador">
                 <h1>informações inicias</h1>
-                <div class="search-bar">
-                    <input type="text" id="searchInput" class="search-input" placeholder="Buscar por código..." oninput="filterTable()">
-                    <button class="search-btn" onclick="filterTable()">Buscar</button>
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fa-solid fa-database" style="margin-right: 10px;"></i>
+                        DataTable Colaboradores
+                    </div>
+                    <div class="card-body">
+                        <table id="datatablesSimple">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Cargo</th>
+                                    <th>Idade</th>
+                                    <th>Região</th>
+                                    <th>Salário</th>
+                                    <th>Email</th>
+                                    <th>Ação</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="colaborador : ${colaboradores}">
+                                    <td th:text="${colaborador.nome}">Nome do Colaborador</td>
+                                    <td th:text="${colaborador.cargo}">Cargo do Colaborador</td>
+                                    <td th:text="${colaborador.dataNascimento}" class="data-nascimento"></td>
+                                    <td th:text="${colaborador.regiao}">Região do Colaborador</td>
+                                    <td th:text="${colaborador.salario}">Salário do Colaborador</td>
+                                    <td th:text="${colaborador.usuario.email}">Salário do Colaborador</td>
+                                    <td>
+                                        <a th:href="${(#mvc.url('CCC#consultarPorIdColaborador').arg(0,colaborador.id)).build()}"><i class="material-icons">search</i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                    </div>
                 </div>
-                <table class="table table-striped" id="dataTable" width="100%" cellspacing="0">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Cargo</th>
-                            <th>Idade</th>
-                            <th>Região</th>
-                            <th>Salário</th>
-                            <th>Ação</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="colaborador : ${colaboradores}">
-                            <a><td th:text="${colaborador.nome}">Nome do Colaborador</td></a>
-                            <td th:text="${colaborador.cargo}">Cargo do Colaborador</td>
-                            <td th:text="${colaborador.dataNascimento}" class="data-nascimento"></td>
-                            <td th:text="${colaborador.regiao}">Região do Colaborador</td>
-                            <td th:text="${colaborador.salario}">Salário do Colaborador</td>
-                            <td>
-                                <a th:href="${(#mvc.url('CCC#consultarPorIdColaborador').arg(0,colaborador.id)).build()}"><i class="material-icons">search</i></a>
-                                <a th:href="${(#mvc.url('CCC#updateColaboradorPorId').arg(0,colaborador.id)).build()}"><i style="margin-left: 20px;" class="material-icons">brush</i></a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
             </main>
             <main th:if="${isAdmin}">
             </main>
@@ -265,26 +177,60 @@
     <script src="materialize/js/materialize.table.js"></script>
 </body>
 <script>
-    function filterTable() {
-        var input, filter, table, tr, td, i, txtValue;
-        input = document.getElementById("searchInput");
-        filter = input.value.toUpperCase();
-        table = document.querySelector(".table");
-        tr = table.getElementsByTagName("tr");
-
-        for (i = 0; i < tr.length; i++) {
-            td = tr[i].getElementsByTagName("td")[0]; // Coluna do Código
-
-            if (td) {
-                txtValue = td.textContent || td.innerText;
-                if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                    tr[i].style.display = "";
-                } else {
-                    tr[i].style.display = "none";
+    $(document).ready(function() {
+        var table = $('#dataTable').DataTable({
+            "paging": true,
+            "lengthMenu": [5, 10, 15, 20], // opções para a quantidade de registros por página
+            "language": {
+                "lengthMenu": "Exibir _MENU_ registros por página",
+                "zeroRecords": "Nenhum registro encontrado",
+                "info": "Mostrando página _PAGE_ de _PAGES_",
+                "infoEmpty": "Nenhum registro disponível",
+                "infoFiltered": "(filtrado de _MAX_ registros no total)",
+                "search": "Pesquisar:",
+                "paginate": {
+                    "first": "Primeiro",
+                    "last": "Último",
+                    "next": "Próximo",
+                    "previous": "Anterior"
                 }
             }
+        });
+
+
+    });
+</script>
+<script>
+        document.addEventListener("DOMContentLoaded", function() {
+        // Função para calcular a idade com base na data de nascimento
+        function calcularIdade(dataNascimento) {
+            const hoje = new Date();
+            const nascimento = new Date(dataNascimento);
+            let idade = hoje.getFullYear() - nascimento.getFullYear();
+            const mes = hoje.getMonth() - nascimento.getMonth();
+            if (mes < 0 || (mes === 0 && hoje.getDate() < nascimento.getDate())) {
+                idade--;
+            }
+            return idade;
         }
-    }
+
+        // Seleciona todas as linhas da tabela
+        const linhas = document.querySelectorAll("#datatablesSimple tbody tr");
+
+        // Itera sobre as linhas e calcula a idade
+        linhas.forEach(linha => {
+            const dataNascimentoElemento = linha.querySelector(".data-nascimento");
+            const dataNascimento = dataNascimentoElemento.textContent.trim();
+
+            if (dataNascimento) {
+                const idade = calcularIdade(dataNascimento);
+                dataNascimentoElemento.textContent = idade;
+            }
+        });
+    });
+</script>
+<script>
+
 
     document.addEventListener("DOMContentLoaded", function() {
         // Função para calcular a idade com base na data de nascimento
